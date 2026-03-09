@@ -1,0 +1,25 @@
+{
+  "name": "company",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yukiko10140422-star/trustport.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/yukiko10140422-star/trustport/issues"
+  },
+  "homepage": "https://github.com/yukiko10140422-star/trustport#readme",
+  "dependencies": {
+    "@kazumatu981/markdown-it-kroki": "^1.3.6",
+    "@mermaid-js/mermaid-cli": "^11.12.0"
+  }
+}

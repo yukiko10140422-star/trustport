@@ -9,6 +9,7 @@
 #
 # 必要ツール:
 #   npm install -g md-to-pdf @marp-team/marp-cli
+#   npm install @mermaid-js/mermaid-cli (ダイアグラム生成用)
 # =============================================================
 
 set -e
@@ -58,20 +59,40 @@ generate_docs() {
 # =============================================================
 # スライド PDF 変換
 # =============================================================
+generate_diagrams() {
+  echo -e "${BLUE}=== ダイアグラム SVG 生成 ===${NC}"
+  local assets_dir="$ROOT_DIR/$SLIDE_DIR/assets"
+  if [ -d "$assets_dir" ]; then
+    for f in "$assets_dir"/*.mmd; do
+      [ -f "$f" ] || continue
+      name=$(basename "${f%.mmd}")
+      echo -e "  ${GREEN}[SVG]${NC} $name.mmd → $name.svg"
+      npx mmdc -i "$f" -o "$assets_dir/${name}.svg" -b transparent -w 900 2>/dev/null || echo "    [WARN] $name.mmd の変換に失敗"
+    done
+  fi
+  echo -e "${GREEN}✓ ダイアグラム生成完了${NC}"
+  echo ""
+}
+
 generate_slides() {
-  echo -e "${BLUE}=== スライド PDF 生成 ===${NC}"
+  echo -e "${BLUE}=== スライド PDF/PPTX 生成 ===${NC}"
   mkdir -p "$SLIDE_OUT"
+
+  # ダイアグラムを先に生成
+  generate_diagrams
 
   if [ -d "$ROOT_DIR/$SLIDE_DIR" ]; then
     for f in "$ROOT_DIR/$SLIDE_DIR"/*.md; do
       [ -f "$f" ] || continue
       name=$(basename "${f%.md}")
-      echo -e "  ${GREEN}[SLIDE]${NC} $SLIDE_DIR/$name.md → outputs/slides/$name.pdf"
+      echo -e "  ${GREEN}[PDF]${NC}  $SLIDE_DIR/$name.md → outputs/slides/$name.pdf"
       marp "$f" --pdf --allow-local-files -o "$SLIDE_OUT/${name}.pdf" 2>/dev/null
+      echo -e "  ${GREEN}[PPTX]${NC} $SLIDE_DIR/$name.md → outputs/slides/$name.pptx"
+      marp "$f" --pptx --allow-local-files -o "$SLIDE_OUT/${name}.pptx" 2>/dev/null
     done
   fi
 
-  echo -e "${GREEN}✓ スライド PDF 生成完了${NC}"
+  echo -e "${GREEN}✓ スライド生成完了${NC}"
   echo ""
 }
 
