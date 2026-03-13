@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 
 const SECTIONS = [
   { id: 'hero', key: 'hero' },
+  { id: 'reversible', key: 'reversible' },
   { id: 'before-after', key: 'beforeAfter' },
   { id: 'testimony', key: 'testimony' },
   { id: 'traceability', key: 'traceability' },

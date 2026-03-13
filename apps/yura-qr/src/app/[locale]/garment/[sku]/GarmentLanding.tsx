@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import {
   HeroSection,
+  ReversibleShowcase,
   BeforeAfterSlider,
   TestimonyCard,
   TraceabilityTimeline,
@@ -57,6 +58,9 @@ export function GarmentLanding({ sku, locale, garment, brandContent }: Props) {
           frontImageUrl={garment?.front_image_url}
           backImageUrl={garment?.back_image_url}
         />
+
+        {/* Reversible Showcase */}
+        <ReversibleShowcase locale={locale} />
 
         {/* Before/After */}
         <section id="before-after" className="py-24 md:py-32 px-6">

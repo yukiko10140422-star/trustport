@@ -5,6 +5,7 @@
   },
   "nav": {
     "hero": "トップ",
+    "reversible": "リバーシブル",
     "beforeAfter": "Before / After",
     "testimony": "証言",
     "traceability": "トレーサビリティ",
@@ -36,6 +37,27 @@
   },
   "story": {
     "title": "YURAについて"
+  },
+  "reversible": {
+    "title": "裏返す、という体験",
+    "subtitle": "表は再生と希望。裏返せば、記憶と現実。1枚の服に、2つの世界。",
+    "tap": "タップして切り替え",
+    "color": "カラー",
+    "concept": "YURAのリバーシブルデザインは、Tシャツを裏返す（inside-out）という行為そのものに意味を込めています。表面には再生した美しい風景を、裏返せば震災直後のリアルな記憶を。「ひっくり返す」瞬間が、忘れかけた記憶への入口になる。",
+    "views": {
+      "front": {
+        "label": "フロント — QRコード",
+        "description": "胸元の小さなQRコードが、デジタルアーカイブへの入口"
+      },
+      "back": {
+        "label": "バック — 再生の風景",
+        "description": "福島の海岸線。自然が取り戻した、美しい景色"
+      },
+      "inside-out": {
+        "label": "インサイドアウト — 記憶",
+        "description": "裏返すと現れる、震災直後の風景。忘れてはいけない記憶"
+      }
+    }
   },
   "community": {
     "title": "記憶を共有する",

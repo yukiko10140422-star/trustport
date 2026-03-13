@@ -5,6 +5,7 @@
   },
   "nav": {
     "hero": "Top",
+    "reversible": "Reversible",
     "beforeAfter": "Before / After",
     "testimony": "Testimony",
     "traceability": "Traceability",
@@ -36,6 +37,27 @@
   },
   "story": {
     "title": "About YURA"
+  },
+  "reversible": {
+    "title": "The Act of Flipping",
+    "subtitle": "The outside is renewal and hope. Turn it inside-out, and find memory and reality. Two worlds in one garment.",
+    "tap": "Tap to switch view",
+    "color": "Color",
+    "concept": "YURA's reversible design imbues meaning into the very act of turning a t-shirt inside-out. The exterior carries the beauty of recovery; flip it to reveal the raw reality of disaster. That moment of turning becomes a gateway to forgotten memories.",
+    "views": {
+      "front": {
+        "label": "Front — QR Code",
+        "description": "A small QR code on the chest — your portal to the digital archive"
+      },
+      "back": {
+        "label": "Back — Landscape of Recovery",
+        "description": "The Fukushima coastline. Nature reclaiming what was lost"
+      },
+      "inside-out": {
+        "label": "Inside-Out — Memory",
+        "description": "Turn it inside-out to reveal the post-disaster landscape. Memories we must not forget"
+      }
+    }
   },
   "community": {
     "title": "Share the Memory",
