@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+:root {
+  --yura-bg: #0A0A0A;
+  --yura-text: #F5F0EB;
+  --yura-accent: #C4A882;
+  --yura-memory: #6B4C3B;
+  --yura-accent-dim: #A08968;
+  --yura-border: #1A1A1A;
+  --yura-surface: #111111;
+}
+
+@theme inline {
+  --color-background: var(--yura-bg);
+  --color-foreground: var(--yura-text);
+  --color-accent: var(--yura-accent);
+  --color-memory: var(--yura-memory);
+  --color-accent-dim: var(--yura-accent-dim);
+  --color-surface: var(--yura-surface);
+  --color-border: var(--yura-border);
+  --font-sans: var(--font-noto-sans-jp);
+  --font-serif: var(--font-noto-serif-jp);
+  --font-display: var(--font-playfair-display);
+}
+
+body {
+  background: var(--yura-bg);
+  color: var(--yura-text);
+}
+
+::selection {
+  background: var(--yura-accent);
+  color: var(--yura-bg);
+}
+
+/* Smooth scroll for anchor navigation */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Hide scrollbar but keep functionality */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}

@@ -1,0 +1,50 @@
+{
+  "meta": {
+    "title": "YURA — 記憶を着る",
+    "description": "被災地の記憶をデジタルアーカイブとして紡ぐファッションブランド"
+  },
+  "nav": {
+    "hero": "トップ",
+    "beforeAfter": "Before / After",
+    "testimony": "証言",
+    "traceability": "トレーサビリティ",
+    "story": "ストーリー",
+    "community": "コミュニティ"
+  },
+  "hero": {
+    "tagline": "記憶を着る。未来を纏う。",
+    "subtitle": "1枚の服が、忘れられゆく記憶への入口になる",
+    "cta": "ストーリーを見る"
+  },
+  "beforeAfter": {
+    "title": "時を超える風景",
+    "before": "Before",
+    "after": "After",
+    "source": "出典"
+  },
+  "testimony": {
+    "title": "記憶の声",
+    "listen": "証言を聴く"
+  },
+  "traceability": {
+    "title": "1枚ができるまで",
+    "factory": "製造工場",
+    "fabric": "素材",
+    "printMethod": "プリント技法",
+    "productionDate": "製造日",
+    "qualityCheck": "品質検査"
+  },
+  "story": {
+    "title": "YURAについて"
+  },
+  "community": {
+    "title": "記憶を共有する",
+    "share": "この服のストーリーをシェア",
+    "hashtag": "#FlipForMemory"
+  },
+  "common": {
+    "loading": "読み込み中...",
+    "error": "エラーが発生しました",
+    "backToTop": "トップに戻る"
+  }
+}

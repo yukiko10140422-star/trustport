@@ -1,1 +1,3 @@
 node_modules/
+apps/yura-qr/.env.local
+apps/yura-qr/node_modules/

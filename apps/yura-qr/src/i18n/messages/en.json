@@ -1,0 +1,50 @@
+{
+  "meta": {
+    "title": "YURA — Wear the Memory",
+    "description": "A fashion brand that weaves memories of disaster-affected areas into digital archives"
+  },
+  "nav": {
+    "hero": "Top",
+    "beforeAfter": "Before / After",
+    "testimony": "Testimony",
+    "traceability": "Traceability",
+    "story": "Story",
+    "community": "Community"
+  },
+  "hero": {
+    "tagline": "Wear the Memory. Embrace the Future.",
+    "subtitle": "A single garment becomes a gateway to fading memories",
+    "cta": "Explore the Story"
+  },
+  "beforeAfter": {
+    "title": "Landscapes Across Time",
+    "before": "Before",
+    "after": "After",
+    "source": "Source"
+  },
+  "testimony": {
+    "title": "Voices of Memory",
+    "listen": "Listen to testimony"
+  },
+  "traceability": {
+    "title": "How It's Made",
+    "factory": "Factory",
+    "fabric": "Material",
+    "printMethod": "Print Method",
+    "productionDate": "Production Date",
+    "qualityCheck": "Quality Check"
+  },
+  "story": {
+    "title": "About YURA"
+  },
+  "community": {
+    "title": "Share the Memory",
+    "share": "Share this garment's story",
+    "hashtag": "#FlipForMemory"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "backToTop": "Back to top"
+  }
+}
