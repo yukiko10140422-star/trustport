@@ -48,6 +48,8 @@ type Props = {
 };
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://yura.style';
+const AMBIENT_AUDIO_URL =
+  'https://fcwidwjxoyijuneojcrm.supabase.co/storage/v1/object/public/testimony-audio/ambient-namie-reconstruction.mp3';
 
 export function MemorialPage({ sku, locale, garment, memorial }: Props) {
   const [shareUrl, setShareUrl] = useState(`${BASE_URL}/${locale}/garment/${sku}`);
@@ -97,7 +99,7 @@ export function MemorialPage({ sku, locale, garment, memorial }: Props) {
   ) || undefined;
 
   return (
-    <AudioProvider useProceduralOcean>
+    <AudioProvider ambientUrl={AMBIENT_AUDIO_URL}>
       <SmoothScrollProvider>
         <StickyNav />
 
