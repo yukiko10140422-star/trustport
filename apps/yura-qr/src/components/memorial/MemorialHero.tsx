@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { localized, localizedWithFallback, type Locale } from '@/lib/i18n';
@@ -32,10 +33,12 @@ export function MemorialHero({ location, statistics, locale }: Props) {
       {/* Background - dark atmospheric */}
       {location.hero_image_url ? (
         <div className="absolute inset-0">
-          <img
+          <Image
             src={location.hero_image_url}
             alt=""
-            className="w-full h-full object-cover opacity-30"
+            fill
+            priority
+            className="object-cover opacity-30"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-background/60" />
         </div>

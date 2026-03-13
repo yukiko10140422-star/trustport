@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { sanitizeExternalUrl } from '@/lib/url';
@@ -113,12 +114,12 @@ export function DisasterTimeline({ events, locale }: Props) {
 
                 {/* Image */}
                 {event.image_url && (
-                  <div className="mt-3 rounded overflow-hidden">
-                    <img
+                  <div className="relative mt-3 rounded overflow-hidden h-48">
+                    <Image
                       src={event.image_url}
                       alt={title}
-                      className="w-full max-h-48 object-cover opacity-80"
-                      loading="lazy"
+                      fill
+                      className="object-cover opacity-80"
                     />
                   </div>
                 )}

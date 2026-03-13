@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { useAudio } from '@/providers/AudioProvider';
@@ -59,10 +60,11 @@ function YouTubeFacade({
   return (
     <>
       {/* Lightweight thumbnail facade — loads instantly */}
-      <img
+      <Image
         src={fallbackImageUrl ?? thumbnailUrl}
         alt=""
-        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-[3s] ${
+        fill
+        className={`object-cover transition-opacity duration-[3s] ${
           loadIframe ? 'opacity-0' : 'opacity-25'
         }`}
       />
@@ -191,18 +193,21 @@ export function ImmersiveOpening({
             />
             {/* Fallback image while video loads */}
             {heroImageUrl && !videoLoaded && (
-              <img
+              <Image
                 src={heroImageUrl}
                 alt=""
-                className="absolute inset-0 w-full h-full object-cover opacity-30"
+                fill
+                className="object-cover opacity-30"
               />
             )}
           </>
         ) : heroImageUrl ? (
-          <img
+          <Image
             src={heroImageUrl}
             alt=""
-            className="absolute inset-0 w-full h-full object-cover opacity-30"
+            fill
+            priority
+            className="object-cover opacity-30"
           />
         ) : null}
 

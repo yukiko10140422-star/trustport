@@ -37,6 +37,11 @@ const nextConfig: NextConfig = {
         hostname: 'www.reconstruction.go.jp',
         pathname: '/10year/images/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'i.ytimg.com',
+        pathname: '/vi/**',
+      },
     ],
   },
   async headers() {

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import gsap from 'gsap';
@@ -185,12 +186,12 @@ export function ScrollTimeline({ events, locale }: Props) {
 
                 {/* Image */}
                 {event.image_url && (
-                  <div className="mb-4 -mx-2 overflow-hidden">
-                    <img
+                  <div className="relative mb-4 -mx-2 overflow-hidden h-40">
+                    <Image
                       src={event.image_url}
                       alt={title}
-                      className="w-full max-h-40 object-cover opacity-70 hover:opacity-90 transition-opacity duration-500"
-                      loading="lazy"
+                      fill
+                      className="object-cover opacity-70 hover:opacity-90 transition-opacity duration-500"
                     />
                   </div>
                 )}

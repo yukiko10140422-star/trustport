@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { sanitizeExternalUrl } from '@/lib/url';
@@ -61,12 +62,12 @@ export function InitiativesSection({ initiatives, locale }: Props) {
               >
                 {/* Image */}
                 {initiative.image_url && (
-                  <div className="aspect-[16/9] overflow-hidden">
-                    <img
+                  <div className="relative aspect-[16/9] overflow-hidden">
+                    <Image
                       src={initiative.image_url}
                       alt={title}
-                      className="w-full h-full object-cover opacity-70 group-hover:opacity-90 transition-opacity"
-                      loading="lazy"
+                      fill
+                      className="object-cover opacity-70 group-hover:opacity-90 transition-opacity"
                     />
                   </div>
                 )}

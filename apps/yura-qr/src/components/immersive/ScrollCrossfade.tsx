@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import gsap from 'gsap';
@@ -71,18 +72,20 @@ function CrossfadePair({
       <div className="sticky top-0 h-screen flex items-center justify-center px-6">
         <div className="relative w-full max-w-4xl aspect-[16/10] overflow-hidden">
           {/* Before image (base layer) */}
-          <img
+          <Image
             src={photo.before_image_url}
             alt={locale === 'en' ? 'Before' : '以前'}
-            className="absolute inset-0 w-full h-full object-cover"
+            fill
+            className="object-cover"
           />
 
           {/* After image (fades in on scroll) */}
           <div ref={afterRef} className="absolute inset-0" style={{ opacity: 0 }}>
-            <img
+            <Image
               src={photo.after_image_url}
               alt={locale === 'en' ? 'After' : '現在'}
-              className="w-full h-full object-cover"
+              fill
+              className="object-cover"
             />
           </div>
 
