@@ -75,7 +75,7 @@ export function MemorialPage({ sku, locale, garment, memorial }: Props) {
   ) || undefined;
 
   return (
-    <AudioProvider ambientUrl={memorial.hero_video_url ? undefined : undefined}>
+    <AudioProvider useProceduralOcean>
       <SmoothScrollProvider>
         <StickyNav />
 

@@ -13,6 +13,19 @@ type Props = {
   readonly summary?: string | null;
 };
 
+const YOUTUBE_REGEX = /(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+
+function isYouTubeUrl(url: string): boolean {
+  return YOUTUBE_REGEX.test(url) || /^[a-zA-Z0-9_-]{11}$/.test(url);
+}
+
+function extractYouTubeId(url: string): string {
+  // Direct ID (11 chars)
+  if (/^[a-zA-Z0-9_-]{11}$/.test(url)) return url;
+  const match = url.match(YOUTUBE_REGEX);
+  return match?.[1] ?? '';
+}
+
 function useDaysSince(dateStr: string): number {
   return useMemo(() => {
     const disaster = new Date(dateStr);
@@ -100,7 +113,29 @@ export function ImmersiveOpening({
     >
       {/* Video / Image Background */}
       <div className="absolute inset-0">
-        {heroVideoUrl ? (
+        {heroVideoUrl && isYouTubeUrl(heroVideoUrl) ? (
+          <>
+            {/* YouTube embed as background */}
+            <div className="absolute inset-0 overflow-hidden">
+              <iframe
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[180%] h-[180%] md:w-[140%] md:h-[140%] opacity-35 pointer-events-none"
+                src={`https://www.youtube.com/embed/${extractYouTubeId(heroVideoUrl)}?autoplay=1&mute=1&loop=1&playlist=${extractYouTubeId(heroVideoUrl)}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&origin=${typeof window !== 'undefined' ? window.location.origin : ''}`}
+                allow="autoplay; encrypted-media"
+                allowFullScreen
+                title="Memorial background video"
+                loading="lazy"
+              />
+            </div>
+            {/* Fallback image under YouTube */}
+            {heroImageUrl && (
+              <img
+                src={heroImageUrl}
+                alt=""
+                className="absolute inset-0 w-full h-full object-cover opacity-20"
+              />
+            )}
+          </>
+        ) : heroVideoUrl ? (
           <>
             <video
               ref={videoRef}
