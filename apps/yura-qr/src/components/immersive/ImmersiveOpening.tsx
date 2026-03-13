@@ -20,10 +20,67 @@ function isYouTubeUrl(url: string): boolean {
 }
 
 function extractYouTubeId(url: string): string {
-  // Direct ID (11 chars)
   if (/^[a-zA-Z0-9_-]{11}$/.test(url)) return url;
   const match = url.match(YOUTUBE_REGEX);
   return match?.[1] ?? '';
+}
+
+/**
+ * YouTube facade: shows a lightweight thumbnail first,
+ * then lazy-loads the iframe after initial paint to avoid LCP penalty.
+ */
+function YouTubeFacade({
+  videoId,
+  fallbackImageUrl,
+}: {
+  videoId: string;
+  fallbackImageUrl?: string | null;
+}) {
+  const [loadIframe, setLoadIframe] = useState(false);
+
+  useEffect(() => {
+    // Delay iframe load until after FCP/LCP to avoid blocking metrics.
+    // Use requestIdleCallback where available, fallback to setTimeout.
+    const id = typeof requestIdleCallback !== 'undefined'
+      ? requestIdleCallback(() => setLoadIframe(true), { timeout: 3000 })
+      : setTimeout(() => setLoadIframe(true), 2000);
+
+    return () => {
+      if (typeof cancelIdleCallback !== 'undefined' && typeof id === 'number') {
+        cancelIdleCallback(id);
+      } else {
+        clearTimeout(id as ReturnType<typeof setTimeout>);
+      }
+    };
+  }, []);
+
+  const thumbnailUrl = `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
+
+  return (
+    <>
+      {/* Lightweight thumbnail facade — loads instantly */}
+      <img
+        src={fallbackImageUrl ?? thumbnailUrl}
+        alt=""
+        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-[3s] ${
+          loadIframe ? 'opacity-0' : 'opacity-25'
+        }`}
+      />
+
+      {/* YouTube iframe — loaded after idle to avoid LCP penalty */}
+      {loadIframe && (
+        <div className="absolute inset-0 overflow-hidden">
+          <iframe
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[180%] h-[180%] md:w-[140%] md:h-[140%] opacity-35 pointer-events-none"
+            src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1`}
+            allow="autoplay; encrypted-media"
+            title="Memorial background video"
+            loading="lazy"
+          />
+        </div>
+      )}
+    </>
+  );
 }
 
 function useDaysSince(dateStr: string): number {
@@ -114,27 +171,10 @@ export function ImmersiveOpening({
       {/* Video / Image Background */}
       <div className="absolute inset-0">
         {heroVideoUrl && isYouTubeUrl(heroVideoUrl) ? (
-          <>
-            {/* YouTube embed as background */}
-            <div className="absolute inset-0 overflow-hidden">
-              <iframe
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[180%] h-[180%] md:w-[140%] md:h-[140%] opacity-35 pointer-events-none"
-                src={`https://www.youtube.com/embed/${extractYouTubeId(heroVideoUrl)}?autoplay=1&mute=1&loop=1&playlist=${extractYouTubeId(heroVideoUrl)}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&origin=${typeof window !== 'undefined' ? window.location.origin : ''}`}
-                allow="autoplay; encrypted-media"
-                allowFullScreen
-                title="Memorial background video"
-                loading="lazy"
-              />
-            </div>
-            {/* Fallback image under YouTube */}
-            {heroImageUrl && (
-              <img
-                src={heroImageUrl}
-                alt=""
-                className="absolute inset-0 w-full h-full object-cover opacity-20"
-              />
-            )}
-          </>
+          <YouTubeFacade
+            videoId={extractYouTubeId(heroVideoUrl)}
+            fallbackImageUrl={heroImageUrl}
+          />
         ) : heroVideoUrl ? (
           <>
             <video
