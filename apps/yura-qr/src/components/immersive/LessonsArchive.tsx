@@ -77,7 +77,7 @@ export function LessonsArchive({ lessons, locale }: Props) {
               >
                 <div className="flex items-start gap-4">
                   {/* Icon */}
-                  <div className="shrink-0 w-10 h-10 rounded-full border border-accent/15 flex items-center justify-center group-hover:border-accent/30 transition-colors">
+                  <div className="shrink-0 w-10 h-10 rounded-full border border-accent/15 flex items-center justify-center group-hover:border-accent/30 icon-glow">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-accent/70 group-hover:text-accent/90 transition-colors">
                       <path d={iconPath} />
                     </svg>
@@ -87,13 +87,13 @@ export function LessonsArchive({ lessons, locale }: Props) {
                     <p className="text-[9px] tracking-[0.2em] uppercase text-foreground/45 mb-2">
                       {t(`category.${lesson.category}`)}
                     </p>
-                    <h3 className="font-serif text-foreground/80 text-base md:text-lg leading-snug group-hover:text-accent/90 transition-colors">
+                    <h3 className="font-serif text-foreground/80 text-base md:text-lg leading-snug group-hover:text-accent/90 transition-colors hover-underline inline">
                       {title}
                     </h3>
 
                     {/* Read more indicator */}
                     <div className="flex items-center gap-2 mt-4 text-accent/60 group-hover:text-accent/80 transition-colors">
-                      <div className="w-4 h-[1px] bg-current" />
+                      <div className="w-4 h-[1px] bg-current grow-line" />
                       <span className="text-[10px] tracking-[0.2em] uppercase">Read</span>
                     </div>
                   </div>

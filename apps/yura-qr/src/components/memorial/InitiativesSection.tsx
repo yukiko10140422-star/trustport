@@ -54,7 +54,7 @@ export function InitiativesSection({ initiatives, locale }: Props) {
             return (
               <motion.div
                 key={initiative.id}
-                className="border border-border/40 bg-background overflow-hidden group"
+                className="border border-border/40 bg-background overflow-hidden group card-lift"
                 initial={{ opacity: 0, y: 15 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -67,7 +67,7 @@ export function InitiativesSection({ initiatives, locale }: Props) {
                       src={initiative.image_url}
                       alt={title}
                       fill
-                      className="object-cover opacity-70 group-hover:opacity-90 transition-opacity"
+                      className="object-cover opacity-70 group-hover:opacity-90 img-zoom"
                     />
                   </div>
                 )}
@@ -104,7 +104,7 @@ export function InitiativesSection({ initiatives, locale }: Props) {
                       className="inline-flex items-center gap-1 text-accent text-xs tracking-wider hover:text-accent-dim transition-colors"
                     >
                       {t('learnMore')}
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="arrow-nudge">
                         <path d="M7 17l9.2-9.2M17 17V7.8H7.8" />
                       </svg>
                     </a>

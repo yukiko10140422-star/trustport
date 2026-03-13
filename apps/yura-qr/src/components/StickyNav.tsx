@@ -72,13 +72,18 @@ export function StickyNav() {
                 <button
                   key={section.id}
                   onClick={() => scrollTo(section.id)}
-                  className={`text-xs tracking-wider whitespace-nowrap transition-colors ${
+                  className={`relative text-xs tracking-wider whitespace-nowrap transition-colors duration-300 pb-1 ${
                     activeSection === section.id
                       ? 'text-accent'
                       : 'text-foreground/60 hover:text-foreground/80'
                   }`}
                 >
                   {t(section.key)}
+                  <span
+                    className={`absolute bottom-0 left-0 h-[1px] bg-accent transition-transform duration-300 origin-left w-full ${
+                      activeSection === section.id ? 'scale-x-100' : 'scale-x-0'
+                    }`}
+                  />
                 </button>
               ))}
             </div>

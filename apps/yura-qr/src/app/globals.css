@@ -31,6 +31,12 @@ body {
   color: var(--yura-bg);
 }
 
+/* Focus-visible for keyboard navigation */
+:focus-visible {
+  outline: 1px solid var(--yura-accent);
+  outline-offset: 2px;
+}
+
 /* Hide scrollbar but keep functionality */
 .hide-scrollbar {
   -ms-overflow-style: none;
@@ -38,4 +44,70 @@ body {
 }
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
+}
+
+/* Animated underline — grows from left on hover */
+.hover-underline {
+  position: relative;
+}
+.hover-underline::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background: var(--yura-accent);
+  opacity: 0.5;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s cubic-bezier(0.25, 0.1, 0, 1);
+}
+.group:hover .hover-underline::after,
+.hover-underline:hover::after {
+  transform: scaleX(1);
+}
+
+/* Grow-line — horizontal line that expands on group hover */
+.grow-line {
+  transition: transform 0.4s cubic-bezier(0.25, 0.1, 0, 1);
+  transform: scaleX(1);
+  transform-origin: left;
+}
+.group:hover .grow-line {
+  transform: scaleX(3);
+}
+
+/* Subtle card lift on hover */
+.card-lift {
+  transition: transform 0.4s cubic-bezier(0.25, 0.1, 0, 1),
+              box-shadow 0.4s cubic-bezier(0.25, 0.1, 0, 1);
+}
+.card-lift:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Icon glow on group hover */
+.icon-glow {
+  transition: box-shadow 0.4s ease-out, border-color 0.4s ease-out;
+}
+.group:hover .icon-glow {
+  box-shadow: 0 0 14px rgba(196, 168, 130, 0.2);
+}
+
+/* Arrow nudge on group hover */
+.arrow-nudge {
+  transition: transform 0.3s cubic-bezier(0.25, 0.1, 0, 1);
+}
+.group:hover .arrow-nudge {
+  transform: translate(2px, -2px);
+}
+
+/* Image zoom on group hover */
+.img-zoom {
+  transition: transform 0.6s cubic-bezier(0.25, 0.1, 0, 1), opacity 0.4s ease-out;
+}
+.group:hover .img-zoom {
+  transform: scale(1.04);
 }

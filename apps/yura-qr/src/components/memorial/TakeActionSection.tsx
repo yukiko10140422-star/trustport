@@ -59,7 +59,7 @@ export function TakeActionSection({ sku, shareUrl, locationName }: Props) {
                 href={`https://x.com/intent/tweet?url=${encodedUrl}&text=${encodedText}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-4 py-2 border border-border/50 text-foreground/60 text-xs tracking-wider hover:border-accent hover:text-accent transition-colors"
+                className="px-4 py-2 border border-border/50 text-foreground/60 text-xs tracking-wider hover:border-accent hover:text-accent hover:-translate-y-0.5 transition-all duration-300"
               >
                 X
               </a>
@@ -67,7 +67,7 @@ export function TakeActionSection({ sku, shareUrl, locationName }: Props) {
                 href={`https://social-plugins.line.me/lineit/share?url=${encodedUrl}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-4 py-2 border border-border/50 text-foreground/60 text-xs tracking-wider hover:border-accent hover:text-accent transition-colors"
+                className="px-4 py-2 border border-border/50 text-foreground/60 text-xs tracking-wider hover:border-accent hover:text-accent hover:-translate-y-0.5 transition-all duration-300"
               >
                 LINE
               </a>
@@ -93,10 +93,10 @@ export function TakeActionSection({ sku, shareUrl, locationName }: Props) {
               href="https://www.town.namie.fukushima.jp/"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 px-4 py-2 border border-border/50 text-foreground/60 text-xs tracking-wider hover:border-accent hover:text-accent transition-colors"
+              className="group/link inline-flex items-center gap-1 px-4 py-2 border border-border/50 text-foreground/60 text-xs tracking-wider hover:border-accent hover:text-accent hover:-translate-y-0.5 transition-all duration-300"
             >
               {t('visit.link')}
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="transition-transform duration-300 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5">
                 <path d="M7 17l9.2-9.2M17 17V7.8H7.8" />
               </svg>
             </a>
@@ -121,10 +121,10 @@ export function TakeActionSection({ sku, shareUrl, locationName }: Props) {
               href="https://www.furusato-tax.jp/city/product/07548"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 px-4 py-2 border border-border/50 text-foreground/60 text-xs tracking-wider hover:border-accent hover:text-accent transition-colors"
+              className="group/link inline-flex items-center gap-1 px-4 py-2 border border-border/50 text-foreground/60 text-xs tracking-wider hover:border-accent hover:text-accent hover:-translate-y-0.5 transition-all duration-300"
             >
               {t('support.link')}
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="transition-transform duration-300 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5">
                 <path d="M7 17l9.2-9.2M17 17V7.8H7.8" />
               </svg>
             </a>
