@@ -51,6 +51,98 @@ export async function generateMetadata({ params }: Props) {
   };
 }
 
+function buildJsonLd({
+  garment,
+  memorial,
+  locale,
+}: {
+  garment: Awaited<ReturnType<typeof getGarmentBySku>>;
+  memorial: Awaited<ReturnType<typeof getLocationMemorial>>;
+  locale: string;
+}) {
+  const isJa = locale === 'ja';
+  const graph: Record<string, unknown>[] = [];
+
+  // Place (disaster location)
+  if (memorial) {
+    const placeName = isJa ? memorial.name_ja : memorial.name_en;
+    const placeDesc = isJa ? memorial.description_ja : memorial.description_en;
+
+    const place: Record<string, unknown> = {
+      '@type': 'Place',
+      name: placeName,
+      ...(placeDesc && { description: placeDesc }),
+      ...(memorial.municipality && {
+        address: {
+          '@type': 'PostalAddress',
+          ...(memorial.municipality && { addressLocality: memorial.municipality }),
+          addressRegion: memorial.prefecture,
+          addressCountry: 'JP',
+        },
+      }),
+    };
+
+    if (memorial.latitude != null && memorial.longitude != null) {
+      place.geo = {
+        '@type': 'GeoCoordinates',
+        latitude: memorial.latitude,
+        longitude: memorial.longitude,
+      };
+    }
+
+    graph.push(place);
+  }
+
+  // Product (garment)
+  if (garment) {
+    const productName = isJa ? garment.name_ja : garment.name_en;
+    const productDesc = isJa ? garment.description_ja : garment.description_en;
+
+    graph.push({
+      '@type': 'Product',
+      name: productName,
+      sku: garment.sku,
+      brand: {
+        '@type': 'Brand',
+        name: 'YURA',
+      },
+      ...(productDesc && { description: productDesc }),
+      ...(garment.front_image_url && { image: garment.front_image_url }),
+    });
+  }
+
+  // WebPage
+  const locationName = memorial
+    ? (isJa ? memorial.name_ja : memorial.name_en)
+    : null;
+  const pageName = locationName
+    ? `${locationName} | ${isJa ? '記憶を未来へ' : 'Memory to the Future'}`
+    : `YURA | ${isJa ? '記憶を未来へ' : 'Memory to the Future'}`;
+  const pageSummary = memorial
+    ? (isJa ? memorial.summary_ja : memorial.summary_en)
+    : null;
+  const pageDesc = pageSummary
+    ?? (isJa
+      ? 'QRコードから災害アーカイブへつながるメモリアルページ'
+      : 'Memorial page connecting to disaster archives via QR code');
+
+  graph.push({
+    '@type': 'WebPage',
+    name: pageName,
+    description: pageDesc,
+    isPartOf: {
+      '@type': 'WebSite',
+      name: 'YURA',
+      url: 'https://yura.style',
+    },
+  });
+
+  return {
+    '@context': 'https://schema.org',
+    '@graph': graph,
+  };
+}
+
 export default async function GarmentPage({ params }: Props) {
   const { sku, locale } = await params;
   const garment = await getGarmentBySku(sku);
@@ -60,12 +152,20 @@ export default async function GarmentPage({ params }: Props) {
     ? await getLocationMemorial(garment.location_id)
     : null;
 
+  const jsonLd = buildJsonLd({ garment, memorial, locale });
+
   return (
-    <MemorialPage
-      sku={sku}
-      locale={locale as Locale}
-      garment={garment}
-      memorial={memorial}
-    />
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <MemorialPage
+        sku={sku}
+        locale={locale as Locale}
+        garment={garment}
+        memorial={memorial}
+      />
+    </>
   );
 }
