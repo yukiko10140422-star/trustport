@@ -1,22 +1,44 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 import { StickyNav } from '@/components';
 import { SmoothScrollProvider } from '@/providers/SmoothScrollProvider';
 import { AudioProvider } from '@/providers/AudioProvider';
 import { ImmersiveOpening } from '@/components/immersive/ImmersiveOpening';
-import { ImpactNumbers } from '@/components/immersive/ImpactNumbers';
-import { ScrollTimeline } from '@/components/immersive/ScrollTimeline';
-import { ScrollCrossfade } from '@/components/immersive/ScrollCrossfade';
-import { VoicesSection } from '@/components/immersive/VoicesSection';
-import { LessonsArchive } from '@/components/immersive/LessonsArchive';
-import { MemorialMoment } from '@/components/immersive/MemorialMoment';
 import { InitiativesSection } from '@/components/memorial/InitiativesSection';
 import { GarmentBridge } from '@/components/memorial/GarmentBridge';
 import { TakeActionSection } from '@/components/memorial/TakeActionSection';
 import { Footer } from '@/components/shared/Footer';
 import { localized, localizedWithFallback, type Locale } from '@/lib/i18n';
 import type { GarmentWithRelations, LocationWithMemorial } from '@/types/database';
+
+// Heavy components: dynamic import to reduce initial bundle (~755 KiB savings)
+// Three.js (MemorialMoment) + GSAP (ImpactNumbers, ScrollTimeline, ScrollCrossfade)
+const ImpactNumbers = dynamic(
+  () => import('@/components/immersive/ImpactNumbers').then((m) => m.ImpactNumbers),
+  { ssr: false },
+);
+const ScrollTimeline = dynamic(
+  () => import('@/components/immersive/ScrollTimeline').then((m) => m.ScrollTimeline),
+  { ssr: false },
+);
+const ScrollCrossfade = dynamic(
+  () => import('@/components/immersive/ScrollCrossfade').then((m) => m.ScrollCrossfade),
+  { ssr: false },
+);
+const VoicesSection = dynamic(
+  () => import('@/components/immersive/VoicesSection').then((m) => m.VoicesSection),
+  { ssr: false },
+);
+const LessonsArchive = dynamic(
+  () => import('@/components/immersive/LessonsArchive').then((m) => m.LessonsArchive),
+  { ssr: false },
+);
+const MemorialMoment = dynamic(
+  () => import('@/components/immersive/MemorialMoment').then((m) => m.MemorialMoment),
+  { ssr: false },
+);
 
 type Props = {
   readonly sku: string;
