@@ -24,13 +24,29 @@ export async function generateMetadata({ params }: Props) {
     ? `${locationName} — ${t('description')}`
     : t('description');
 
+  const title = `${locationName || name} | ${t('title')}`;
+  const ogTitle = `${locationName || name} | YURA — ${t('title')}`;
+
+  // Use location hero image for OGP
+  const memorial = garment?.location_id
+    ? await getLocationMemorial(garment.location_id)
+    : null;
+  const ogImage = memorial?.hero_image_url ?? undefined;
+
   return {
-    title: `${locationName || name} | ${t('title')}`,
+    title,
     description,
     openGraph: {
-      title: `${locationName || name} | YURA — ${t('title')}`,
+      title: ogTitle,
       description,
       type: 'website',
+      ...(ogImage && { images: [{ url: ogImage, width: 1200, height: 630, alt: locationName || name }] }),
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: ogTitle,
+      description,
+      ...(ogImage && { images: [ogImage] }),
     },
   };
 }

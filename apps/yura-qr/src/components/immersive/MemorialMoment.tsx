@@ -1,25 +1,37 @@
 'use client';
 
-import { useRef, useMemo, Suspense } from 'react';
+import { useRef, useMemo, useState, useEffect, Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import * as THREE from 'three';
 
-const PARTICLE_COUNT = 200;
+function useParticleCount(): number {
+  const [count, setCount] = useState(80); // SSR-safe default
+  useEffect(() => {
+    const isMobile = window.innerWidth < 768;
+    const isLowEnd = navigator.hardwareConcurrency != null && navigator.hardwareConcurrency <= 4;
+    if (isMobile || isLowEnd) {
+      setCount(60);
+    } else {
+      setCount(200);
+    }
+  }, []);
+  return count;
+}
 
-function Lanterns() {
+function Lanterns({ count }: { count: number }) {
   const meshRef = useRef<THREE.InstancedMesh>(null);
   const dummy = useMemo(() => new THREE.Object3D(), []);
 
   // Initialize particle positions & velocities
   const particles = useMemo(() => {
-    const positions = new Float32Array(PARTICLE_COUNT * 3);
-    const velocities = new Float32Array(PARTICLE_COUNT * 3);
-    const scales = new Float32Array(PARTICLE_COUNT);
-    const phases = new Float32Array(PARTICLE_COUNT);
+    const positions = new Float32Array(count * 3);
+    const velocities = new Float32Array(count * 3);
+    const scales = new Float32Array(count);
+    const phases = new Float32Array(count);
 
-    for (let i = 0; i < PARTICLE_COUNT; i++) {
+    for (let i = 0; i < count; i++) {
       // Spread across a wide area
       positions[i * 3] = (Math.random() - 0.5) * 20;     // x
       positions[i * 3 + 1] = Math.random() * -2;          // y (start below)
@@ -35,13 +47,13 @@ function Lanterns() {
     }
 
     return { positions, velocities, scales, phases };
-  }, []);
+  }, [count]);
 
   useFrame(({ clock }) => {
     if (!meshRef.current) return;
     const t = clock.getElapsedTime();
 
-    for (let i = 0; i < PARTICLE_COUNT; i++) {
+    for (let i = 0; i < count; i++) {
       const idx = i * 3;
 
       // Update position
@@ -78,7 +90,7 @@ function Lanterns() {
   });
 
   return (
-    <instancedMesh ref={meshRef} args={[undefined, undefined, PARTICLE_COUNT]}>
+    <instancedMesh ref={meshRef} args={[undefined, undefined, count]}>
       <sphereGeometry args={[1, 8, 8]} />
       <meshBasicMaterial
         color="#C4A882"
@@ -90,18 +102,19 @@ function Lanterns() {
   );
 }
 
-function Scene() {
+function Scene({ particleCount }: { particleCount: number }) {
   return (
     <>
       <ambientLight intensity={0.1} />
       <fog attach="fog" args={['#0A0A0A', 5, 20]} />
-      <Lanterns />
+      <Lanterns count={particleCount} />
     </>
   );
 }
 
 export function MemorialMoment() {
   const t = useTranslations('memorial');
+  const particleCount = useParticleCount();
 
   return (
     <section className="relative h-[80vh] md:h-screen overflow-hidden">
@@ -112,8 +125,9 @@ export function MemorialMoment() {
             camera={{ position: [0, 2, 8], fov: 60 }}
             style={{ background: 'transparent' }}
             gl={{ antialias: true, alpha: true }}
+            dpr={[1, 1.5]}
           >
-            <Scene />
+            <Scene particleCount={particleCount} />
           </Canvas>
         </Suspense>
       </div>
