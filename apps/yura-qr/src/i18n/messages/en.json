@@ -14,7 +14,13 @@
     "action": "Take Action"
   },
   "memorial": {
-    "scrollToLearn": "Scroll to learn"
+    "scrollToLearn": "Scroll to learn",
+    "daysSince": "days have passed",
+    "experienceWithSound": "Experience with sound",
+    "soundOn": "Sound ON",
+    "soundOff": "Sound OFF",
+    "memorialMessage": "There was once a life here.\nLaughter echoed, festival lanterns swayed in the wind.\nOn that day, everything changed.\nThese lights are the candles of memory.",
+    "inMemory": "So we never forget"
   },
   "statistics": {
     "title": "The Reality in Numbers"

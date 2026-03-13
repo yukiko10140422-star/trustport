@@ -14,7 +14,13 @@
     "action": "アクション"
   },
   "memorial": {
-    "scrollToLearn": "スクロールして学ぶ"
+    "scrollToLearn": "スクロールして学ぶ",
+    "daysSince": "日が経過しました",
+    "experienceWithSound": "音声付きで体験する",
+    "soundOn": "音声 ON",
+    "soundOff": "音声 OFF",
+    "memorialMessage": "ここには、かつて人々の暮らしがありました。\n笑い声が響き、祭りの灯が揺れた場所。\nあの日を境に、すべてが変わりました。\nこの光は、記憶の灯です。",
+    "inMemory": "忘れない、ために"
   },
   "statistics": {
     "title": "数字が語る現実"
