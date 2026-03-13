@@ -51,8 +51,7 @@ type Props = {
  * No external files needed — fully synthesized in real-time.
  */
 function createOceanSynth(ctx: AudioContext, masterGain: GainNode) {
-  // White noise source via AudioWorklet fallback: ScriptProcessor
-  const bufferSize = 4096;
+  // White noise source
   const noiseNode = ctx.createBufferSource();
   const noiseBuffer = ctx.createBuffer(1, ctx.sampleRate * 10, ctx.sampleRate);
   const data = noiseBuffer.getChannelData(0);
