@@ -145,11 +145,11 @@ export function MemorialMoment() {
         >
           <div className="w-12 h-[1px] bg-accent/30 mx-auto mb-8" />
 
-          <p className="font-serif text-foreground/40 text-sm md:text-base leading-[2] max-w-md mx-auto mb-8">
+          <p className="font-serif text-foreground/60 text-sm md:text-base leading-[2] max-w-md mx-auto mb-8">
             {t('memorialMessage')}
           </p>
 
-          <p className="text-foreground/15 text-[10px] tracking-[0.4em] uppercase">
+          <p className="text-foreground/40 text-[10px] tracking-[0.4em] uppercase">
             {t('inMemory')}
           </p>
         </motion.div>

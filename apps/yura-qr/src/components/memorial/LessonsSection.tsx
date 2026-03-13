@@ -58,7 +58,7 @@ export function LessonsSection({ lessons, locale }: Props) {
           {t('title')}
         </motion.h2>
         <motion.p
-          className="text-foreground/40 text-sm text-center mb-16 max-w-md mx-auto"
+          className="text-foreground/60 text-sm text-center mb-16 max-w-md mx-auto"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
@@ -89,18 +89,18 @@ export function LessonsSection({ lessons, locale }: Props) {
                   aria-expanded={isExpanded}
                   aria-controls={`lesson-body-${lesson.id}`}
                 >
-                  <div className="text-accent/60 shrink-0 mt-0.5">
+                  <div className="text-accent/70 shrink-0 mt-0.5">
                     {icon}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-[9px] tracking-[0.2em] uppercase text-foreground/30 mb-1">
+                    <p className="text-[9px] tracking-[0.2em] uppercase text-foreground/50 mb-1">
                       {t(`category.${lesson.category}`)}
                     </p>
                     <h3 className="font-serif text-foreground/85 text-base md:text-lg group-hover:text-accent transition-colors">
                       {title}
                     </h3>
                   </div>
-                  <div className={`text-foreground/30 transition-transform shrink-0 ${isExpanded ? 'rotate-180' : ''}`}>
+                  <div className={`text-foreground/50 transition-transform shrink-0 ${isExpanded ? 'rotate-180' : ''}`}>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                       <path d="M6 9l6 6 6-6" />
                     </svg>

@@ -95,7 +95,7 @@ export function ScrollTimeline({ events, locale }: Props) {
       <div className="absolute top-0 left-0 right-0 z-20 pt-8 pb-4 px-6 bg-gradient-to-b from-background via-background/95 to-transparent pointer-events-none">
         <div className="max-w-7xl mx-auto flex items-end justify-between">
           <div>
-            <p className="text-foreground/15 text-[10px] tracking-[0.4em] uppercase mb-2">
+            <p className="text-foreground/40 text-[10px] tracking-[0.4em] uppercase mb-2">
               {t('subtitle')}
             </p>
             <h2 className="font-serif text-xl md:text-3xl text-accent/90">
@@ -108,7 +108,7 @@ export function ScrollTimeline({ events, locale }: Props) {
             {Object.entries(EVENT_COLORS).map(([type, colors]) => (
               <div key={type} className="flex items-center gap-1.5">
                 <div className={`w-2 h-2 rounded-full ${colors.dot}`} />
-                <span className="text-foreground/25 text-[9px] tracking-wider uppercase">
+                <span className="text-foreground/50 text-[9px] tracking-wider uppercase">
                   {t(`type.${type}`)}
                 </span>
               </div>
@@ -160,7 +160,7 @@ export function ScrollTimeline({ events, locale }: Props) {
                     <span className="text-foreground/50 text-xs font-mono tracking-wide">
                       {event.event_date}
                       {event.event_time && (
-                        <span className="text-foreground/30 ml-2">
+                        <span className="text-foreground/50 ml-2">
                           {event.event_time.slice(0, 5)}
                         </span>
                       )}
@@ -178,7 +178,7 @@ export function ScrollTimeline({ events, locale }: Props) {
 
                 {/* Description */}
                 {description && (
-                  <p className="text-foreground/45 text-sm leading-relaxed mb-4">
+                  <p className="text-foreground/60 text-sm leading-relaxed mb-4">
                     {description}
                   </p>
                 )}
@@ -197,16 +197,16 @@ export function ScrollTimeline({ events, locale }: Props) {
 
                 {/* Impact */}
                 {impact && (
-                  <p className="text-accent/60 text-xs font-mono tracking-wide mb-3 border-l-2 border-accent/20 pl-3">
+                  <p className="text-accent/70 text-xs font-mono tracking-wide mb-3 border-l-2 border-accent/30 pl-3">
                     {impact}
                   </p>
                 )}
 
                 {/* Source */}
                 {event.source && (
-                  <p className="text-foreground/15 text-[10px]">
+                  <p className="text-foreground/40 text-[10px]">
                     {sourceHref ? (
-                      <a href={sourceHref} target="_blank" rel="noopener noreferrer" className="hover:text-foreground/30 transition-colors">
+                      <a href={sourceHref} target="_blank" rel="noopener noreferrer" className="hover:text-foreground/60 transition-colors">
                         {event.source}
                       </a>
                     ) : event.source}

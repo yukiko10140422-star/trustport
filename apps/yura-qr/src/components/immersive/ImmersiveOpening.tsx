@@ -236,13 +236,13 @@ export function ImmersiveOpening({
           animate={{ opacity: 1 }}
           transition={{ duration: 1.5, delay: 0.5 }}
         >
-          <p className="text-foreground/25 text-[10px] tracking-[0.4em] uppercase mb-3">
+          <p className="text-foreground/50 text-[10px] tracking-[0.4em] uppercase mb-3">
             {disasterDate}
           </p>
           <p className="font-display text-5xl md:text-7xl lg:text-8xl text-accent/90 tabular-nums">
             <AnimatedCounter target={daysSince} duration={3} />
           </p>
-          <p className="text-foreground/30 text-xs tracking-[0.25em] uppercase mt-2">
+          <p className="text-foreground/50 text-xs tracking-[0.25em] uppercase mt-2">
             {t('daysSince')}
           </p>
         </motion.div>
@@ -260,7 +260,7 @@ export function ImmersiveOpening({
         {/* Summary */}
         {summary && (
           <motion.p
-            className="font-serif text-foreground/45 text-sm md:text-base leading-[1.8] max-w-lg mx-auto mb-12"
+            className="font-serif text-foreground/60 text-sm md:text-base leading-[1.8] max-w-lg mx-auto mb-12"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1.2, delay: 1.8 }}
@@ -303,7 +303,7 @@ export function ImmersiveOpening({
           {isUnlocked && (
             <motion.button
               onClick={toggleAmbient}
-              className="inline-flex items-center gap-2 text-foreground/20 text-[10px] tracking-[0.2em] uppercase hover:text-foreground/40 transition-colors"
+              className="inline-flex items-center gap-2 text-foreground/45 text-[10px] tracking-[0.2em] uppercase hover:text-foreground/60 transition-colors"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5 }}
@@ -346,7 +346,7 @@ export function ImmersiveOpening({
           animate={{ y: [0, 8, 0] }}
           transition={{ repeat: Infinity, duration: 2.5, ease: 'easeInOut' }}
         >
-          <svg width="20" height="32" viewBox="0 0 20 32" fill="none" className="text-foreground/15">
+          <svg width="20" height="32" viewBox="0 0 20 32" fill="none" className="text-foreground/40">
             <rect x="1" y="1" width="18" height="30" rx="9" stroke="currentColor" strokeWidth="1" />
             <motion.circle
               cx="10"

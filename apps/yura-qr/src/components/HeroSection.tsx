@@ -86,7 +86,7 @@ export function HeroSection({ sku, garmentName, frontImageUrl }: Props) {
         </motion.p>
 
         <motion.p
-          className="text-foreground/40 text-sm max-w-sm mx-auto"
+          className="text-foreground/60 text-sm max-w-sm mx-auto"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6 }}
@@ -110,7 +110,7 @@ export function HeroSection({ sku, garmentName, frontImageUrl }: Props) {
               height="24"
               viewBox="0 0 24 24"
               fill="none"
-              className="text-accent/60 mx-auto"
+              className="text-accent/70 mx-auto"
             >
               <path
                 d="M12 5v14M19 12l-7 7-7-7"

@@ -34,7 +34,7 @@ export function InitiativesSection({ initiatives, locale }: Props) {
           {t('title')}
         </motion.h2>
         <motion.p
-          className="text-foreground/40 text-sm text-center mb-16 max-w-lg mx-auto"
+          className="text-foreground/60 text-sm text-center mb-16 max-w-lg mx-auto"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
@@ -74,7 +74,7 @@ export function InitiativesSection({ initiatives, locale }: Props) {
                 <div className="p-5 md:p-6">
                   {/* Category & Status */}
                   <div className="flex items-center gap-2 mb-3">
-                    <span className="text-[9px] tracking-[0.15em] uppercase text-foreground/35">
+                    <span className="text-[9px] tracking-[0.15em] uppercase text-foreground/50">
                       {t(`category.${initiative.category}`)}
                     </span>
                     <span className={`text-[9px] tracking-wider uppercase px-2 py-0.5 rounded-sm border ${STATUS_STYLES[initiative.status] ?? ''}`}>

@@ -46,14 +46,14 @@ export function TakeActionSection({ sku, shareUrl, locationName }: Props) {
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
           >
-            <div className="text-accent/50 mb-4 flex justify-center">
+            <div className="text-accent/70 mb-4 flex justify-center">
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" />
                 <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" /><line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
               </svg>
             </div>
             <h3 className="font-serif text-foreground/80 mb-2">{t('share.title')}</h3>
-            <p className="text-foreground/40 text-xs mb-4">{t('share.description')}</p>
+            <p className="text-foreground/60 text-xs mb-4">{t('share.description')}</p>
             <div className="flex justify-center gap-3">
               <a
                 href={`https://x.com/intent/tweet?url=${encodedUrl}&text=${encodedText}`}
@@ -82,13 +82,13 @@ export function TakeActionSection({ sku, shareUrl, locationName }: Props) {
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
           >
-            <div className="text-accent/50 mb-4 flex justify-center">
+            <div className="text-accent/70 mb-4 flex justify-center">
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" />
               </svg>
             </div>
             <h3 className="font-serif text-foreground/80 mb-2">{t('visit.title')}</h3>
-            <p className="text-foreground/40 text-xs mb-4">{t('visit.description')}</p>
+            <p className="text-foreground/60 text-xs mb-4">{t('visit.description')}</p>
             <a
               href="https://www.town.namie.fukushima.jp/"
               target="_blank"
@@ -110,13 +110,13 @@ export function TakeActionSection({ sku, shareUrl, locationName }: Props) {
             viewport={{ once: true }}
             transition={{ delay: 0.3 }}
           >
-            <div className="text-accent/50 mb-4 flex justify-center">
+            <div className="text-accent/70 mb-4 flex justify-center">
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
               </svg>
             </div>
             <h3 className="font-serif text-foreground/80 mb-2">{t('support.title')}</h3>
-            <p className="text-foreground/40 text-xs mb-4">{t('support.description')}</p>
+            <p className="text-foreground/60 text-xs mb-4">{t('support.description')}</p>
             <a
               href="https://www.furusato-tax.jp/city/product/07548"
               target="_blank"

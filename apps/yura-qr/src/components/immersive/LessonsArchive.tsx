@@ -48,13 +48,13 @@ export function LessonsArchive({ lessons, locale }: Props) {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
         >
-          <p className="text-foreground/15 text-[10px] tracking-[0.4em] uppercase mb-4">
+          <p className="text-foreground/40 text-[10px] tracking-[0.4em] uppercase mb-4">
             Archive
           </p>
           <h2 className="font-serif text-2xl md:text-4xl text-accent/90 mb-4">
             {t('title')}
           </h2>
-          <p className="text-foreground/30 text-sm max-w-md mx-auto">
+          <p className="text-foreground/50 text-sm max-w-md mx-auto">
             {t('subtitle')}
           </p>
         </motion.div>
@@ -78,13 +78,13 @@ export function LessonsArchive({ lessons, locale }: Props) {
                 <div className="flex items-start gap-4">
                   {/* Icon */}
                   <div className="shrink-0 w-10 h-10 rounded-full border border-accent/15 flex items-center justify-center group-hover:border-accent/30 transition-colors">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-accent/50 group-hover:text-accent/80 transition-colors">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-accent/70 group-hover:text-accent/90 transition-colors">
                       <path d={iconPath} />
                     </svg>
                   </div>
 
                   <div className="flex-1 min-w-0">
-                    <p className="text-[9px] tracking-[0.2em] uppercase text-foreground/20 mb-2">
+                    <p className="text-[9px] tracking-[0.2em] uppercase text-foreground/45 mb-2">
                       {t(`category.${lesson.category}`)}
                     </p>
                     <h3 className="font-serif text-foreground/80 text-base md:text-lg leading-snug group-hover:text-accent/90 transition-colors">
@@ -92,7 +92,7 @@ export function LessonsArchive({ lessons, locale }: Props) {
                     </h3>
 
                     {/* Read more indicator */}
-                    <div className="flex items-center gap-2 mt-4 text-accent/40 group-hover:text-accent/70 transition-colors">
+                    <div className="flex items-center gap-2 mt-4 text-accent/60 group-hover:text-accent/80 transition-colors">
                       <div className="w-4 h-[1px] bg-current" />
                       <span className="text-[10px] tracking-[0.2em] uppercase">Read</span>
                     </div>
@@ -131,7 +131,7 @@ export function LessonsArchive({ lessons, locale }: Props) {
               {/* Close button */}
               <button
                 onClick={() => setSelectedId(null)}
-                className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center text-foreground/30 hover:text-foreground/60 transition-colors"
+                className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center text-foreground/50 hover:text-foreground/70 transition-colors"
                 aria-label="Close"
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -140,7 +140,7 @@ export function LessonsArchive({ lessons, locale }: Props) {
               </button>
 
               {/* Category */}
-              <p className="text-[9px] tracking-[0.2em] uppercase text-accent/50 mb-4">
+              <p className="text-[9px] tracking-[0.2em] uppercase text-accent/70 mb-4">
                 {t(`category.${selectedLesson.category}`)}
               </p>
 

@@ -79,7 +79,7 @@ export function MemorialPage({ sku, locale, garment, memorial }: Props) {
           <h1 className="font-serif text-2xl text-accent mb-4">
             {locale === 'en' ? 'Memorial Not Found' : 'メモリアルが見つかりません'}
           </h1>
-          <p className="text-foreground/40 text-sm">
+          <p className="text-foreground/60 text-sm">
             {locale === 'en'
               ? 'The memorial archive for this garment is not yet available.'
               : 'この衣服に紐づくメモリアルアーカイブはまだ公開されていません。'}

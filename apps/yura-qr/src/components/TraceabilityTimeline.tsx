@@ -69,12 +69,12 @@ export function TraceabilityTimeline({ info, locale }: Props) {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
         >
-          <p className="text-foreground/30 text-xs tracking-wider uppercase mb-1">
+          <p className="text-foreground/50 text-xs tracking-wider uppercase mb-1">
             Carbon Footprint
           </p>
           <p className="text-accent font-display text-2xl">
             {info.carbon_footprint_kg}
-            <span className="text-sm text-foreground/40 ml-1">kg CO₂</span>
+            <span className="text-sm text-foreground/60 ml-1">kg CO₂</span>
           </p>
         </motion.div>
       )}
@@ -82,7 +82,7 @@ export function TraceabilityTimeline({ info, locale }: Props) {
       {/* Notes */}
       {notes && (
         <motion.p
-          className="mt-6 text-foreground/30 text-xs leading-relaxed"
+          className="mt-6 text-foreground/50 text-xs leading-relaxed"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}

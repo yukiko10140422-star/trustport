@@ -47,7 +47,7 @@ export function MemorialHero({ location, statistics, locale }: Props) {
       <div className="relative z-10 w-full max-w-3xl px-6 text-center">
         {/* Date */}
         <motion.p
-          className="text-accent/60 text-sm tracking-[0.3em] font-mono mb-6"
+          className="text-accent/70 text-sm tracking-[0.3em] font-mono mb-6"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 0.2 }}
@@ -67,7 +67,7 @@ export function MemorialHero({ location, statistics, locale }: Props) {
 
         {/* Disaster type */}
         <motion.p
-          className="text-foreground/40 text-xs tracking-[0.2em] uppercase mb-8"
+          className="text-foreground/60 text-xs tracking-[0.2em] uppercase mb-8"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6 }}
@@ -100,12 +100,12 @@ export function MemorialHero({ location, statistics, locale }: Props) {
                 <p className="font-display text-2xl md:text-3xl text-accent">
                   {stat.value_text}
                   {localized(locale, stat.unit_ja, stat.unit_en) && (
-                    <span className="text-sm text-foreground/40 ml-1">
+                    <span className="text-sm text-foreground/60 ml-1">
                       {localized(locale, stat.unit_ja, stat.unit_en)}
                     </span>
                   )}
                 </p>
-                <p className="text-foreground/40 text-[10px] tracking-wider mt-1">
+                <p className="text-foreground/60 text-[10px] tracking-wider mt-1">
                   {localized(locale, stat.label_ja, stat.label_en)}
                 </p>
               </div>
@@ -120,14 +120,14 @@ export function MemorialHero({ location, statistics, locale }: Props) {
           animate={{ opacity: 1 }}
           transition={{ delay: 1.4 }}
         >
-          <p className="text-foreground/20 text-[10px] tracking-[0.3em] uppercase mb-3">
+          <p className="text-foreground/45 text-[10px] tracking-[0.3em] uppercase mb-3">
             {t('scrollToLearn')}
           </p>
           <motion.div
             animate={{ y: [0, 8, 0] }}
             transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="text-accent/40 mx-auto">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="text-accent/60 mx-auto">
               <path d="M12 5v14M19 12l-7 7-7-7" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </motion.div>

@@ -40,7 +40,7 @@ export function TestimonyCard({ testimony, locale }: Props) {
       transition={{ duration: 0.5 }}
     >
       {/* Quote mark */}
-      <div className="text-accent/30 font-display text-4xl leading-none mb-4">&ldquo;</div>
+      <div className="text-accent/50 font-display text-4xl leading-none mb-4">&ldquo;</div>
 
       {/* Content */}
       <p className="font-serif text-foreground/80 text-sm md:text-base leading-relaxed mb-6">
@@ -54,7 +54,7 @@ export function TestimonyCard({ testimony, locale }: Props) {
             <p className="text-foreground/60 text-sm">{testimony.speaker_name}</p>
           )}
           {testimony.speaker_role && (
-            <p className="text-foreground/30 text-xs mt-0.5">{testimony.speaker_role}</p>
+            <p className="text-foreground/50 text-xs mt-0.5">{testimony.speaker_role}</p>
           )}
         </div>
 
@@ -82,7 +82,7 @@ export function TestimonyCard({ testimony, locale }: Props) {
 
       {/* Source */}
       {testimony.source && (
-        <p className="text-foreground/20 text-[10px] mt-4">
+        <p className="text-foreground/45 text-[10px] mt-4">
           {testimony.source_url ? (
             <a href={testimony.source_url} target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">
               {testimony.source}

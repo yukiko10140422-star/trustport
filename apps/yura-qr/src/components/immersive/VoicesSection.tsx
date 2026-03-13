@@ -190,7 +190,7 @@ export function VoicesSection({ testimonies, locale }: Props) {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
         >
-          <p className="text-foreground/15 text-[10px] tracking-[0.4em] uppercase mb-4">
+          <p className="text-foreground/40 text-[10px] tracking-[0.4em] uppercase mb-4">
             Testimony
           </p>
           <h2 className="font-serif text-2xl md:text-4xl text-accent/90">
@@ -245,13 +245,13 @@ export function VoicesSection({ testimonies, locale }: Props) {
                       <cite className="text-foreground/50 text-sm not-italic font-serif">
                         {testimony.speaker_name}
                         {testimony.speaker_age_at_time && (
-                          <span className="text-foreground/25 ml-1">
+                          <span className="text-foreground/50 ml-1">
                             ({testimony.speaker_age_at_time})
                           </span>
                         )}
                       </cite>
                       {testimony.speaker_role && (
-                        <p className="text-foreground/20 text-[10px] tracking-wider mt-0.5">
+                        <p className="text-foreground/45 text-[10px] tracking-wider mt-0.5">
                           {testimony.speaker_role}
                         </p>
                       )}

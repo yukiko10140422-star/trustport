@@ -105,7 +105,7 @@ function CrossfadePair({
                 {caption}
               </p>
               {photo.source && (
-                <p className="text-foreground/20 text-[10px] mt-1">
+                <p className="text-foreground/45 text-[10px] mt-1">
                   {photo.source}
                 </p>
               )}
@@ -130,7 +130,7 @@ export function ScrollCrossfade({ photos, locale }: Props) {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
         >
-          <p className="text-foreground/15 text-[10px] tracking-[0.4em] uppercase mb-4">
+          <p className="text-foreground/40 text-[10px] tracking-[0.4em] uppercase mb-4">
             Before / After
           </p>
           <h2 className="font-serif text-2xl md:text-4xl text-accent/90">

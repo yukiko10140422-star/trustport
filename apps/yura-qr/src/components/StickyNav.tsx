@@ -75,7 +75,7 @@ export function StickyNav() {
                   className={`text-xs tracking-wider whitespace-nowrap transition-colors ${
                     activeSection === section.id
                       ? 'text-accent'
-                      : 'text-foreground/40 hover:text-foreground/70'
+                      : 'text-foreground/60 hover:text-foreground/80'
                   }`}
                 >
                   {t(section.key)}

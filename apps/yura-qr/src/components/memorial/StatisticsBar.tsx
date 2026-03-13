@@ -18,7 +18,7 @@ export function StatisticsBar({ statistics, locale }: Props) {
   return (
     <section className="py-16 px-6 border-y border-border/30">
       <motion.p
-        className="text-foreground/25 text-[10px] tracking-[0.3em] uppercase text-center mb-8"
+        className="text-foreground/50 text-[10px] tracking-[0.3em] uppercase text-center mb-8"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
@@ -45,11 +45,11 @@ export function StatisticsBar({ statistics, locale }: Props) {
             >
               <p className="font-display text-2xl md:text-3xl text-accent mb-1">
                 {stat.value_text}
-                {unit && <span className="text-xs text-foreground/40 ml-1">{unit}</span>}
+                {unit && <span className="text-xs text-foreground/60 ml-1">{unit}</span>}
               </p>
               <p className="text-foreground/50 text-xs tracking-wider">{label}</p>
               {context && (
-                <p className="text-foreground/25 text-[10px] mt-1 leading-snug">{context}</p>
+                <p className="text-foreground/50 text-[10px] mt-1 leading-snug">{context}</p>
               )}
             </motion.div>
           );

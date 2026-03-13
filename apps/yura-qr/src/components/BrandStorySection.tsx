@@ -46,7 +46,7 @@ export function BrandStorySection({ content, locale }: Props) {
           </motion.div>
         ) : (
           <motion.div
-            className="text-center text-foreground/30 text-sm"
+            className="text-center text-foreground/50 text-sm"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}

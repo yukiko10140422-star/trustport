@@ -51,7 +51,7 @@ export function ReversibleShowcase({ locale }: Props) {
         </motion.h2>
 
         <motion.p
-          className="text-foreground/40 text-sm text-center mb-12 max-w-md mx-auto"
+          className="text-foreground/60 text-sm text-center mb-12 max-w-md mx-auto"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
@@ -101,7 +101,7 @@ export function ReversibleShowcase({ locale }: Props) {
           <div className="flex flex-col gap-8">
             {/* Color selector */}
             <div className="flex items-center gap-4">
-              <span className="text-foreground/30 text-xs tracking-wider uppercase">
+              <span className="text-foreground/50 text-xs tracking-wider uppercase">
                 {t('color')}
               </span>
               <div className="flex gap-3">
@@ -131,7 +131,7 @@ export function ReversibleShowcase({ locale }: Props) {
                   className={`text-left px-4 py-3 border transition-all ${
                     view === v
                       ? 'border-accent bg-accent/5 text-accent'
-                      : 'border-border text-foreground/40 hover:text-foreground/70 hover:border-foreground/20'
+                      : 'border-border text-foreground/60 hover:text-foreground/80 hover:border-foreground/30'
                   }`}
                 >
                   <span className="text-xs tracking-wider uppercase block">

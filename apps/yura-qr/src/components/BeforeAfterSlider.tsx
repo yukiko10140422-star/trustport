@@ -161,7 +161,7 @@ export function BeforeAfterSlider({
             <p className="text-sm text-foreground/60 font-serif">{caption}</p>
           )}
           {source && (
-            <p className="text-xs text-foreground/30 mt-1">
+            <p className="text-xs text-foreground/50 mt-1">
               {sourceUrl ? (
                 <a
                   href={sourceUrl}

@@ -44,7 +44,7 @@ export function DisasterTimeline({ events, locale }: Props) {
           {t('title')}
         </motion.h2>
         <motion.p
-          className="text-foreground/40 text-sm text-center mb-16 max-w-md mx-auto"
+          className="text-foreground/60 text-sm text-center mb-16 max-w-md mx-auto"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
@@ -125,7 +125,7 @@ export function DisasterTimeline({ events, locale }: Props) {
 
                 {/* Source */}
                 {event.source && (
-                  <p className="text-foreground/20 text-[10px] mt-2">
+                  <p className="text-foreground/45 text-[10px] mt-2">
                     {sanitizeExternalUrl(event.source_url) ? (
                       <a href={sanitizeExternalUrl(event.source_url)!} target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">
                         {event.source}

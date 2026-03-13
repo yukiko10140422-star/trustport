@@ -81,7 +81,7 @@ export function CommunitySection({ sku, shareUrl }: Props) {
               href={platform.getUrl(shareUrl, shareText)}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-12 h-12 flex items-center justify-center border border-border text-foreground/40 hover:text-accent hover:border-accent transition-colors"
+              className="w-12 h-12 flex items-center justify-center border border-border text-foreground/60 hover:text-accent hover:border-accent transition-colors"
               aria-label={`Share on ${platform.name}`}
             >
               {platform.icon}
@@ -91,7 +91,7 @@ export function CommunitySection({ sku, shareUrl }: Props) {
 
         {/* Hashtag */}
         <motion.p
-          className="mt-8 text-accent/60 font-display text-lg tracking-wider"
+          className="mt-8 text-accent/70 font-display text-lg tracking-wider"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}

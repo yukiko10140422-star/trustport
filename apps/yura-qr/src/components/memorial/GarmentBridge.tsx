@@ -26,7 +26,7 @@ export function GarmentBridge({ garment, locale, sku }: Props) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <p className="text-foreground/25 text-[10px] tracking-[0.3em] uppercase mb-4">
+          <p className="text-foreground/50 text-[10px] tracking-[0.3em] uppercase mb-4">
             {sku}
           </p>
           <h2 className="font-serif text-2xl md:text-4xl text-accent mb-6">

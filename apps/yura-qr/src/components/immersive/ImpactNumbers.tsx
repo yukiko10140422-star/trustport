@@ -73,7 +73,7 @@ function CounterCell({
           {displayValue}
         </span>
         {unit && (
-          <span className="text-foreground/30 text-sm md:text-base ml-2 font-serif">
+          <span className="text-foreground/50 text-sm md:text-base ml-2 font-serif">
             {unit}
           </span>
         )}
@@ -86,7 +86,7 @@ function CounterCell({
 
       {/* Context */}
       {context && (
-        <p className="text-foreground/20 text-[10px] md:text-[11px] mt-2 leading-relaxed max-w-[200px] mx-auto">
+        <p className="text-foreground/45 text-[10px] md:text-[11px] mt-2 leading-relaxed max-w-[200px] mx-auto">
           {context}
         </p>
       )}
@@ -105,7 +105,7 @@ export function ImpactNumbers({ statistics, locale }: Props) {
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/20 to-transparent" />
 
       <motion.p
-        className="text-foreground/15 text-[10px] tracking-[0.4em] uppercase text-center mb-4"
+        className="text-foreground/40 text-[10px] tracking-[0.4em] uppercase text-center mb-4"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
