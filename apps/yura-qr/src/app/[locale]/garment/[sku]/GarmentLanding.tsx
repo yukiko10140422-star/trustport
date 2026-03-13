@@ -133,6 +133,7 @@ export function GarmentLanding({ sku, locale, garment, brandContent }: Props) {
                   source_url: null,
                   is_published: true,
                   sort_order: 0,
+                  category: 'survivor',
                   created_at: new Date().toISOString(),
                 }}
                 locale={locale}

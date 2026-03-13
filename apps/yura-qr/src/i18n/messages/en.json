@@ -1,21 +1,34 @@
 {
   "meta": {
-    "title": "YURA — Wear the Memory",
-    "description": "A fashion brand that weaves memories of disaster-affected areas into digital archives"
+    "title": "Memory for the Future",
+    "description": "A digital memorial preserving the memory and lessons of disaster-affected areas"
   },
   "nav": {
-    "hero": "Top",
-    "reversible": "Reversible",
+    "memorial": "Memorial",
+    "timeline": "Timeline",
     "beforeAfter": "Before / After",
-    "testimony": "Testimony",
-    "traceability": "Traceability",
-    "story": "Story",
-    "community": "Community"
+    "voices": "Voices",
+    "lessons": "Lessons",
+    "namieNow": "Namie Now",
+    "garment": "The Garment",
+    "action": "Take Action"
   },
-  "hero": {
-    "tagline": "Wear the Memory. Embrace the Future.",
-    "subtitle": "A single garment becomes a gateway to fading memories",
-    "cta": "Explore the Story"
+  "memorial": {
+    "scrollToLearn": "Scroll to learn"
+  },
+  "statistics": {
+    "title": "The Reality in Numbers"
+  },
+  "timeline": {
+    "title": "What Happened That Day",
+    "subtitle": "A chronicle of Namie Town, beginning March 11, 2011",
+    "type": {
+      "earthquake": "Earthquake",
+      "tsunami": "Tsunami",
+      "nuclear": "Nuclear",
+      "evacuation": "Evacuation",
+      "recovery": "Recovery"
+    }
   },
   "beforeAfter": {
     "title": "Landscapes Across Time",
@@ -27,6 +40,64 @@
     "title": "Voices of Memory",
     "listen": "Listen to testimony"
   },
+  "lessons": {
+    "title": "What This Disaster Taught Us",
+    "subtitle": "Lessons for the future, so tragedy is never repeated",
+    "category": {
+      "preparedness": "Preparedness",
+      "infrastructure": "Infrastructure",
+      "community": "Community",
+      "policy": "Policy",
+      "memory": "Memory Preservation"
+    }
+  },
+  "initiatives": {
+    "title": "Namie Today",
+    "subtitle": "The ongoing efforts to rebuild Namie Town",
+    "learnMore": "Learn more",
+    "category": {
+      "agriculture": "Agriculture",
+      "tourism": "Tourism",
+      "community": "Community",
+      "education": "Education",
+      "culture": "Culture",
+      "infrastructure": "Infrastructure"
+    },
+    "status": {
+      "ongoing": "Ongoing",
+      "completed": "Completed",
+      "planned": "Planned"
+    }
+  },
+  "garmentBridge": {
+    "title": "What This Garment Carries",
+    "narrative": "To keep this memory alive in everyday life. YURA's reversible t-shirt carries the beauty of recovery on the outside, and the memory of disaster when turned inside-out. Through the QR code, you access this archive — the wearer becomes a storyteller of memory.",
+    "traceabilityTitle": "Manufacturing Traceability"
+  },
+  "action": {
+    "title": "Carry the Memory Forward",
+    "subtitle": "Learning is the first action. Sharing is the next step.",
+    "shareText": "Memories we must not forget. Learn the story of this place.",
+    "share": {
+      "title": "Share",
+      "description": "Share this memorial to spread awareness"
+    },
+    "visit": {
+      "title": "Visit",
+      "description": "Visit Namie Town and experience its recovery firsthand",
+      "link": "Namie Town Official"
+    },
+    "support": {
+      "title": "Support",
+      "description": "Support Namie's recovery through Furusato Tax",
+      "link": "Furusato Tax"
+    }
+  },
+  "footer": {
+    "disclaimer": "Information on this site is based on official government sources and firsthand testimonies. While we strive for accuracy, please refer to the cited sources for details.",
+    "sources": "Sources: Reconstruction Agency, Namie Town, Cabinet Office Disaster Prevention",
+    "rights": "All rights reserved."
+  },
   "traceability": {
     "title": "How It's Made",
     "factory": "Factory",
@@ -34,9 +105,6 @@
     "printMethod": "Print Method",
     "productionDate": "Production Date",
     "qualityCheck": "Quality Check"
-  },
-  "story": {
-    "title": "About YURA"
   },
   "reversible": {
     "title": "The Act of Flipping",
@@ -58,11 +126,6 @@
         "description": "Turn it inside-out to reveal the post-disaster landscape. Memories we must not forget"
       }
     }
-  },
-  "community": {
-    "title": "Share the Memory",
-    "share": "Share this garment's story",
-    "hashtag": "#FlipForMemory"
   },
   "common": {
     "loading": "Loading...",

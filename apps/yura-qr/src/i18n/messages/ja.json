@@ -1,21 +1,34 @@
 {
   "meta": {
-    "title": "YURA — 記憶を着る",
-    "description": "被災地の記憶をデジタルアーカイブとして紡ぐファッションブランド"
+    "title": "記憶を未来へ",
+    "description": "被災地の記憶と教訓を未来に伝えるデジタルメモリアル"
   },
   "nav": {
-    "hero": "トップ",
-    "reversible": "リバーシブル",
+    "memorial": "メモリアル",
+    "timeline": "タイムライン",
     "beforeAfter": "Before / After",
-    "testimony": "証言",
-    "traceability": "トレーサビリティ",
-    "story": "ストーリー",
-    "community": "コミュニティ"
+    "voices": "記憶の声",
+    "lessons": "教訓",
+    "namieNow": "浪江の今",
+    "garment": "この服",
+    "action": "アクション"
   },
-  "hero": {
-    "tagline": "記憶を着る。未来を纏う。",
-    "subtitle": "1枚の服が、忘れられゆく記憶への入口になる",
-    "cta": "ストーリーを見る"
+  "memorial": {
+    "scrollToLearn": "スクロールして学ぶ"
+  },
+  "statistics": {
+    "title": "数字が語る現実"
+  },
+  "timeline": {
+    "title": "あの日、何が起きたのか",
+    "subtitle": "2011年3月11日から始まった、浪江町の記録",
+    "type": {
+      "earthquake": "地震",
+      "tsunami": "津波",
+      "nuclear": "原発事故",
+      "evacuation": "避難",
+      "recovery": "復興"
+    }
   },
   "beforeAfter": {
     "title": "時を超える風景",
@@ -27,6 +40,64 @@
     "title": "記憶の声",
     "listen": "証言を聴く"
   },
+  "lessons": {
+    "title": "この災害が教えてくれたこと",
+    "subtitle": "悲劇を繰り返さないために、未来への教訓",
+    "category": {
+      "preparedness": "備え・防災",
+      "infrastructure": "インフラ・制度",
+      "community": "コミュニティ",
+      "policy": "政策・判断",
+      "memory": "記憶の継承"
+    }
+  },
+  "initiatives": {
+    "title": "浪江の今",
+    "subtitle": "復興に向けて歩み続ける浪江町の取り組み",
+    "learnMore": "詳しく見る",
+    "category": {
+      "agriculture": "農業",
+      "tourism": "観光",
+      "community": "コミュニティ",
+      "education": "教育",
+      "culture": "文化",
+      "infrastructure": "インフラ"
+    },
+    "status": {
+      "ongoing": "進行中",
+      "completed": "完了",
+      "planned": "計画中"
+    }
+  },
+  "garmentBridge": {
+    "title": "この服が繋ぐもの",
+    "narrative": "この記憶を、日常の中で生かし続けるために。YURAのリバーシブルTシャツは、表に再生した美しい風景を、裏返せば震災の記憶を。QRコードからこのアーカイブにアクセスでき、着る人が記憶の語り部になる。",
+    "traceabilityTitle": "製造トレーサビリティ"
+  },
+  "action": {
+    "title": "記憶を未来へつなぐ",
+    "subtitle": "知ることが、最初のアクション。伝えることが、次の一歩。",
+    "shareText": "忘れてはいけない記憶。この場所のストーリーを知ってほしい。",
+    "share": {
+      "title": "伝える",
+      "description": "このメモリアルをシェアして、記憶を広げる"
+    },
+    "visit": {
+      "title": "訪れる",
+      "description": "浪江町を訪れて、復興の今を体感する",
+      "link": "浪江町公式サイト"
+    },
+    "support": {
+      "title": "支える",
+      "description": "ふるさと納税で浪江町の復興を応援する",
+      "link": "ふるさと納税"
+    }
+  },
+  "footer": {
+    "disclaimer": "このサイトに掲載されている情報は、公的機関の資料および当事者の証言に基づいています。事実の正確性には最大限配慮していますが、詳細は各出典をご確認ください。",
+    "sources": "出典: 復興庁、浪江町、内閣府防災情報",
+    "rights": "All rights reserved."
+  },
   "traceability": {
     "title": "1枚ができるまで",
     "factory": "製造工場",
@@ -34,9 +105,6 @@
     "printMethod": "プリント技法",
     "productionDate": "製造日",
     "qualityCheck": "品質検査"
-  },
-  "story": {
-    "title": "YURAについて"
   },
   "reversible": {
     "title": "裏返す、という体験",
@@ -58,11 +126,6 @@
         "description": "裏返すと現れる、震災直後の風景。忘れてはいけない記憶"
       }
     }
-  },
-  "community": {
-    "title": "記憶を共有する",
-    "share": "この服のストーリーをシェア",
-    "hashtag": "#FlipForMemory"
   },
   "common": {
     "loading": "読み込み中...",

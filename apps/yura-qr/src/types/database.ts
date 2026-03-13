@@ -1,4 +1,4 @@
-/** Supabase DB types for YURA QR Landing App */
+/** Supabase DB types for YURA QR Memorial Archive */
 
 export type Collection = {
   readonly id: string;
@@ -29,6 +29,10 @@ export type Location = {
   readonly description_en: string | null;
   readonly disaster_type: string;
   readonly disaster_date: string | null;
+  readonly hero_image_url: string | null;
+  readonly hero_video_url: string | null;
+  readonly summary_ja: string | null;
+  readonly summary_en: string | null;
   readonly created_at: string;
   readonly updated_at: string;
 };
@@ -63,6 +67,7 @@ export type Testimony = {
   readonly source_url: string | null;
   readonly is_published: boolean;
   readonly sort_order: number;
+  readonly category: string;
   readonly created_at: string;
 };
 
@@ -130,6 +135,100 @@ export type BrandContent = {
   readonly updated_at: string;
 };
 
+// ---- Memorial Archive Types ----
+
+export type DisasterTimelineEvent = {
+  readonly id: string;
+  readonly location_id: string;
+  readonly event_date: string;
+  readonly event_time: string | null;
+  readonly event_type: 'earthquake' | 'tsunami' | 'nuclear' | 'evacuation' | 'recovery';
+  readonly title_ja: string;
+  readonly title_en: string;
+  readonly description_ja: string | null;
+  readonly description_en: string | null;
+  readonly impact_ja: string | null;
+  readonly impact_en: string | null;
+  readonly image_url: string | null;
+  readonly video_url: string | null;
+  readonly source: string | null;
+  readonly source_url: string | null;
+  readonly sort_order: number;
+  readonly is_published: boolean;
+  readonly created_at: string;
+};
+
+export type Lesson = {
+  readonly id: string;
+  readonly location_id: string;
+  readonly title_ja: string;
+  readonly title_en: string;
+  readonly body_ja: string;
+  readonly body_en: string | null;
+  readonly category: 'preparedness' | 'infrastructure' | 'community' | 'policy' | 'memory';
+  readonly icon_name: string | null;
+  readonly sort_order: number;
+  readonly is_published: boolean;
+  readonly created_at: string;
+  readonly updated_at: string;
+};
+
+export type RecoveryInitiative = {
+  readonly id: string;
+  readonly location_id: string;
+  readonly title_ja: string;
+  readonly title_en: string;
+  readonly description_ja: string | null;
+  readonly description_en: string | null;
+  readonly category: 'agriculture' | 'tourism' | 'community' | 'education' | 'culture' | 'infrastructure';
+  readonly status: 'ongoing' | 'completed' | 'planned';
+  readonly start_date: string | null;
+  readonly website_url: string | null;
+  readonly image_url: string | null;
+  readonly sort_order: number;
+  readonly is_published: boolean;
+  readonly created_at: string;
+  readonly updated_at: string;
+};
+
+export type PhotoGalleryItem = {
+  readonly id: string;
+  readonly location_id: string;
+  readonly initiative_id: string | null;
+  readonly image_url: string;
+  readonly thumbnail_url: string | null;
+  readonly caption_ja: string | null;
+  readonly caption_en: string | null;
+  readonly photographer: string | null;
+  readonly date_taken: string | null;
+  readonly category: 'disaster' | 'recovery' | 'present' | 'people';
+  readonly source: string | null;
+  readonly source_url: string | null;
+  readonly license: string | null;
+  readonly sort_order: number;
+  readonly is_published: boolean;
+  readonly created_at: string;
+};
+
+export type Statistic = {
+  readonly id: string;
+  readonly location_id: string;
+  readonly label_ja: string;
+  readonly label_en: string;
+  readonly value_text: string;
+  readonly unit_ja: string | null;
+  readonly unit_en: string | null;
+  readonly context_ja: string | null;
+  readonly context_en: string | null;
+  readonly category: 'casualties' | 'displacement' | 'economic' | 'recovery';
+  readonly reference_date: string | null;
+  readonly source: string | null;
+  readonly source_url: string | null;
+  readonly sort_order: number;
+  readonly is_published: boolean;
+  readonly created_at: string;
+};
+
 /** Garment with all relations joined */
 export type GarmentWithRelations = Garment & {
   readonly collection: Collection | null;
@@ -138,6 +237,17 @@ export type GarmentWithRelations = Garment & {
     readonly testimonies: readonly Testimony[];
   }) | null;
   readonly manufacturing_info: ManufacturingInfo | null;
+};
+
+/** Location with all memorial data joined */
+export type LocationWithMemorial = Location & {
+  readonly location_photos: readonly LocationPhoto[];
+  readonly testimonies: readonly Testimony[];
+  readonly timeline_events: readonly DisasterTimelineEvent[];
+  readonly lessons: readonly Lesson[];
+  readonly initiatives: readonly RecoveryInitiative[];
+  readonly gallery: readonly PhotoGalleryItem[];
+  readonly statistics: readonly Statistic[];
 };
 
 /** Locale type for i18n */

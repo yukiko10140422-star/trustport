@@ -5,13 +5,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 
 const SECTIONS = [
-  { id: 'hero', key: 'hero' },
-  { id: 'reversible', key: 'reversible' },
+  { id: 'memorial', key: 'memorial' },
+  { id: 'timeline', key: 'timeline' },
   { id: 'before-after', key: 'beforeAfter' },
-  { id: 'testimony', key: 'testimony' },
-  { id: 'traceability', key: 'traceability' },
-  { id: 'story', key: 'story' },
-  { id: 'community', key: 'community' },
+  { id: 'voices', key: 'voices' },
+  { id: 'lessons', key: 'lessons' },
+  { id: 'namie-now', key: 'namieNow' },
+  { id: 'garment', key: 'garment' },
+  { id: 'action', key: 'action' },
 ] as const;
 
 export function StickyNav() {

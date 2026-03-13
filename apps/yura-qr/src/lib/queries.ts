@@ -8,6 +8,12 @@ import type {
   ManufacturingInfo,
   BrandContent,
   GarmentWithRelations,
+  LocationWithMemorial,
+  DisasterTimelineEvent,
+  Lesson,
+  RecoveryInitiative,
+  PhotoGalleryItem,
+  Statistic,
 } from '@/types/database';
 
 export async function getGarmentBySku(sku: string): Promise<GarmentWithRelations | null> {
@@ -62,8 +68,8 @@ export async function getGarmentBySku(sku: string): Promise<GarmentWithRelations
         : null,
       manufacturing_info: (manufacturingRes.data as ManufacturingInfo | null) ?? null,
     };
-  } catch {
-    console.error('Failed to fetch garment:', sku);
+  } catch (err) {
+    console.error('Failed to fetch garment:', err);
     return null;
   }
 }
@@ -79,6 +85,47 @@ export async function getBrandContent(slug: string): Promise<BrandContent | null
     if (error) return null;
     return data as BrandContent | null;
   } catch {
+    return null;
+  }
+}
+
+/** Sort helper for arrays with sort_order */
+function bySortOrder<T extends { sort_order: number }>(items: T[]): T[] {
+  return [...items].sort((a, b) => a.sort_order - b.sort_order);
+}
+
+/** Fetch full memorial data for a location (single nested query) */
+export async function getLocationMemorial(locationId: string): Promise<LocationWithMemorial | null> {
+  try {
+    const { data, error } = await supabase
+      .from('locations')
+      .select(`
+        *,
+        location_photos(*),
+        testimonies(*),
+        disaster_timeline_events(*),
+        lessons(*),
+        recovery_initiatives(*),
+        photo_gallery_items(*),
+        statistics(*)
+      `)
+      .eq('id', locationId)
+      .maybeSingle();
+
+    if (error || !data) return null;
+
+    return {
+      ...(data as Location),
+      location_photos: bySortOrder((data.location_photos ?? []) as LocationPhoto[]),
+      testimonies: bySortOrder((data.testimonies ?? []) as Testimony[]),
+      timeline_events: bySortOrder((data.disaster_timeline_events ?? []) as DisasterTimelineEvent[]),
+      lessons: bySortOrder((data.lessons ?? []) as Lesson[]),
+      initiatives: bySortOrder((data.recovery_initiatives ?? []) as RecoveryInitiative[]),
+      gallery: bySortOrder((data.photo_gallery_items ?? []) as PhotoGalleryItem[]),
+      statistics: bySortOrder((data.statistics ?? []) as Statistic[]),
+    };
+  } catch (err) {
+    console.error('Failed to fetch location memorial:', err);
     return null;
   }
 }
