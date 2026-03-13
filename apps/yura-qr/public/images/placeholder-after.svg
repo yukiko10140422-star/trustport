@@ -1,1 +1,57 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600"><rect fill="#111111" width="800" height="600"/><text x="400" y="280" fill="#C4A882" font-size="24" text-anchor="middle" font-family="serif">2024</text><text x="400" y="320" fill="#C4A882" font-size="16" text-anchor="middle" font-family="serif">After</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <!-- Sky - golden sunset -->
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#5a6a7a"/>
+      <stop offset="60%" stop-color="#8a7a5a"/>
+      <stop offset="100%" stop-color="#C4A882"/>
+    </linearGradient>
+    <linearGradient id="ground" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#4a6a3a"/>
+      <stop offset="100%" stop-color="#2a4020"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Sky -->
+  <rect fill="url(#sky)" width="800" height="320"/>
+
+  <!-- Sun glow -->
+  <circle cx="400" cy="280" r="80" fill="#C4A882" opacity="0.3"/>
+  <circle cx="400" cy="280" r="40" fill="#dac8a0" opacity="0.4"/>
+
+  <!-- Hills -->
+  <ellipse cx="200" cy="320" rx="250" ry="80" fill="#3a5a2a"/>
+  <ellipse cx="600" cy="330" rx="300" ry="70" fill="#2a4a1a"/>
+
+  <!-- Green ground with recovery -->
+  <rect fill="url(#ground)" y="310" width="800" height="290"/>
+
+  <!-- Ocean strip -->
+  <rect fill="#4a6a8a" y="290" width="800" height="35" opacity="0.5"/>
+
+  <!-- Wildflowers (small dots of color) -->
+  <circle cx="100" cy="380" r="4" fill="#c4a060" opacity="0.7"/>
+  <circle cx="150" cy="400" r="3" fill="#d4b070" opacity="0.6"/>
+  <circle cx="200" cy="370" r="4" fill="#c4a060" opacity="0.7"/>
+  <circle cx="300" cy="390" r="3" fill="#e0c080" opacity="0.6"/>
+  <circle cx="350" cy="410" r="4" fill="#c4a060" opacity="0.7"/>
+  <circle cx="450" cy="385" r="3" fill="#d4b070" opacity="0.6"/>
+  <circle cx="500" cy="405" r="4" fill="#c4a060" opacity="0.7"/>
+  <circle cx="550" cy="375" r="3" fill="#e0c080" opacity="0.6"/>
+  <circle cx="650" cy="395" r="4" fill="#c4a060" opacity="0.7"/>
+  <circle cx="700" cy="380" r="3" fill="#d4b070" opacity="0.6"/>
+  <circle cx="250" cy="420" r="3" fill="#c4a060" opacity="0.5"/>
+  <circle cx="400" cy="430" r="4" fill="#d4b070" opacity="0.5"/>
+  <circle cx="600" cy="415" r="3" fill="#c4a060" opacity="0.5"/>
+
+  <!-- Small grass tufts -->
+  <line x1="120" y1="390" x2="125" y2="375" stroke="#5a8a4a" stroke-width="2" stroke-linecap="round"/>
+  <line x1="280" y1="400" x2="285" y2="385" stroke="#5a8a4a" stroke-width="2" stroke-linecap="round"/>
+  <line x1="420" y1="395" x2="425" y2="380" stroke="#5a8a4a" stroke-width="2" stroke-linecap="round"/>
+  <line x1="580" y1="385" x2="585" y2="370" stroke="#5a8a4a" stroke-width="2" stroke-linecap="round"/>
+  <line x1="680" y1="405" x2="685" y2="390" stroke="#5a8a4a" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Date text -->
+  <text x="400" y="500" fill="#C4A882" font-size="28" text-anchor="middle" font-family="serif" font-weight="300">2024</text>
+  <text x="400" y="535" fill="#a09070" font-size="14" text-anchor="middle" font-family="serif" letter-spacing="3">AFTER</text>
+</svg>
