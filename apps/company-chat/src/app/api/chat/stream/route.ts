@@ -9,6 +9,7 @@ import { MODELS, type ModelKey } from '@/lib/constants';
 import { TOOLS } from '@/lib/tools/definitions';
 import { executeTool } from '@/lib/tools/handlers';
 import { saveMessage, createConversation, generateTitle } from '@/lib/conversations';
+import { extractPdfText } from '@/lib/pdf-extractor';
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
@@ -42,11 +43,29 @@ export async function POST(req: NextRequest) {
 
   const accessToken = (session as unknown as Record<string, unknown>).accessToken as string || '';
 
-  // ユーザーメッセージを組み立て（画像あり/なし）
+  // ユーザーメッセージを組み立て（画像/PDF あり/なし）
   let userContent: Anthropic.ContentBlockParam[] | string;
-  if (images.length > 0) {
+  const typedImages = images as Array<{ url: string; type: string }>;
+
+  // PDF添付があるかチェック
+  const pdfImages = typedImages.filter(img => img.type === 'application/pdf');
+  const nonPdfImages = typedImages.filter(img => img.type !== 'application/pdf');
+
+  let pdfContext = '';
+  for (const pdf of pdfImages) {
+    const result = await extractPdfText(pdf.url);
+    if (result.success && result.text) {
+      pdfContext += `\n\n--- 添付PDF (${result.pages}ページ${result.truncated ? '、一部抜粋' : ''}) ---\n${result.text}`;
+    } else {
+      pdfContext += `\n\n--- 添付PDF ---\n${result.error || 'テキスト抽出失敗'}`;
+    }
+  }
+
+  const fullMessage = pdfContext ? message + pdfContext : message;
+
+  if (nonPdfImages.length > 0) {
     const blocks: Anthropic.ContentBlockParam[] = [];
-    for (const img of images as Array<{ url: string; type: string }>) {
+    for (const img of nonPdfImages) {
       blocks.push({
         type: 'image',
         source: {
@@ -55,10 +74,10 @@ export async function POST(req: NextRequest) {
         },
       });
     }
-    blocks.push({ type: 'text', text: message });
+    blocks.push({ type: 'text', text: fullMessage });
     userContent = blocks;
   } else {
-    userContent = message;
+    userContent = fullMessage;
   }
 
   const messages: Anthropic.MessageParam[] = [
