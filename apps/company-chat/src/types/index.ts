@@ -19,6 +19,8 @@ export interface ChatMessage {
   model?: string;
   taskId?: string;
   timestamp: number;
+  streaming?: boolean;
+  toolsRunning?: string[];
 }
 
 export interface ChatRequest {

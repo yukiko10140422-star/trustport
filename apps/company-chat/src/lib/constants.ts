@@ -6,6 +6,17 @@ export const MODELS = {
 
 export type ModelKey = keyof typeof MODELS;
 
+export const TOOL_LABELS: Record<string, string> = {
+  get_calendar_events: 'カレンダー確認中',
+  create_calendar_event: '予定作成中',
+  get_todos: 'TODO確認中',
+  create_todo: 'TODO作成中',
+  complete_todo: 'TODO更新中',
+  search_company_docs: '社内資料検索中',
+  get_company_doc_detail: '資料取得中',
+  web_search: 'Web検索中',
+};
+
 export const DEPT_COLORS: Record<string, string> = {
   secretary: '#4CAF50',
   ceo: '#D32F2F',

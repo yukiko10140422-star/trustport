@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { useSession, signOut } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import type { ChatMessage } from '@/types';
 import type { ModelKey } from '@/lib/constants';
@@ -9,9 +9,13 @@ import { MODELS, DEPT_COLORS } from '@/lib/constants';
 import { getAllDepartments } from '@/lib/departments';
 import { classifyTask } from '@/lib/action-detector';
 import TabBar from '@/components/TabBar';
-import TaskStatus from '@/components/TaskStatus';
+import ConversationDrawer from '@/components/ConversationDrawer';
+import MessageBubble from '@/components/MessageBubble';
+import ImageUpload, { type UploadedImage } from '@/components/ImageUpload';
 
 const departments = getAllDepartments();
+
+import { createSSEParser } from '@/lib/sse-parser';
 
 function genId() {
   return Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
@@ -37,8 +41,12 @@ export default function ChatPage() {
   const [selectedDept, setSelectedDept] = useState<string>('');
   const [showDeptPicker, setShowDeptPicker] = useState(false);
   const [showModelPicker, setShowModelPicker] = useState(false);
+  const [conversationId, setConversationId] = useState<string | null>(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [images, setImages] = useState<UploadedImage[]>([]);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const abortRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
     if (status === 'unauthenticated') router.push('/login');
@@ -48,15 +56,75 @@ export default function ChatPage() {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
+  // 会話選択ハンドラ
+  const handleSelectConversation = useCallback(async (id: string | null) => {
+    if (id === null) {
+      // 新しい会話
+      setConversationId(null);
+      setMessages([{
+        id: 'welcome', role: 'assistant',
+        content: 'おはようございます！秘書のひなたです。\n何でも聞いてくださいね。',
+        departmentId: 'secretary', departmentName: '秘書室',
+        person: '藤崎 ひなた', timestamp: Date.now(),
+      }]);
+      return;
+    }
+    setConversationId(id);
+    try {
+      const res = await fetch(`/api/conversations/${id}`);
+      if (res.ok) {
+        const rows = await res.json();
+        const loaded: ChatMessage[] = rows.map((r: {
+          id: string; role: 'user' | 'assistant'; content: string;
+          department_id: string | null; department_name: string | null;
+          person: string | null; model: string | null; image_url: string | null;
+          created_at: string;
+        }) => ({
+          id: r.id,
+          role: r.role,
+          content: r.content,
+          departmentId: r.department_id || undefined,
+          departmentName: r.department_name || undefined,
+          person: r.person || undefined,
+          model: r.model || undefined,
+          imageUrl: r.image_url || undefined,
+          timestamp: new Date(r.created_at).getTime(),
+        }));
+        setMessages(loaded.length > 0 ? loaded : [{
+          id: 'welcome', role: 'assistant',
+          content: 'この会話の続きをどうぞ！',
+          departmentId: 'secretary', departmentName: '秘書室',
+          person: '藤崎 ひなた', timestamp: Date.now(),
+        }]);
+      }
+    } catch {
+      // ignore
+    }
+  }, []);
+
+  // Auto-resize textarea
+  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setInput(e.target.value);
+    const el = e.target;
+    el.style.height = 'auto';
+    el.style.height = `${Math.min(el.scrollHeight, 120)}px`;
+  }, []);
+
   const sendMessage = useCallback(async () => {
     const text = input.trim();
     if (!text || loading) return;
 
+    const attachedImages = [...images];
     const userMsg: ChatMessage = {
       id: genId(), role: 'user', content: text, timestamp: Date.now(),
-    };
+      imageUrl: attachedImages.length > 0 ? attachedImages[0].preview : undefined,
+    } as ChatMessage & { imageUrl?: string };
     setMessages(prev => [...prev, userMsg]);
     setInput('');
+    setImages([]);
+    if (inputRef.current) {
+      inputRef.current.style.height = 'auto';
+    }
     setLoading(true);
 
     const history = messages.filter(m => m.id !== 'welcome').map(m => ({
@@ -67,6 +135,7 @@ export default function ChatPage() {
 
     try {
       if (classification.weight === 'heavy') {
+        // 重タスクは従来通り
         const res = await fetch('/api/tasks', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -97,49 +166,155 @@ export default function ChatPage() {
           }]);
         }
       } else {
-        const res = await fetch('/api/chat', {
+        // ストリーミング
+        const assistantId = genId();
+        const controller = new AbortController();
+        abortRef.current = controller;
+
+        const res = await fetch('/api/chat/stream', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             message: text, model, history,
             departmentId: selectedDept || undefined,
+            conversationId: conversationId || undefined,
+            images: attachedImages.map(img => ({ url: img.url, type: img.type })),
           }),
+          signal: controller.signal,
         });
 
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'API error');
-
-        if (data.routingMessage) {
-          setMessages(prev => [...prev, {
-            id: genId(), role: 'assistant', content: data.routingMessage,
-            departmentId: 'secretary', departmentName: '秘書室',
-            person: '藤崎 ひなた', timestamp: Date.now(),
-          }]);
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.error || 'API error');
         }
 
+        const reader = res.body?.getReader();
+        if (!reader) throw new Error('No reader');
+
+        const decoder = new TextDecoder();
+        let metaReceived = false;
+
+        const parser = createSSEParser((event, data) => {
+          const d = data as Record<string, unknown>;
+
+          switch (event) {
+            case 'meta': {
+              metaReceived = true;
+              if (d.conversationId) {
+                setConversationId(d.conversationId as string);
+              }
+              // ルーティングメッセージがあれば先に表示
+              if (d.routingMessage) {
+                setMessages(prev => [...prev, {
+                  id: genId(), role: 'assistant',
+                  content: d.routingMessage as string,
+                  departmentId: 'secretary', departmentName: '秘書室',
+                  person: '藤崎 ひなた', timestamp: Date.now(),
+                }]);
+              }
+              // アシスタントメッセージの枠を作る
+              setMessages(prev => [...prev, {
+                id: assistantId, role: 'assistant', content: '',
+                departmentId: d.departmentId as string,
+                departmentName: d.departmentName as string,
+                person: d.person as string,
+                model: d.model as string,
+                timestamp: Date.now(),
+                streaming: true,
+              }]);
+              break;
+            }
+            case 'text': {
+              setMessages(prev => prev.map(m =>
+                m.id === assistantId
+                  ? { ...m, content: m.content + (d.text as string) }
+                  : m,
+              ));
+              break;
+            }
+            case 'tool_start': {
+              setMessages(prev => prev.map(m =>
+                m.id === assistantId
+                  ? { ...m, toolsRunning: d.tools as string[] }
+                  : m,
+              ));
+              break;
+            }
+            case 'tool_end': {
+              setMessages(prev => prev.map(m =>
+                m.id === assistantId
+                  ? { ...m, toolsRunning: undefined }
+                  : m,
+              ));
+              break;
+            }
+            case 'done': {
+              if (d.conversationId) {
+                setConversationId(d.conversationId as string);
+              }
+              setMessages(prev => prev.map(m =>
+                m.id === assistantId
+                  ? { ...m, streaming: false }
+                  : m,
+              ));
+              break;
+            }
+            case 'error': {
+              if (!metaReceived) {
+                setMessages(prev => [...prev, {
+                  id: assistantId, role: 'assistant',
+                  content: `エラー: ${d.error}`,
+                  departmentId: 'secretary', departmentName: '秘書室',
+                  person: '藤崎 ひなた', timestamp: Date.now(),
+                }]);
+              } else {
+                setMessages(prev => prev.map(m =>
+                  m.id === assistantId
+                    ? { ...m, content: m.content + `\n\nエラー: ${d.error}`, streaming: false }
+                    : m,
+                ));
+              }
+              break;
+            }
+          }
+        });
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          parser.feed(decoder.decode(value, { stream: true }));
+        }
+      }
+    } catch (err) {
+      if (err instanceof DOMException && err.name === 'AbortError') {
+        // ユーザーによるキャンセル
+      } else {
         setMessages(prev => [...prev, {
-          id: genId(), role: 'assistant', content: data.text,
-          departmentId: data.departmentId, departmentName: data.departmentName,
-          person: data.person, model: data.model, timestamp: Date.now(),
+          id: genId(), role: 'assistant',
+          content: 'すみません、エラーが発生しました。もう一度お試しください。',
+          departmentId: 'secretary', departmentName: '秘書室',
+          person: '藤崎 ひなた', timestamp: Date.now(),
         }]);
       }
-    } catch {
-      setMessages(prev => [...prev, {
-        id: genId(), role: 'assistant',
-        content: 'すみません、エラーが発生しました。もう一度お試しください。',
-        departmentId: 'secretary', departmentName: '秘書室',
-        person: '藤崎 ひなた', timestamp: Date.now(),
-      }]);
     } finally {
       setLoading(false);
       setSelectedDept('');
+      abortRef.current = null;
     }
-  }, [input, loading, model, messages, selectedDept]);
+  }, [input, loading, model, messages, selectedDept, conversationId, images]);
+
+  const handleStop = useCallback(() => {
+    abortRef.current?.abort();
+    setLoading(false);
+  }, []);
 
   if (status !== 'authenticated') return null;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100dvh', maxWidth: 640, margin: '0 auto', background: 'var(--bg)' }}>
+    <div style={{
+      display: 'flex', flexDirection: 'column', height: '100dvh',
+      maxWidth: 640, margin: '0 auto', background: 'var(--bg)',
+    }}>
       {/* Header */}
       <header style={{
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -148,12 +323,21 @@ export default function ChatPage() {
         color: '#fff',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div style={{
-            width: 36, height: 36, borderRadius: '50%',
-            background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(8px)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: 15, fontWeight: 700,
-          }}>秘</div>
+          <button
+            onClick={() => setDrawerOpen(true)}
+            style={{
+              width: 36, height: 36, borderRadius: '50%',
+              background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(8px)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 15, fontWeight: 700, border: 'none', color: '#fff',
+              cursor: 'pointer',
+            }}
+            title="会話履歴"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round">
+              <line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" />
+            </svg>
+          </button>
           <div>
             <div style={{ fontWeight: 700, fontSize: 15, letterSpacing: '0.02em' }}>Company 秘書室</div>
             <div style={{ fontSize: 11, opacity: 0.8 }}>藤崎 ひなた</div>
@@ -204,7 +388,7 @@ export default function ChatPage() {
             <MessageBubble msg={msg} />
           </div>
         ))}
-        {loading && (
+        {loading && !messages.some(m => m.streaming) && (
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '12px 0' }}>
             <div style={{ display: 'flex', gap: 4 }}>
               {[0, 1, 2].map(i => (
@@ -215,7 +399,7 @@ export default function ChatPage() {
                 }} />
               ))}
             </div>
-            <span style={{ fontSize: 12, color: 'var(--text-tertiary)' }}>考え中...</span>
+            <span style={{ fontSize: 12, color: 'var(--text-tertiary)' }}>接続中...</span>
           </div>
         )}
         <div ref={bottomRef} />
@@ -263,9 +447,17 @@ export default function ChatPage() {
         display: 'flex', alignItems: 'flex-end', gap: 8,
         padding: '10px 16px', borderTop: '1px solid var(--border)',
         background: 'var(--surface)',
+        position: 'relative',
       }}
       className="safe-bottom"
       >
+        <ImageUpload
+          images={images}
+          onAdd={(img) => setImages(prev => [...prev, img])}
+          onRemove={(i) => setImages(prev => prev.filter((_, idx) => idx !== i))}
+          disabled={loading}
+        />
+
         <button
           onClick={() => setShowDeptPicker(!showDeptPicker)}
           style={{
@@ -283,7 +475,7 @@ export default function ChatPage() {
         <textarea
           ref={inputRef}
           value={input}
-          onChange={e => setInput(e.target.value)}
+          onChange={handleInputChange}
           onKeyDown={e => {
             if (e.key === 'Enter' && !e.shiftKey) {
               e.preventDefault();
@@ -309,81 +501,53 @@ export default function ChatPage() {
           }}
         />
 
-        <button
-          onClick={sendMessage}
-          disabled={!input.trim() || loading}
-          style={{
-            width: 38, height: 38, borderRadius: '50%',
-            background: input.trim() && !loading
-              ? 'linear-gradient(135deg, var(--gradient-start), var(--gradient-end))'
-              : 'var(--border)',
-            border: 'none', color: '#fff', cursor: input.trim() ? 'pointer' : 'default',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            flexShrink: 0, transition: 'all 0.2s',
-            boxShadow: input.trim() && !loading ? 'var(--shadow-md)' : 'none',
-          }}
-        >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="22" y1="2" x2="11" y2="13" /><polygon points="22 2 15 22 11 13 2 9 22 2" />
-          </svg>
-        </button>
+        {loading ? (
+          <button
+            onClick={handleStop}
+            style={{
+              width: 38, height: 38, borderRadius: '50%',
+              background: '#ef4444', border: 'none', color: '#fff',
+              cursor: 'pointer', display: 'flex', alignItems: 'center',
+              justifyContent: 'center', flexShrink: 0, transition: 'all 0.2s',
+            }}
+            title="停止"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff">
+              <rect x="6" y="6" width="12" height="12" rx="2" />
+            </svg>
+          </button>
+        ) : (
+          <button
+            onClick={sendMessage}
+            disabled={!input.trim()}
+            style={{
+              width: 38, height: 38, borderRadius: '50%',
+              background: input.trim()
+                ? 'linear-gradient(135deg, var(--gradient-start), var(--gradient-end))'
+                : 'var(--border)',
+              border: 'none', color: '#fff',
+              cursor: input.trim() ? 'pointer' : 'default',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              flexShrink: 0, transition: 'all 0.2s',
+              boxShadow: input.trim() ? 'var(--shadow-md)' : 'none',
+            }}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13" /><polygon points="22 2 15 22 11 13 2 9 22 2" />
+            </svg>
+          </button>
+        )}
       </footer>
 
       <TabBar />
+
+      <ConversationDrawer
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        currentId={conversationId}
+        onSelect={handleSelectConversation}
+      />
     </div>
   );
 }
 
-function MessageBubble({ msg }: { msg: ChatMessage }) {
-  const isUser = msg.role === 'user';
-  const color = msg.departmentId ? DEPT_COLORS[msg.departmentId] || 'var(--text-secondary)' : 'var(--text-secondary)';
-
-  return (
-    <div style={{
-      display: 'flex', flexDirection: 'column',
-      alignItems: isUser ? 'flex-end' : 'flex-start',
-      marginBottom: 14,
-    }}>
-      {!isUser && msg.person && (
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
-          <div style={{
-            width: 28, height: 28, borderRadius: '50%',
-            background: `linear-gradient(135deg, ${color}, ${color}dd)`,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            color: '#fff', fontSize: 11, fontWeight: 700,
-            boxShadow: 'var(--shadow-sm)',
-          }}>
-            {msg.person.charAt(msg.person.indexOf(' ') + 1) || msg.person.charAt(0)}
-          </div>
-          <span style={{ fontSize: 12, color: 'var(--text-secondary)', fontWeight: 500 }}>
-            {msg.person}
-            {msg.departmentName && <span style={{ opacity: 0.7 }}> / {msg.departmentName}</span>}
-          </span>
-          {msg.model && (
-            <span style={{
-              fontSize: 9, padding: '2px 7px', borderRadius: 10,
-              background: 'var(--primary-bg)', color: 'var(--primary)',
-              fontWeight: 600, letterSpacing: '0.02em',
-            }}>
-              {msg.model}
-            </span>
-          )}
-        </div>
-      )}
-
-      <div style={{
-        maxWidth: '85%', padding: msg.taskId ? '4px' : '12px 16px',
-        borderRadius: isUser ? '20px 20px 4px 20px' : '20px 20px 20px 4px',
-        background: isUser
-          ? 'linear-gradient(135deg, var(--gradient-start), var(--gradient-end))'
-          : msg.taskId ? 'transparent' : 'var(--surface)',
-        color: isUser ? '#fff' : 'var(--text)',
-        border: isUser ? 'none' : msg.taskId ? 'none' : '1px solid var(--border-light)',
-        fontSize: 15, lineHeight: 1.6, whiteSpace: 'pre-wrap',
-        boxShadow: isUser ? 'var(--shadow-md)' : msg.taskId ? 'none' : 'var(--shadow-sm)',
-      }}>
-        {msg.taskId ? <TaskStatus taskId={msg.taskId} /> : msg.content}
-      </div>
-    </div>
-  );
-}

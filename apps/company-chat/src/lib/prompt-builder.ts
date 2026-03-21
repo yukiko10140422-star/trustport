@@ -7,6 +7,38 @@ function buildDepartmentDirectory(): string {
     .join('\n');
 }
 
+const RICH_CONTENT_INSTRUCTIONS = `
+## リッチコンテンツ出力
+あなたの応答はMarkdownとして描画されます。以下を活用してください：
+- **テーブル**: データの比較や一覧にはMarkdownテーブルを使う
+- **リスト**: 箇条書き・番号付きリスト
+- **コードブロック**: \`\`\`言語名 で囲む
+- **強調**: **太字**や*斜体*
+
+### アーティファクト（リッチHTML）
+グラフ、チャート、図表、スライド風の表現など、Markdownでは表現しきれないビジュアルコンテンツが必要な場合は、以下の形式でHTML/TailwindCSSを出力してください：
+
+~~~artifact:html title="タイトル"
+<div class="p-4">
+  <!-- HTML + TailwindCSS でリッチコンテンツを描画 -->
+</div>
+~~~
+
+アーティファクトの注意点：
+- TailwindCSS のユーティリティクラスが全て使えます
+- Chart.js が利用可能です（<canvas>にグラフを描画し、末尾に<script>で初期化）
+- SVGも直接書けます
+- 背景は透明です。文字色やボーダーは明示的に指定してください
+- レスポンシブに作ってください（max-width: 100%）
+
+使い分け：
+- 簡単な数字・リスト → Markdownテーブル
+- グラフ・チャート・データビジュアライゼーション → artifact
+- ダッシュボード風の複合表示 → artifact
+- スライド・カード風表現 → artifact
+- 普通の会話 → プレーンテキスト or 軽いMarkdown`;
+
+
 export function buildSystemPrompt(dept: Department): string {
   const today = new Date().toLocaleDateString('ja-JP', { timeZone: 'Asia/Tokyo' });
   const dayOfWeek = new Date().toLocaleDateString('ja-JP', { weekday: 'long', timeZone: 'Asia/Tokyo' });
@@ -40,7 +72,8 @@ ${buildDepartmentDirectory()}
 - 予定の追加やTODO作成を依頼されたら、対応する作成ツールを使ってください
 - ツール実行結果をもとに、自然な日本語で回答してください
 - 検索結果が0件の場合は「該当する資料が見つかりませんでした」と正直に伝えてください
-- 今日の日付: ${today}（${dayOfWeek}）`;
+- 今日の日付: ${today}（${dayOfWeek}）
+${RICH_CONTENT_INSTRUCTIONS}`;
   }
 
   // 各部署は専門家として回答するが、他部署の知識も持つ
@@ -69,7 +102,8 @@ ${dept.role}
 - 予定の追加やTODO作成を依頼されたら、対応する作成ツールを使ってください
 - ツール実行結果をもとに、自然な日本語で回答してください
 - 検索結果が0件の場合は「該当する資料が見つかりませんでした」と正直に伝えてください
-- 今日の日付: ${today}（${dayOfWeek}）`;
+- 今日の日付: ${today}（${dayOfWeek}）
+${RICH_CONTENT_INSTRUCTIONS}`;
 }
 
 export function buildSecretaryRoutingMessage(dept: Department, _userMessage: string): string {

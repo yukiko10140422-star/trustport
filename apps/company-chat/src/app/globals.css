@@ -88,6 +88,15 @@ body {
   50% { opacity: 0.5; }
 }
 
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Rich markdown content overrides */
+.rich-markdown p:first-child { margin-top: 0; }
+.rich-markdown p:last-child { margin-bottom: 0; }
+
 /* Scrollbar styling */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
