@@ -1,12 +1,17 @@
 import { listEvents, createEvent } from './calendar-service';
 import { listTodos, createTodo, completeTodo } from './todo-service';
+import { searchDocuments, getDocumentDetail } from './company-docs-service';
+
+// Google OAuth不要のツール
+const NO_AUTH_TOOLS = new Set(['search_company_docs', 'get_company_doc_detail']);
 
 export async function executeTool(
   toolName: string,
   toolInput: Record<string, unknown>,
   accessToken: string,
 ): Promise<string> {
-  if (!accessToken) {
+  // Google系ツールのみaccessToken必須
+  if (!accessToken && !NO_AUTH_TOOLS.has(toolName)) {
     return JSON.stringify({ error: 'Google認証が必要です。再ログインしてください。' });
   }
 
@@ -51,6 +56,25 @@ export async function executeTool(
           completed: toolInput.completed as boolean,
         });
         return JSON.stringify({ ok: true });
+      }
+
+      case 'search_company_docs': {
+        const results = await searchDocuments(
+          toolInput.query as string,
+          {
+            department: toolInput.department as string | undefined,
+            docType: toolInput.doc_type as string | undefined,
+          },
+        );
+        return JSON.stringify(results);
+      }
+
+      case 'get_company_doc_detail': {
+        const doc = await getDocumentDetail(toolInput.file_path as string);
+        if (!doc) {
+          return JSON.stringify({ error: '該当するドキュメントが見つかりませんでした' });
+        }
+        return JSON.stringify(doc);
       }
 
       default:

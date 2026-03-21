@@ -66,4 +66,40 @@ export const TOOLS: Anthropic.Tool[] = [
       required: ['taskId', 'completed'],
     },
   },
+  {
+    name: 'search_company_docs',
+    description: '社内資料を全文検索します。事業の進捗、決定事項、リサーチ結果、プロジェクト計画などを調べるときに使います。キーワードで検索し、関連するドキュメントの内容を返します。',
+    input_schema: {
+      type: 'object' as const,
+      properties: {
+        query: {
+          type: 'string',
+          description: '検索キーワード（スペース区切りでAND検索）。例: "アパレル 進捗", "DX ターゲット"',
+        },
+        department: {
+          type: 'string',
+          description: '部署で絞り込む場合に指定。例: "apparel", "ceo", "research", "pm", "dx"',
+        },
+        doc_type: {
+          type: 'string',
+          description: 'ドキュメント種別で絞り込む。例: "decision", "project", "research", "todo"',
+        },
+      },
+      required: ['query'],
+    },
+  },
+  {
+    name: 'get_company_doc_detail',
+    description: '特定の社内資料の全文を取得します。search_company_docsで見つかったドキュメントの詳細を確認したいときに使います。',
+    input_schema: {
+      type: 'object' as const,
+      properties: {
+        file_path: {
+          type: 'string',
+          description: 'ドキュメントのfile_path。search_company_docsの結果から取得したパスを指定。',
+        },
+      },
+      required: ['file_path'],
+    },
+  },
 ];

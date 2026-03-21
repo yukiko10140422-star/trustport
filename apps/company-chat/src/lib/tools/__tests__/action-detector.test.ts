@@ -29,12 +29,12 @@ describe('classifyTask', () => {
     expect(classifyTask('コミットしてpushして').weight).toBe('heavy');
   });
 
-  // --- heavy: 事業データが必要な質問 ---
-  it('business + data query → heavy', () => {
-    expect(classifyTask('アパレル事業の進捗教えて').weight).toBe('heavy');
-    expect(classifyTask('DXプロジェクトの状況は？').weight).toBe('heavy');
-    expect(classifyTask('eBayの売上確認して').weight).toBe('heavy');
-    expect(classifyTask('YURAの計画どうなってる？').weight).toBe('heavy');
+  // --- light: 事業データの読み取り（Supabase検索で即時回答） ---
+  it('business + data query (read-only) → light', () => {
+    expect(classifyTask('アパレル事業の進捗教えて').weight).toBe('light');
+    expect(classifyTask('DXプロジェクトの状況は？').weight).toBe('light');
+    expect(classifyTask('eBayの売上確認して').weight).toBe('light');
+    expect(classifyTask('YURAの計画どうなってる？').weight).toBe('light');
   });
 
   it('business without data query → chat', () => {

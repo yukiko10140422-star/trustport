@@ -90,11 +90,14 @@ export function classifyTask(message: string): TaskClassification {
   const hasBusiness = BUSINESS_KEYWORDS.some((kw) => lower.includes(kw.toLowerCase()));
   const hasDataQuery = DATA_QUERY_KEYWORDS.some((kw) => lower.includes(kw.toLowerCase()));
   if (hasBusiness && hasDataQuery) {
-    return { weight: 'heavy', taskType: 'report' };
+    return { weight: 'light', taskType: null }; // Supabase検索で即時回答
   }
 
   // カレンダー・TODO関連 → 軽作業（tool_useで処理可能）
-  const TOOL_KEYWORDS = ['TODO', '予定', 'カレンダー', 'スケジュール', 'タスク'];
+  const TOOL_KEYWORDS = [
+    'TODO', '予定', 'カレンダー', 'スケジュール', 'タスク',
+    '決定事項', '社内資料',
+  ];
   if (TOOL_KEYWORDS.some((kw) => lower.includes(kw.toLowerCase()))) {
     return { weight: 'light', taskType: null };
   }
