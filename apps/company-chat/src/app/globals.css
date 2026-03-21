@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+/* ライトモード（デフォルト） */
 :root {
   --bg: #f0f2f5;
   --surface: #ffffff;
@@ -27,34 +28,9 @@
   --radius-sm: 10px;
 }
 
-/* 手動ライトモード強制 */
-[data-theme="light"] {
-  --bg: #f0f2f5;
-  --surface: #ffffff;
-  --surface-elevated: #ffffff;
-  --text: #1a1a2e;
-  --text-secondary: #6b7280;
-  --text-tertiary: #9ca3af;
-  --border: #e5e7eb;
-  --border-light: #f3f4f6;
-  --primary: #6366f1;
-  --primary-light: #818cf8;
-  --primary-bg: #eef2ff;
-  --user-bubble: #6366f1;
-  --success: #10b981;
-  --success-bg: #ecfdf5;
-  --warning: #f59e0b;
-  --warning-bg: #fffbeb;
-  --danger: #ef4444;
-  --gradient-start: #6366f1;
-  --gradient-end: #8b5cf6;
-  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.05);
-  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -4px rgba(0,0,0,0.05);
-}
-
-/* 手動ダークモード強制 */
-[data-theme="dark"] {
+/* ダークモード — 手動切替 or システム設定 */
+[data-theme="dark"],
+:root:not([data-theme="light"]):is(.prefers-dark) {
   --bg: #0c0c1d;
   --surface: #1a1a2e;
   --surface-elevated: #222240;
@@ -79,7 +55,6 @@
   --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.5);
 }
 
-/* システム設定に従うダークモード（data-theme未指定時） */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #0c0c1d;
@@ -117,40 +92,19 @@ body {
   margin: 0;
 }
 
-/* Safe area for mobile */
 .safe-bottom {
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(16px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-}
-
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
-}
-
-/* Rich markdown content overrides */
 .rich-markdown p:first-child { margin-top: 0; }
 .rich-markdown p:last-child { margin-bottom: 0; }
 
-/* Scrollbar styling */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
