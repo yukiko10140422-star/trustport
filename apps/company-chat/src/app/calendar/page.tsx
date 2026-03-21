@@ -78,7 +78,7 @@ export default function CalendarPage() {
         const data = await res.json();
         setEvents(data.events);
       }
-    } catch { /* ignore */ }
+    } catch (e) { console.error('カレンダー読み込み失敗:', e); }
     setLoading(false);
   }, [monthOffset]);
 
@@ -91,7 +91,7 @@ export default function CalendarPage() {
     try {
       const res = await fetch(`/api/calendar?eventId=${encodeURIComponent(eventId)}`, { method: 'DELETE' });
       if (res.ok) loadEvents();
-    } catch { /* ignore */ }
+    } catch (e) { console.error('予定削除失敗:', e); }
   }, [loadEvents]);
 
   const addEvent = async () => {

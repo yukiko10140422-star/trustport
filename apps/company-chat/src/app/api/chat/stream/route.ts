@@ -102,8 +102,8 @@ export async function POST(req: NextRequest) {
           try {
             const conv = await createConversation(auth.email, generateTitle(message));
             conversationId = conv.id;
-          } catch {
-            // Supabaseが落ちていても会話は続行
+          } catch (e) {
+            console.error('会話作成失敗:', e);
             conversationId = null;
           }
         }
@@ -117,8 +117,8 @@ export async function POST(req: NextRequest) {
               content: message,
               imageUrl: images.length > 0 ? (images as Array<{ url: string }>)[0].url : undefined,
             });
-          } catch {
-            // 保存失敗は無視して会話続行
+          } catch (e) {
+            console.error('ユーザーメッセージ保存失敗:', e);
           }
         }
 
@@ -224,8 +224,8 @@ export async function POST(req: NextRequest) {
               person: dept.person,
               model: modelKey,
             });
-          } catch {
-            // 保存失敗は無視
+          } catch (e) {
+            console.error('アシスタントメッセージ保存失敗:', e);
           }
         }
 

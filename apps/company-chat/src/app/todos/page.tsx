@@ -32,7 +32,7 @@ export default function TodosPage() {
         const data = await res.json();
         setTasks(data.tasks);
       }
-    } catch { /* ignore */ }
+    } catch (e) { console.error('TODO読み込み失敗:', e); }
     setLoading(false);
   }, []);
 

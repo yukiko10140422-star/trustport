@@ -27,8 +27,8 @@ export default function ConversationDrawer({ open, onClose, currentId, onSelect 
         const data = await res.json();
         setConversations(data);
       }
-    } catch {
-      // ignore
+    } catch (e) {
+      console.error('会話一覧読み込み失敗:', e);
     } finally {
       setLoading(false);
     }

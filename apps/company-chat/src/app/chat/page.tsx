@@ -76,7 +76,7 @@ export default function ChatPage() {
           createSecretaryMessage('この会話の続きをどうぞ！'),
         ]);
       }
-    } catch { /* ignore */ }
+    } catch (e) { console.error('会話読み込み失敗:', e); }
   }, []);
 
   const sendMessage = useCallback(async () => {
