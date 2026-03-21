@@ -71,9 +71,9 @@ export default function MessageBubble({ msg }: { msg: ChatMessage }) {
         overflow: 'hidden',
       }}>
         {/* ユーザーの添付画像 */}
-        {isUser && (msg as ChatMessage & { imageUrl?: string }).imageUrl && (
+        {isUser && msg.imageUrl && (
           <img
-            src={(msg as ChatMessage & { imageUrl?: string }).imageUrl}
+            src={msg.imageUrl}
             alt="添付画像"
             style={{
               maxWidth: '100%', borderRadius: 8, marginBottom: 8,

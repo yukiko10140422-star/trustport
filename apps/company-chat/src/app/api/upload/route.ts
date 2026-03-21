@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
+import { getAuthSession } from '@/lib/api-auth';
 import { getSupabaseAdmin } from '@/lib/supabase';
 
 const MAX_SIZE = 10 * 1024 * 1024; // 10MB
@@ -10,8 +9,8 @@ const ALLOWED_TYPES = new Set([
 ]);
 
 export async function POST(req: NextRequest) {
-  const session = await getServerSession(authOptions);
-  if (!session?.user?.email) {
+  const auth = await getAuthSession();
+  if (!auth) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
@@ -38,7 +37,7 @@ export async function POST(req: NextRequest) {
 
   const sb = getSupabaseAdmin();
   const ext = file.name.split('.').pop() || 'bin';
-  const path = `chat-uploads/${session.user.email}/${Date.now()}.${ext}`;
+  const path = `chat-uploads/${auth.email}/${Date.now()}.${ext}`;
 
   const buffer = Buffer.from(await file.arrayBuffer());
 

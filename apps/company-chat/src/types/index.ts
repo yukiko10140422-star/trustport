@@ -18,6 +18,7 @@ export interface ChatMessage {
   person?: string;
   model?: string;
   taskId?: string;
+  imageUrl?: string;
   timestamp: number;
   streaming?: boolean;
   toolsRunning?: string[];

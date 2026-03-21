@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
 import Anthropic from '@anthropic-ai/sdk';
-import { authOptions } from '@/lib/auth';
+import { getAuthSession } from '@/lib/api-auth';
 import { routeMessage } from '@/lib/router';
 import { buildSystemPrompt, buildSecretaryRoutingMessage } from '@/lib/prompt-builder';
 import { selectModel } from '@/lib/model-selector';
@@ -14,8 +13,8 @@ const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 const MAX_TOOL_ROUNDS = 5;
 
 export async function POST(req: NextRequest) {
-  const session = await getServerSession(authOptions);
-  if (!session) {
+  const auth = await getAuthSession();
+  if (!auth) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
@@ -32,7 +31,7 @@ export async function POST(req: NextRequest) {
   const systemPrompt = buildSystemPrompt(dept);
   const routingMessage = buildSecretaryRoutingMessage(dept, message);
 
-  const accessToken = (session as unknown as Record<string, unknown>).accessToken as string || '';
+  const { accessToken } = auth;
 
   const messages: Anthropic.MessageParam[] = [
     ...history.slice(-10).map((m: { role: string; content: string }) => ({

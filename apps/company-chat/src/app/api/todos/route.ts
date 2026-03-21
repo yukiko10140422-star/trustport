@@ -1,14 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
+import { getAuthSession } from '@/lib/api-auth';
 
 const TASKS_API = 'https://tasks.googleapis.com/tasks/v1';
-
-async function getToken() {
-  const session = await getServerSession(authOptions);
-  if (!session) return null;
-  return (session as any).accessToken as string;
-}
 
 async function getDefaultTaskList(token: string): Promise<string> {
   const res = await fetch(`${TASKS_API}/users/@me/lists?maxResults=1`, {
@@ -19,8 +12,9 @@ async function getDefaultTaskList(token: string): Promise<string> {
 }
 
 export async function GET(req: NextRequest) {
-  const token = await getToken();
-  if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  const auth = await getAuthSession();
+  if (!auth?.accessToken) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  const token = auth.accessToken;
 
   const listId = await getDefaultTaskList(token);
   const res = await fetch(
@@ -45,8 +39,9 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const token = await getToken();
-  if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  const auth = await getAuthSession();
+  if (!auth?.accessToken) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  const token = auth.accessToken;
 
   const body = await req.json();
   const { title, due, notes } = body;
@@ -75,8 +70,9 @@ export async function POST(req: NextRequest) {
 }
 
 export async function PATCH(req: NextRequest) {
-  const token = await getToken();
-  if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  const auth = await getAuthSession();
+  if (!auth?.accessToken) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  const token = auth.accessToken;
 
   const body = await req.json();
   const { taskId, completed } = body;

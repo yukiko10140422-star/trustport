@@ -127,7 +127,7 @@ export default function ChatPage() {
     const userMsg: ChatMessage = {
       id: genId(), role: 'user', content: text, timestamp: Date.now(),
       imageUrl: attachedImages.length > 0 ? attachedImages[0].preview : undefined,
-    } as ChatMessage & { imageUrl?: string };
+    };
     setMessages(prev => [...prev, userMsg]);
     setInput('');
     setImages([]);

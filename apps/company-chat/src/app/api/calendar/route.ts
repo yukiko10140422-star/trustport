@@ -1,18 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
+import { getAuthSession } from '@/lib/api-auth';
 
 const CALENDAR_API = 'https://www.googleapis.com/calendar/v3';
 
-async function getToken() {
-  const session = await getServerSession(authOptions);
-  if (!session) return null;
-  return (session as any).accessToken as string;
-}
-
 export async function GET(req: NextRequest) {
-  const token = await getToken();
-  if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  const auth = await getAuthSession();
+  if (!auth?.accessToken) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  const token = auth.accessToken;
 
   const { searchParams } = new URL(req.url);
   const timeMin = searchParams.get('timeMin') || new Date().toISOString();
@@ -44,8 +38,9 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const token = await getToken();
-  if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  const auth = await getAuthSession();
+  if (!auth?.accessToken) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  const token = auth.accessToken;
 
   const body = await req.json();
   const { title, start, end, allDay } = body;
