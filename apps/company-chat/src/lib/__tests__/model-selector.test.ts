@@ -2,29 +2,20 @@ import { describe, it, expect } from 'vitest';
 import { selectModel } from '../model-selector';
 
 describe('selectModel', () => {
-  it('ユーザー指定があればそれを優先', () => {
-    expect(selectModel('secretary', 'opus')).toBe('opus');
-    expect(selectModel('engineering', 'haiku')).toBe('haiku');
+  it('ユーザー指定が有効なキーならそれを優先', () => {
+    expect(selectModel('opus')).toBe('opus');
+    expect(selectModel('haiku')).toBe('haiku');
+    expect(selectModel('sonnet')).toBe('sonnet');
   });
 
-  it('CEO部署はsonnet', () => {
-    expect(selectModel('ceo')).toBe('sonnet');
+  it('無効なキーは無視してデフォルト sonnet', () => {
+    expect(selectModel('gpt-4')).toBe('sonnet');
+    expect(selectModel('invalid')).toBe('sonnet');
+    expect(selectModel('')).toBe('sonnet');
   });
 
-  it('技術系部署はsonnet', () => {
-    expect(selectModel('engineering')).toBe('sonnet');
-    expect(selectModel('research')).toBe('sonnet');
-    expect(selectModel('legal')).toBe('sonnet');
-    expect(selectModel('dx')).toBe('sonnet');
-  });
-
-  it('その他の部署はhaiku', () => {
-    expect(selectModel('secretary')).toBe('haiku');
-    expect(selectModel('marketing')).toBe('haiku');
-    expect(selectModel('sales')).toBe('haiku');
-  });
-
-  it('未知の部署IDはhaiku', () => {
-    expect(selectModel('unknown')).toBe('haiku');
+  it('未指定はデフォルト sonnet', () => {
+    expect(selectModel()).toBe('sonnet');
+    expect(selectModel(undefined)).toBe('sonnet');
   });
 });

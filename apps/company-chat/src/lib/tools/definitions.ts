@@ -131,4 +131,50 @@ export const TOOLS: Anthropic.Tool[] = [
       required: ['query'],
     },
   },
+  {
+    name: 'list_files',
+    description: 'プロジェクト内のディレクトリのファイル一覧を取得します。コードを確認したり、ファイル構造を把握するときに使います。',
+    input_schema: {
+      type: 'object' as const,
+      properties: {
+        path: { type: 'string', description: 'ディレクトリパス（プロジェクトルートからの相対パス）。例: "src", "apps/company-chat/src/lib"' },
+      },
+      required: ['path'],
+    },
+  },
+  {
+    name: 'read_file',
+    description: 'プロジェクト内のファイルの内容を読み取ります。コードの確認や修正箇所の特定に使います。',
+    input_schema: {
+      type: 'object' as const,
+      properties: {
+        path: { type: 'string', description: 'ファイルパス（プロジェクトルートからの相対パス）。例: "src/app/page.tsx"' },
+      },
+      required: ['path'],
+    },
+  },
+  {
+    name: 'write_file',
+    description: 'プロジェクト内のファイルを作成または上書きします。コードの修正、新しいファイルの作成に使います。既存ファイルは自動的にバックアップされます。',
+    input_schema: {
+      type: 'object' as const,
+      properties: {
+        path: { type: 'string', description: 'ファイルパス（プロジェクトルートからの相対パス）' },
+        content: { type: 'string', description: 'ファイルに書き込む内容' },
+      },
+      required: ['path', 'content'],
+    },
+  },
+  {
+    name: 'search_files',
+    description: 'プロジェクト内のファイルをテキスト検索します。特定のコード、関数名、変数名などを探すときに使います。',
+    input_schema: {
+      type: 'object' as const,
+      properties: {
+        query: { type: 'string', description: '検索するテキスト' },
+        directory: { type: 'string', description: '検索対象ディレクトリ（省略時はプロジェクト全体）' },
+      },
+      required: ['query'],
+    },
+  },
 ];

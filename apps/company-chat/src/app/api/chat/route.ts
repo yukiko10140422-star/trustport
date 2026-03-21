@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import Anthropic from '@anthropic-ai/sdk';
 import { getAuthSession } from '@/lib/api-auth';
 import { routeMessage } from '@/lib/router';
-import { buildSystemPrompt, buildSecretaryRoutingMessage } from '@/lib/prompt-builder';
+import { buildCacheableSystemPrompt, buildSecretaryRoutingMessage } from '@/lib/prompt-builder';
 import { selectModel } from '@/lib/model-selector';
-import { MODELS, type ModelKey } from '@/lib/constants';
+import { MODELS } from '@/lib/constants';
 import { TOOLS } from '@/lib/tools/definitions';
 import { executeTool } from '@/lib/tools/handlers';
 
@@ -26,9 +26,9 @@ export async function POST(req: NextRequest) {
   }
 
   const dept = routeMessage(message, departmentId);
-  const modelKey = selectModel(dept.id, userModel as ModelKey | undefined);
+  const modelKey = selectModel(userModel as string | undefined);
   const modelId = MODELS[modelKey].id;
-  const systemPrompt = buildSystemPrompt(dept);
+  const systemPrompt = buildCacheableSystemPrompt(dept);
   const routingMessage = buildSecretaryRoutingMessage(dept, message);
 
   const { accessToken } = auth;
@@ -55,10 +55,8 @@ export async function POST(req: NextRequest) {
     while (response.stop_reason === 'tool_use' && rounds < MAX_TOOL_ROUNDS) {
       rounds++;
 
-      // assistantの応答をメッセージ履歴に追加
       messages.push({ role: 'assistant', content: response.content });
 
-      // 全てのtool_useブロックを実行
       const toolResults: Anthropic.ToolResultBlockParam[] = [];
       for (const block of response.content) {
         if (block.type === 'tool_use') {
@@ -75,10 +73,8 @@ export async function POST(req: NextRequest) {
         }
       }
 
-      // tool_resultをメッセージ履歴に追加
       messages.push({ role: 'user', content: toolResults });
 
-      // 再度Claude APIを呼ぶ
       response = await client.messages.create({
         model: modelId,
         max_tokens: 2048,
@@ -88,7 +84,6 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // 最終テキスト応答を抽出
     const text = response.content
       .filter((b): b is Anthropic.TextBlock => b.type === 'text')
       .map((b) => b.text)
@@ -103,10 +98,9 @@ export async function POST(req: NextRequest) {
       text,
     });
   } catch (err: unknown) {
-    const errorMessage = err instanceof Error ? err.message : String(err);
-    console.error('Claude API error:', errorMessage);
+    console.error('Claude API error:', err instanceof Error ? err.message : String(err));
     return NextResponse.json(
-      { error: errorMessage || 'API error' },
+      { error: 'AIの応答中にエラーが発生しました。もう一度お試しください。' },
       { status: 500 },
     );
   }

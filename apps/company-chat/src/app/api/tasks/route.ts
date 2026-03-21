@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getAuthSession } from '@/lib/api-auth';
 import { getSupabaseAdmin } from '@/lib/supabase';
 import { routeMessage } from '@/lib/router';
-import { classifyTask } from '@/lib/action-detector';
+import { isHeavyTask } from '@/lib/action-detector';
 
 const HEARTBEAT_TIMEOUT_MS = 60_000; // 60秒以内のハートビートならオンライン
 
@@ -19,8 +19,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Message required' }, { status: 400 });
   }
 
-  // タスク分類
-  const classification = classifyTask(message);
+  const { taskType } = isHeavyTask(message);
   const dept = routeMessage(message, departmentId);
 
   // ワーカーのオンライン状態を確認
@@ -52,14 +51,15 @@ export async function POST(req: NextRequest) {
       department_id: dept.id,
       department_name: dept.name,
       person: dept.person,
-      task_type: classification.taskType || 'heavy',
+      task_type: taskType || 'heavy',
       priority: 0,
     })
     .select('id, status, created_at')
     .single();
 
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    console.error('Task creation error:', error.message);
+    return NextResponse.json({ error: 'タスクの作成に失敗しました' }, { status: 500 });
   }
 
   return NextResponse.json({
@@ -88,7 +88,8 @@ export async function GET(req: NextRequest) {
     .limit(limit);
 
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    console.error('Task list error:', error.message);
+    return NextResponse.json({ error: 'タスク一覧の取得に失敗しました' }, { status: 500 });
   }
 
   return NextResponse.json({ tasks });

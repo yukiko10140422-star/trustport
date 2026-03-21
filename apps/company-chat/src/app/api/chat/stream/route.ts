@@ -2,9 +2,9 @@ import { NextRequest } from 'next/server';
 import Anthropic from '@anthropic-ai/sdk';
 import { getAuthSession } from '@/lib/api-auth';
 import { routeMessage } from '@/lib/router';
-import { buildSystemPrompt, buildSecretaryRoutingMessage } from '@/lib/prompt-builder';
+import { buildCacheableSystemPrompt, buildSecretaryRoutingMessage } from '@/lib/prompt-builder';
 import { selectModel } from '@/lib/model-selector';
-import { MODELS, type ModelKey } from '@/lib/constants';
+import { MODELS } from '@/lib/constants';
 import { TOOLS } from '@/lib/tools/definitions';
 import { executeTool } from '@/lib/tools/handlers';
 import { saveMessage, createConversation, generateTitle } from '@/lib/conversations';
@@ -35,9 +35,9 @@ export async function POST(req: NextRequest) {
   }
 
   const dept = routeMessage(message, departmentId);
-  const modelKey = selectModel(dept.id, userModel as ModelKey | undefined);
+  const modelKey = selectModel(userModel as string | undefined);
   const modelId = MODELS[modelKey].id;
-  const systemPrompt = buildSystemPrompt(dept);
+  const systemPrompt = buildCacheableSystemPrompt(dept);
   const routingMessage = buildSecretaryRoutingMessage(dept, message);
 
   const { accessToken } = auth;
@@ -46,7 +46,6 @@ export async function POST(req: NextRequest) {
   let userContent: Anthropic.ContentBlockParam[] | string;
   const typedImages = images as Array<{ url: string; type: string }>;
 
-  // PDF添付があるかチェック
   const pdfImages = typedImages.filter(img => img.type === 'application/pdf');
   const nonPdfImages = typedImages.filter(img => img.type !== 'application/pdf');
 
@@ -96,7 +95,6 @@ export async function POST(req: NextRequest) {
       };
 
       try {
-        // 会話IDの確定（新規 or 既存）
         let conversationId = existingConvId;
         if (!conversationId) {
           try {
@@ -108,7 +106,6 @@ export async function POST(req: NextRequest) {
           }
         }
 
-        // ユーザーメッセージを保存
         if (conversationId) {
           try {
             await saveMessage({
@@ -122,7 +119,6 @@ export async function POST(req: NextRequest) {
           }
         }
 
-        // メタデータ送信
         send('meta', {
           departmentId: dept.id,
           departmentName: dept.name,
@@ -212,7 +208,6 @@ export async function POST(req: NextRequest) {
           }
         }
 
-        // アシスタントメッセージを保存
         if (conversationId && fullText) {
           try {
             await saveMessage({
@@ -231,8 +226,8 @@ export async function POST(req: NextRequest) {
 
         send('done', { conversationId });
       } catch (err: unknown) {
-        const errorMessage = err instanceof Error ? err.message : String(err);
-        send('error', { error: errorMessage });
+        console.error('Stream error:', err instanceof Error ? err.message : String(err));
+        send('error', { error: 'AIの応答中にエラーが発生しました。もう一度お試しください。' });
       } finally {
         controller.close();
       }

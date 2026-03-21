@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import type { ChatMessage } from '@/types';
 import type { ModelKey } from '@/lib/constants';
-import { classifyTask } from '@/lib/action-detector';
+import { isHeavyTask } from '@/lib/action-detector';
 import { createSSEParser } from '@/lib/sse-parser';
 import { genId, createSecretaryMessage, WELCOME_MESSAGE } from '@/lib/message-helpers';
 import type { UploadedImage } from '@/components/ImageUpload';
@@ -21,7 +21,7 @@ export default function ChatPage() {
   const router = useRouter();
   const [messages, setMessages] = useState<ChatMessage[]>([WELCOME_MESSAGE]);
   const [input, setInput] = useState('');
-  const [model, setModel] = useState<ModelKey>('haiku');
+  const [model, setModel] = useState<ModelKey>('sonnet');
   const [loading, setLoading] = useState(false);
   const [selectedDept, setSelectedDept] = useState('');
   const [showDeptPicker, setShowDeptPicker] = useState(false);
@@ -97,10 +97,10 @@ export default function ChatPage() {
       role: m.role, content: m.content,
     }));
 
-    const classification = classifyTask(text);
+    const { isHeavy } = isHeavyTask(text);
 
     try {
-      if (classification.weight === 'heavy') {
+      if (isHeavy) {
         const res = await fetch('/api/tasks', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },

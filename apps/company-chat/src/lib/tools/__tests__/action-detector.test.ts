@@ -1,54 +1,46 @@
 import { describe, it, expect } from 'vitest';
-import { classifyTask } from '../../action-detector';
+import { isHeavyTask } from '../../action-detector';
 
-describe('classifyTask', () => {
-  // --- chat: 挨拶 ---
-  it('greetings → chat', () => {
-    expect(classifyTask('こんにちは').weight).toBe('chat');
-    expect(classifyTask('おはよう').weight).toBe('chat');
+describe('isHeavyTask', () => {
+  // --- heavy: 明示的な実行依頼 ---
+  it('調査・リサーチ依頼 → heavy/research', () => {
+    expect(isHeavyTask('競合を調べて')).toEqual({ isHeavy: true, taskType: 'research' });
+    expect(isHeavyTask('リサーチしてください')).toEqual({ isHeavy: true, taskType: 'research' });
   });
 
-  // --- chat: 相談・質問（実行依頼ではない） ---
-  it('consultation (〜したい) → chat', () => {
-    expect(classifyTask('音声機能追加したいんだけど').weight).toBe('chat');
-    expect(classifyTask('UIを改善したい').weight).toBe('chat');
-    expect(classifyTask('新しい機能を検討したい').weight).toBe('chat');
+  it('スライド作成依頼 → heavy/slide', () => {
+    expect(isHeavyTask('スライドを作ってください')).toEqual({ isHeavy: true, taskType: 'slide' });
+    expect(isHeavyTask('企画書を作成お願い')).toEqual({ isHeavy: true, taskType: 'slide' });
   });
 
-  it('opinions (〜どう思う) → chat', () => {
-    expect(classifyTask('この設計どう思う？').weight).toBe('chat');
-    expect(classifyTask('アパレルの方向性どう思います？').weight).toBe('chat');
+  it('コード実行依頼 → heavy/code', () => {
+    expect(isHeavyTask('実装してください')).toEqual({ isHeavy: true, taskType: 'code' });
+    expect(isHeavyTask('コミットしてpushして')).toEqual({ isHeavy: true, taskType: 'code' });
   });
 
-  it('general questions → chat', () => {
-    expect(classifyTask('今日の天気は？').weight).toBe('chat');
-    expect(classifyTask('壁打ちしたい').weight).toBe('chat');
+  it('レポート作成依頼 → heavy/report', () => {
+    expect(isHeavyTask('レポートを作ってください')).toEqual({ isHeavy: true, taskType: 'report' });
   });
 
-  // --- heavy: 明示的な実行依頼（「〜して」） ---
-  it('explicit execution → heavy', () => {
-    expect(classifyTask('競合を調べて').weight).toBe('heavy');
-    expect(classifyTask('スライドを作ってください').weight).toBe('heavy');
-    expect(classifyTask('実装してください').weight).toBe('heavy');
-    expect(classifyTask('コミットしてpushして').weight).toBe('heavy');
+  it('ファイル操作依頼 → heavy/file-op', () => {
+    expect(isHeavyTask('ドキュメントを作成してください')).toEqual({ isHeavy: true, taskType: 'file-op' });
   });
 
-  // --- light: 事業データの読み取り ---
-  it('business + data query → light', () => {
-    expect(classifyTask('アパレル事業の進捗教えて').weight).toBe('light');
-    expect(classifyTask('DXプロジェクトの状況は？').weight).toBe('light');
-    expect(classifyTask('YURAの計画どうなってる？').weight).toBe('light');
+  // --- not heavy: LLMが判断するメッセージ ---
+  it('挨拶 → not heavy', () => {
+    expect(isHeavyTask('こんにちは').isHeavy).toBe(false);
+    expect(isHeavyTask('おはよう').isHeavy).toBe(false);
   });
 
-  // --- light: ツール系 ---
-  it('calendar/todo → light', () => {
-    expect(classifyTask('今月の予定教えて').weight).toBe('light');
-    expect(classifyTask('TODO一覧見せて').weight).toBe('light');
+  it('相談・質問 → not heavy', () => {
+    expect(isHeavyTask('ベースカラーを変えたい').isHeavy).toBe(false);
+    expect(isHeavyTask('この設計どう思う？').isHeavy).toBe(false);
+    expect(isHeavyTask('壁打ちしたい').isHeavy).toBe(false);
   });
 
-  // --- 境界ケース ---
-  it('consultation about heavy topic → chat (not heavy)', () => {
-    // 「スライドについて相談したい」は相談であり作成依頼ではない
-    expect(classifyTask('スライドについて相談したいんだけど').weight).toBe('chat');
+  it('データ参照 → not heavy', () => {
+    expect(isHeavyTask('今月の予定教えて').isHeavy).toBe(false);
+    expect(isHeavyTask('TODO一覧見せて').isHeavy).toBe(false);
+    expect(isHeavyTask('アパレル事業の進捗教えて').isHeavy).toBe(false);
   });
 });

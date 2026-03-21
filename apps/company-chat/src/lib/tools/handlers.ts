@@ -2,9 +2,13 @@ import { listEvents, createEvent, deleteEvent } from './calendar-service';
 import { listTodos, createTodo, completeTodo } from './todo-service';
 import { searchDocuments, getDocumentDetail } from './company-docs-service';
 import { searchWeb } from './web-search-service';
+import { listFiles, readFile, writeFile, searchFiles } from './file-service';
 
 // Google OAuth不要のツール
-const NO_AUTH_TOOLS = new Set(['search_company_docs', 'get_company_doc_detail', 'web_search']);
+const NO_AUTH_TOOLS = new Set([
+  'search_company_docs', 'get_company_doc_detail', 'web_search',
+  'list_files', 'read_file', 'write_file', 'search_files',
+]);
 
 export async function executeTool(
   toolName: string,
@@ -89,6 +93,32 @@ export async function executeTool(
           toolInput.count as number | undefined,
         );
         return JSON.stringify(results);
+      }
+
+      case 'list_files': {
+        const result = await listFiles(toolInput.path as string);
+        return JSON.stringify(result);
+      }
+
+      case 'read_file': {
+        const result = await readFile(toolInput.path as string);
+        return JSON.stringify(result);
+      }
+
+      case 'write_file': {
+        const result = await writeFile(
+          toolInput.path as string,
+          toolInput.content as string,
+        );
+        return JSON.stringify(result);
+      }
+
+      case 'search_files': {
+        const result = await searchFiles(
+          toolInput.query as string,
+          toolInput.directory as string | undefined,
+        );
+        return JSON.stringify(result);
       }
 
       default:

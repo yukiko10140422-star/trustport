@@ -16,6 +16,10 @@ export const TOOL_LABELS: Record<string, string> = {
   search_company_docs: '社内資料検索中',
   get_company_doc_detail: '資料取得中',
   web_search: 'Web検索中',
+  list_files: 'ファイル一覧取得中',
+  read_file: 'ファイル読み取り中',
+  write_file: 'ファイル書き込み中',
+  search_files: 'ファイル検索中',
 };
 
 export const DEPT_COLORS: Record<string, string> = {
