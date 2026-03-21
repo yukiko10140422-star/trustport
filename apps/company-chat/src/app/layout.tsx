@@ -17,7 +17,12 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ja">
+    <html lang="ja" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: `
+          (function(){try{var t=localStorage.getItem('company-chat-theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}})();
+        `}} />
+      </head>
       <body>
         <Providers>{children}</Providers>
       </body>

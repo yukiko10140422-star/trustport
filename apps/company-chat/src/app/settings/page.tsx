@@ -2,8 +2,9 @@
 
 import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import TabBar from '@/components/TabBar';
+import { getTheme, setTheme, THEME_OPTIONS, type ThemeValue } from '@/lib/theme';
 
 export default function SettingsPage() {
   const { data: session, status } = useSession();
@@ -50,6 +51,9 @@ export default function SettingsPage() {
           </div>
         </div>
 
+        {/* Theme */}
+        <ThemeSelector />
+
         {/* Logout */}
         <button
           onClick={() => signOut({ callbackUrl: '/login' })}
@@ -64,6 +68,52 @@ export default function SettingsPage() {
       </main>
 
       <TabBar />
+    </div>
+  );
+}
+
+function ThemeSelector() {
+  const [current, setCurrent] = useState<ThemeValue>('system');
+
+  useEffect(() => {
+    setCurrent(getTheme());
+  }, []);
+
+  const handleChange = (value: ThemeValue) => {
+    setTheme(value);
+    setCurrent(value);
+  };
+
+  return (
+    <div style={{
+      padding: 16, borderRadius: 12, border: '1px solid var(--border)',
+      background: 'var(--surface)', marginBottom: 12,
+    }}>
+      <div style={{ fontSize: 12, color: 'var(--text-secondary)', fontWeight: 600, marginBottom: 10 }}>
+        テーマ
+      </div>
+      <div style={{ display: 'flex', gap: 8 }}>
+        {THEME_OPTIONS.map(opt => (
+          <button
+            key={opt.value}
+            onClick={() => handleChange(opt.value)}
+            style={{
+              flex: 1,
+              padding: '10px 8px',
+              borderRadius: 10,
+              fontSize: 13,
+              fontWeight: current === opt.value ? 700 : 400,
+              border: current === opt.value ? '2px solid var(--primary)' : '1px solid var(--border)',
+              background: current === opt.value ? 'var(--primary-bg)' : 'transparent',
+              color: current === opt.value ? 'var(--primary)' : 'var(--text)',
+              cursor: 'pointer',
+              transition: 'all 0.2s',
+            }}
+          >
+            {opt.label}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
