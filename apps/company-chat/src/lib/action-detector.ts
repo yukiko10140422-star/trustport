@@ -34,13 +34,20 @@ const HEAVY_KEYWORDS: Record<TaskType, string[]> = {
   heavy: [],
 };
 
-// --- Light task keywords (Claude API on Vercel) ---
+// --- 事業・プロジェクト名のキーワード（これらが含まれる「進捗」質問は重作業） ---
 
-const LIGHT_ACTION_KEYWORDS = [
-  '進捗', '状況', 'ステータス', '確認して', '教えて', '見せて',
-  'プロジェクト', '計画', 'スケジュール', '売上', '在庫',
-  'リスティング', '決定事項', '振り返り',
-  '聞いて', 'きいて', 'TODO', '予定',
+const BUSINESS_KEYWORDS = [
+  'アパレル', 'YURA', 'ゆら', 'DX', 'eBay', 'イーベイ',
+  'プロダクト', 'スタートアップ', '被災地', 'QR', 'リバーシブル',
+  'vkei', 'V系', 'EC', 'メモリアル', '仮想会社', 'company',
+];
+
+// --- ファイルアクセスが必要な動詞（事業名と組み合わさると重作業） ---
+
+const DATA_QUERY_KEYWORDS = [
+  '進捗', '状況', 'ステータス', '確認して', '見せて',
+  'プロジェクト', '計画', '決定事項', '振り返り',
+  'どうなってる', 'どこまで', '教えて',
 ];
 
 const CHAT_ONLY_PATTERNS = [
@@ -71,19 +78,28 @@ export function classifyTask(message: string): TaskClassification {
 
   const lower = message.toLowerCase();
 
-  // Check heavy keywords first (more specific)
+  // Check heavy keywords first (most specific)
   for (const [type, keywords] of Object.entries(HEAVY_KEYWORDS) as [TaskType, string[]][]) {
     if (keywords.some((kw) => lower.includes(kw.toLowerCase()))) {
       return { weight: 'heavy', taskType: type };
     }
   }
 
-  // Check light action keywords
-  if (LIGHT_ACTION_KEYWORDS.some((kw) => lower.includes(kw.toLowerCase()))) {
+  // 事業データが必要な質問 → 重作業
+  // （事業名 + データクエリ動詞の組み合わせ）
+  const hasBusiness = BUSINESS_KEYWORDS.some((kw) => lower.includes(kw.toLowerCase()));
+  const hasDataQuery = DATA_QUERY_KEYWORDS.some((kw) => lower.includes(kw.toLowerCase()));
+  if (hasBusiness && hasDataQuery) {
+    return { weight: 'heavy', taskType: 'report' };
+  }
+
+  // カレンダー・TODO関連 → 軽作業（tool_useで処理可能）
+  const TOOL_KEYWORDS = ['TODO', '予定', 'カレンダー', 'スケジュール', 'タスク'];
+  if (TOOL_KEYWORDS.some((kw) => lower.includes(kw.toLowerCase()))) {
     return { weight: 'light', taskType: null };
   }
 
-  // Default: chat
+  // その他の質問・雑談 → chat（軽作業）
   return { weight: 'chat', taskType: null };
 }
 
