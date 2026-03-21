@@ -19,13 +19,6 @@ export function getSupabaseAdmin(): SupabaseClient {
   return _admin;
 }
 
-/** @deprecated use getSupabaseAdmin() */
-export const supabaseAdmin = new Proxy({} as SupabaseClient, {
-  get(_target, prop) {
-    return (getSupabaseAdmin() as unknown as Record<string | symbol, unknown>)[prop];
-  },
-});
-
 // クライアントサイド用（Realtime購読）
 export function createSupabaseBrowser(): SupabaseClient {
   if (!supabaseUrl) {

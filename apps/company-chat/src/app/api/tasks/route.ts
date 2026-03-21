@@ -1,15 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
-import { supabaseAdmin } from '@/lib/supabase';
+import { getAuthSession } from '@/lib/api-auth';
+import { getSupabaseAdmin } from '@/lib/supabase';
 import { routeMessage } from '@/lib/router';
 import { classifyTask } from '@/lib/action-detector';
 
 const HEARTBEAT_TIMEOUT_MS = 60_000; // 60秒以内のハートビートならオンライン
 
 export async function POST(req: NextRequest) {
-  const session = await getServerSession(authOptions);
-  if (!session) {
+  const auth = await getAuthSession();
+  if (!auth) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
@@ -25,7 +24,7 @@ export async function POST(req: NextRequest) {
   const dept = routeMessage(message, departmentId);
 
   // ワーカーのオンライン状態を確認
-  const { data: workerData } = await supabaseAdmin
+  const { data: workerData } = await getSupabaseAdmin()
     .from('company_worker_status')
     .select('is_online, last_heartbeat')
     .eq('id', 'default')
@@ -46,7 +45,7 @@ export async function POST(req: NextRequest) {
   }
 
   // Supabaseにタスク作成
-  const { data: task, error } = await supabaseAdmin
+  const { data: task, error } = await getSupabaseAdmin()
     .from('company_tasks')
     .insert({
       message,
@@ -74,15 +73,15 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
-  const session = await getServerSession(authOptions);
-  if (!session) {
+  const auth = await getAuthSession();
+  if (!auth) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
   const { searchParams } = new URL(req.url);
   const limit = Math.min(parseInt(searchParams.get('limit') || '20', 10), 50);
 
-  const { data: tasks, error } = await supabaseAdmin
+  const { data: tasks, error } = await getSupabaseAdmin()
     .from('company_tasks')
     .select('*')
     .order('created_at', { ascending: false })
