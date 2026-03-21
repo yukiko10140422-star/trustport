@@ -1,7 +1,7 @@
 # リポジトリ分離（yura-qr / vkei-ec）
 
 - 作成日: 2026-03-20
-- 完了日:
+- 完了日: 2026-03-21
 - 優先度: MEDIUM
 - 関連: [2026-03-20-security-fixes.md](2026-03-20-security-fixes.md)
 
