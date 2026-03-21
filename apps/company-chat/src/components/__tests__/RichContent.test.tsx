@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { describe, it, expect, vi } from 'vitest';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import RichContent from '../RichContent';
 
 describe('RichContent', () => {
@@ -84,5 +84,48 @@ describe('RichContent', () => {
     const link = screen.getByText('リンク');
     expect(link.tagName).toBe('A');
     expect(link.getAttribute('target')).toBe('_blank');
+  });
+
+  // --- コピーボタン テスト ---
+
+  it('コードブロックにコピーボタンがある', () => {
+    const md = '```javascript\nconst x = 1;\n```';
+    const { container } = render(<RichContent content={md} />);
+    const copyBtn = container.querySelector('button[data-testid="copy-btn"]');
+    expect(copyBtn).not.toBeNull();
+  });
+
+  it('コピーボタンをクリックするとclipboardにコピーされる', async () => {
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    Object.assign(navigator, { clipboard: { writeText } });
+
+    const md = '```javascript\nconst x = 1;\n```';
+    const { container } = render(<RichContent content={md} />);
+    const copyBtn = container.querySelector('button[data-testid="copy-btn"]')!;
+    fireEvent.click(copyBtn);
+
+    await waitFor(() => {
+      expect(writeText).toHaveBeenCalledWith('const x = 1;\n');
+    });
+  });
+
+  it('コピー成功後にボタンテキストが一時的に変わる', async () => {
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    Object.assign(navigator, { clipboard: { writeText } });
+
+    const md = '```javascript\nconst x = 1;\n```';
+    const { container } = render(<RichContent content={md} />);
+    const copyBtn = container.querySelector('button[data-testid="copy-btn"]')!;
+    fireEvent.click(copyBtn);
+
+    await waitFor(() => {
+      expect(copyBtn.textContent).toContain('Copied');
+    });
+  });
+
+  it('インラインコードにはコピーボタンがない', () => {
+    const { container } = render(<RichContent content="これは `code` です" />);
+    const copyBtn = container.querySelector('button[data-testid="copy-btn"]');
+    expect(copyBtn).toBeNull();
   });
 });
