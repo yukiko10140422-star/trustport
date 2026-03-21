@@ -1,0 +1,182 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --navy: #0f3460;
+  --dark-bg: #070710;
+  --dark-bg-2: #1a1a2e;
+  --dark-bg-95: rgba(26,26,46,0.95);
+  --terracotta: #c27c5e;
+  --teal: #2a9d8f;
+  --ivory: #faf3e0;
+  --gold: #d4a574;
+  --purple: #8b7ec8;
+  --coral: #e94560;
+  --text-primary: #ffffff;
+  --text-secondary: #e0e0e0;
+  --text-body: #b0b0b0;
+  --text-muted: #808080;
+  --text-soft: rgba(255, 255, 255, 0.8);
+  --card-bg: rgba(255,255,255,0.03);
+  --card-border: rgba(255,255,255,0.06);
+  --card-border-top: rgba(255,255,255,0.12);
+}
+
+body {
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  font-family: 'Noto Sans JP', 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--dark-bg);
+  color: white;
+}
+
+.slide {
+  width: 1920px;
+  height: 1080px;
+  position: relative;
+  background-color: var(--dark-bg);
+  background-image:
+    radial-gradient(ellipse 80% 60% at 15% 25%, rgba(42,157,143,0.07) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 50% at 85% 80%, rgba(212,165,116,0.05) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 35% at 60% 40%, rgba(139,126,200,0.03) 0%, transparent 60%);
+}
+
+/* Noise texture */
+.slide::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+  opacity: 0.03;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Section label */
+.section-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 16px;
+}
+
+/* Main title (gradient) */
+.title-gradient {
+  font-family: 'Inter', sans-serif;
+  font-size: 72px;
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -1px;
+  background: linear-gradient(135deg, #ffffff 0%, var(--ivory) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Subtitle gold */
+.subtitle-gold {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 2px;
+}
+
+/* Divider */
+.divider {
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--teal), var(--terracotta));
+  border-radius: 2px;
+}
+
+/* Body text */
+.body-text {
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.8;
+  color: var(--text-body);
+}
+.body-text strong {
+  color: var(--ivory);
+  font-weight: 700;
+}
+
+/* Glass card */
+.glass-card {
+  background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--card-border);
+  border-top-color: var(--card-border-top);
+  border-radius: 16px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2), 0 8px 24px rgba(0,0,0,0.15),
+    inset 0 1px 0 rgba(255,255,255,0.05);
+  padding: 32px;
+}
+
+/* Brand bar */
+.brand-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--teal), var(--terracotta), var(--gold));
+  box-shadow: 0 -2px 12px rgba(42,157,143,0.3);
+  z-index: 10;
+}
+
+/* Slide number */
+.slide-number {
+  position: absolute;
+  top: 40px;
+  right: 48px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.2);
+  letter-spacing: 4px;
+  z-index: 10;
+}
+
+/* Decorative ring */
+.deco-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.04);
+  pointer-events: none;
+}
+
+/* KPI card */
+.kpi-card {
+  text-align: center;
+}
+.kpi-value {
+  font-family: 'Inter', sans-serif;
+  font-size: 48px;
+  font-weight: 900;
+  color: var(--teal);
+  text-shadow: 0 0 30px rgba(42,157,143,0.3);
+}
+.kpi-label {
+  font-size: 16px;
+  color: var(--text-body);
+  margin-top: 8px;
+}
+
+/* Glow text */
+.glow-teal {
+  text-shadow: 0 0 20px rgba(42,157,143,0.4);
+}
+.glow-gold {
+  text-shadow: 0 0 20px rgba(212,165,116,0.4);
+}

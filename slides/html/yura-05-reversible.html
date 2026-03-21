@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="/slides/html/common.css">
+<style>
+  .slide {
+    padding: 80px;
+    display: flex;
+    flex-direction: column;
+    background-image:
+      radial-gradient(ellipse 70% 50% at 80% 30%, rgba(212,165,116,0.1) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 50% at 20% 70%, rgba(42,157,143,0.08) 0%, transparent 65%);
+  }
+  .header { z-index: 6; position: relative; margin-bottom: 40px; }
+  h2 { font-size: 40px; font-weight: 900; }
+  h2 span { color: var(--gold); }
+  .content { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; flex: 1; z-index: 6; position: relative; }
+  /* Flip card visual */
+  .flip-visual {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+  }
+  .tshirt-container {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+  }
+  .tshirt-side {
+    width: 300px;
+    height: 360px;
+    border-radius: 16px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+  }
+  .tshirt-front {
+    background: linear-gradient(135deg, rgba(42,157,143,0.15) 0%, rgba(42,157,143,0.05) 100%);
+    border: 1px solid rgba(42,157,143,0.3);
+    box-shadow: 0 0 40px rgba(42,157,143,0.1);
+  }
+  .tshirt-back {
+    background: linear-gradient(135deg, rgba(194,124,94,0.15) 0%, rgba(194,124,94,0.05) 100%);
+    border: 1px solid rgba(194,124,94,0.3);
+    box-shadow: 0 0 40px rgba(194,124,94,0.1);
+  }
+  .tshirt-label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .tshirt-front .tshirt-label { color: var(--teal); }
+  .tshirt-back .tshirt-label { color: var(--terracotta); }
+  .tshirt-icon {
+    margin-bottom: 16px;
+  }
+  .tshirt-title {
+    font-size: 22px;
+    font-weight: 900;
+    margin-bottom: 8px;
+  }
+  .tshirt-front .tshirt-title { color: var(--teal); text-shadow: 0 0 20px rgba(42,157,143,0.4); }
+  .tshirt-back .tshirt-title { color: var(--terracotta); text-shadow: 0 0 20px rgba(194,124,94,0.4); }
+  .tshirt-desc {
+    font-size: 15px;
+    color: var(--text-body);
+    line-height: 1.6;
+    padding: 0 24px;
+  }
+  .flip-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: var(--card-bg);
+    flex-shrink: 0;
+  }
+  .cultural-ref {
+    padding: 16px 24px;
+    border-radius: 12px;
+    background: rgba(212,165,116,0.06);
+    border: 1px solid rgba(212,165,116,0.15);
+    font-size: 14px;
+    color: var(--text-body);
+    line-height: 1.6;
+    text-align: center;
+  }
+  .cultural-ref strong { color: var(--gold); }
+  /* Right: specs */
+  .spec-list { display: flex; flex-direction: column; gap: 16px; }
+  .spec-card {
+    padding: 20px 24px;
+    border-radius: 12px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-top-color: var(--card-border-top);
+  }
+  .spec-card-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .spec-card-body {
+    font-size: 14px;
+    color: var(--text-body);
+    line-height: 1.7;
+  }
+  .spec-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+  .badge-rec {
+    background: rgba(42,157,143,0.2);
+    color: var(--teal);
+    border: 1px solid rgba(42,157,143,0.3);
+  }
+  .cost-compare {
+    margin-top: 16px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .cost-box {
+    padding: 16px;
+    border-radius: 10px;
+    text-align: center;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+  }
+  .cost-val {
+    font-family: 'Inter';
+    font-size: 28px;
+    font-weight: 900;
+    margin-bottom: 4px;
+  }
+  .cost-label {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+</style>
+</head>
+<body>
+  <div class="slide">
+    <div class="header">
+      <div class="section-label">PRODUCT INNOVATION</div>
+      <h2><span>リバーシブル</span>デザイン — 1着に2つの物語</h2>
+    </div>
+    <div class="content">
+      <!-- Left: Visual -->
+      <div class="flip-visual">
+        <div class="tshirt-container">
+          <div class="tshirt-side tshirt-front">
+            <div class="tshirt-label">FRONT</div>
+            <div class="tshirt-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+            </div>
+            <div class="tshirt-title">美しい現在</div>
+            <div class="tshirt-desc">復興した風景、希望、<br>再生の美しさ</div>
+          </div>
+          <div class="flip-arrow">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round"><path d="M7 16V4m0 0L3 8m4-4l4 4M17 8v12m0 0l4-4m-4 4l-4-4"/></svg>
+          </div>
+          <div class="tshirt-side tshirt-back">
+            <div class="tshirt-label">BACK</div>
+            <div class="tshirt-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--terracotta)" stroke-width="1.5" stroke-linecap="round"><path d="M12 2v6l3-3M12 8l-3-3"/><circle cx="12" cy="14" r="4"/><path d="M3.34 19a10 10 0 0117.32 0"/></svg>
+            </div>
+            <div class="tshirt-title">残された記憶</div>
+            <div class="tshirt-desc">被災前の風景、<br>失われた日常の記録</div>
+          </div>
+        </div>
+        <div class="cultural-ref">
+          <strong>日本の消防半纏（引けし半纏）</strong>から着想<br>
+          「表は質素、裏は絢爛」—— 19世紀から続くリバーシブルの伝統
+        </div>
+      </div>
+
+      <!-- Right: Technical specs -->
+      <div class="spec-list">
+        <div class="spec-card">
+          <div class="spec-card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/></svg>
+            推奨プリント技法
+            <span class="spec-badge badge-rec">RECOMMENDED</span>
+          </div>
+          <div class="spec-card-body">
+            <strong style="color: var(--ivory);">DTF（Direct-to-Film）転写</strong><br>
+            素材を選ばず、両面に完全に異なるフルカラーデザインが実現可能。
+            片面ずつ155°C/12-15秒で転写。洗濯耐久50-80回。
+          </div>
+        </div>
+        <div class="spec-card">
+          <div class="spec-card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/></svg>
+            構造方式
+          </div>
+          <div class="spec-card-body">
+            <strong style="color: var(--ivory);">二重構造（ダブルレイヤー）</strong><br>
+            2枚の薄手生地（4.0oz綿100%）を縫い合わせ。
+            両面に完全に独立したデザインを実現。
+          </div>
+        </div>
+        <div class="spec-card">
+          <div class="spec-card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+            製造パートナー候補
+          </div>
+          <div class="spec-card-body">
+            <strong style="color: var(--ivory);">三恵クレア（福島・南相馬）</strong><br>
+            50年の実績。Paul Smith等の取引先。小ロット対応可能。
+            サンプル検証を推奨。
+          </div>
+        </div>
+        <div class="cost-compare">
+          <div class="cost-box">
+            <div class="cost-val" style="color: var(--text-muted);">900-1,900</div>
+            <div class="cost-label">通常Tシャツ原価（円）</div>
+          </div>
+          <div class="cost-box">
+            <div class="cost-val" style="color: var(--gold); text-shadow: 0 0 20px rgba(212,165,116,0.3);">3,500-4,500</div>
+            <div class="cost-label">リバーシブル原価（円/50枚）</div>
+          </div>
+        </div>
+        <div style="text-align: center; margin-top: 8px; font-size: 14px; color: var(--text-muted);">
+          想定小売価格: <span style="color: var(--gold); font-weight: 700;">8,800 - 12,000円</span>
+        </div>
+      </div>
+    </div>
+    <div class="slide-number">05 / 12</div>
+    <div class="brand-bar"></div>
+  </div>
+</body>
+</html>

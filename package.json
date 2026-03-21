@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --test scripts/__tests__/*.test.js",
+    "test:company": "node --test scripts/__tests__/department-registry.test.js scripts/__tests__/artifact.test.js scripts/__tests__/pipeline.test.js scripts/__tests__/orchestrator.test.js"
   },
   "repository": {
     "type": "git",
@@ -20,6 +21,10 @@
   "homepage": "https://github.com/yukiko10140422-star/trustport#readme",
   "dependencies": {
     "@kazumatu981/markdown-it-kroki": "^1.3.6",
-    "@mermaid-js/mermaid-cli": "^11.12.0"
+    "@mermaid-js/mermaid-cli": "^11.12.0",
+    "pptxgenjs": "^4.0.1"
+  },
+  "devDependencies": {
+    "playwright": "^1.58.2"
   }
 }

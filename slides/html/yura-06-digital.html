@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="/slides/html/common.css">
+<style>
+  .slide {
+    padding: 80px;
+    display: flex;
+    flex-direction: column;
+    background-image:
+      radial-gradient(ellipse 70% 50% at 75% 25%, rgba(139,126,200,0.1) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 50% at 25% 75%, rgba(42,157,143,0.08) 0%, transparent 65%);
+  }
+  .header { z-index: 6; position: relative; margin-bottom: 32px; }
+  h2 { font-size: 38px; font-weight: 900; }
+  h2 span { color: var(--purple); }
+  .subtitle { font-size: 18px; color: var(--text-body); margin-top: 8px; }
+  .content { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 48px; flex: 1; z-index: 6; position: relative; }
+  /* Flow diagram */
+  .flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+  }
+  .flow-step {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    border-radius: 12px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-top-color: var(--card-border-top);
+    position: relative;
+  }
+  .flow-connector {
+    width: 2px;
+    height: 20px;
+    margin-left: 42px;
+    background: linear-gradient(180deg, var(--teal), rgba(42,157,143,0.2));
+  }
+  .flow-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .flow-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+  .flow-desc {
+    font-size: 14px;
+    color: var(--text-body);
+    line-height: 1.5;
+  }
+  /* Brand table */
+  .brand-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .brand-chip {
+    padding: 14px 16px;
+    border-radius: 10px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .brand-chip-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  .brand-chip-use {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+  .brand-chip-tech {
+    margin-left: auto;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  .tech-nfc { background: rgba(139,126,200,0.2); color: var(--purple); }
+  .tech-qr { background: rgba(42,157,143,0.2); color: var(--teal); }
+  .tech-both { background: rgba(212,165,116,0.2); color: var(--gold); }
+  /* Compare table */
+  .compare-row {
+    display: grid;
+    grid-template-columns: 120px 1fr 1fr;
+    gap: 2px;
+    font-size: 14px;
+  }
+  .compare-row.header-row {
+    margin-bottom: 8px;
+  }
+  .compare-row.header-row > div {
+    font-weight: 700;
+    color: var(--text-primary);
+    padding: 10px 14px;
+  }
+  .compare-cell {
+    padding: 8px 14px;
+    background: var(--card-bg);
+    color: var(--text-body);
+    line-height: 1.4;
+  }
+  .compare-cell:first-child {
+    font-weight: 600;
+    color: var(--text-secondary);
+    border-radius: 6px 0 0 6px;
+  }
+  .compare-cell:last-child {
+    border-radius: 0 6px 6px 0;
+  }
+  .yura-rec {
+    margin-top: 16px;
+    padding: 16px 20px;
+    border-radius: 12px;
+    background: rgba(139,126,200,0.08);
+    border: 1px solid rgba(139,126,200,0.2);
+    font-size: 14px;
+    color: var(--text-body);
+    line-height: 1.6;
+  }
+  .yura-rec strong { color: var(--purple); }
+</style>
+</head>
+<body>
+  <div class="slide">
+    <div class="header">
+      <div class="section-label">DIGITAL ARCHIVE TECHNOLOGY</div>
+      <h2><span>着るデジタルアーカイブ</span> — QR/NFC技術</h2>
+      <div class="subtitle">1枚の服が、被災地の記憶への入口になる</div>
+    </div>
+    <div class="content">
+      <!-- Left: User flow -->
+      <div>
+        <div style="font-size: 16px; font-weight: 700; color: var(--text-primary); margin-bottom: 16px;">ユーザー体験フロー</div>
+        <div class="flow">
+          <div class="flow-step">
+            <div class="flow-icon" style="background: rgba(42,157,143,0.15); border: 1px solid rgba(42,157,143,0.3);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>
+            </div>
+            <div>
+              <div class="flow-title">表面 QR スキャン</div>
+              <div class="flow-desc">織りネームのQRで復興の「今」にアクセス</div>
+            </div>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-step">
+            <div class="flow-icon" style="background: rgba(139,126,200,0.15); border: 1px solid rgba(139,126,200,0.3);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div>
+              <div class="flow-title">裏面 NFC タップ</div>
+              <div class="flow-desc">NFCチップで被災前の「記憶」アーカイブへ</div>
+            </div>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-step">
+            <div class="flow-icon" style="background: rgba(212,165,116,0.15); border: 1px solid rgba(212,165,116,0.3);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            </div>
+            <div>
+              <div class="flow-title">デジタルアーカイブ閲覧</div>
+              <div class="flow-desc">被災前の風景写真・住民の声・復興の記録</div>
+            </div>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-step">
+            <div class="flow-icon" style="background: rgba(233,69,96,0.15); border: 1px solid rgba(233,69,96,0.3);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--coral)" stroke-width="1.5"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+            </div>
+            <div>
+              <div class="flow-title">コミュニティ参加</div>
+              <div class="flow-desc">寄付トラッキング・復興活動への接点</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Adoption + specs -->
+      <div>
+        <div style="font-size: 16px; font-weight: 700; color: var(--text-primary); margin-bottom: 12px;">採用ブランド</div>
+        <div class="brand-grid">
+          <div class="brand-chip">
+            <div><div class="brand-chip-name">Moncler</div><div class="brand-chip-use">真贋判定</div></div>
+            <div class="brand-chip-tech tech-both">NFC+QR</div>
+          </div>
+          <div class="brand-chip">
+            <div><div class="brand-chip-name">Louis Vuitton</div><div class="brand-chip-use">フィジタル</div></div>
+            <div class="brand-chip-tech tech-nfc">NFC</div>
+          </div>
+          <div class="brand-chip">
+            <div><div class="brand-chip-name">Nike/RTFKT</div><div class="brand-chip-use">AR体験</div></div>
+            <div class="brand-chip-tech tech-both">QR+NFC</div>
+          </div>
+          <div class="brand-chip">
+            <div><div class="brand-chip-name">9dcc</div><div class="brand-chip-use">全製品連携</div></div>
+            <div class="brand-chip-tech tech-nfc">NFC</div>
+          </div>
+        </div>
+
+        <div style="font-size: 16px; font-weight: 700; color: var(--text-primary); margin-bottom: 12px; margin-top: 20px;">NFC vs QR 比較</div>
+        <div class="compare-row header-row">
+          <div></div>
+          <div style="color: var(--purple);">NFC</div>
+          <div style="color: var(--teal);">QR</div>
+        </div>
+        <div class="compare-row" style="margin-bottom: 4px;">
+          <div class="compare-cell">読取速度</div>
+          <div class="compare-cell">0.1秒</div>
+          <div class="compare-cell">1-3秒</div>
+        </div>
+        <div class="compare-row" style="margin-bottom: 4px;">
+          <div class="compare-cell">セキュリティ</div>
+          <div class="compare-cell">高（クローン防止）</div>
+          <div class="compare-cell">低-中</div>
+        </div>
+        <div class="compare-row" style="margin-bottom: 4px;">
+          <div class="compare-cell">単価/500枚</div>
+          <div class="compare-cell">40-65円</div>
+          <div class="compare-cell">10-30円</div>
+        </div>
+        <div class="compare-row">
+          <div class="compare-cell">洗濯耐久</div>
+          <div class="compare-cell">150回+</div>
+          <div class="compare-cell">50-100回</div>
+        </div>
+
+        <div class="yura-rec">
+          <strong>YURA推奨: NFC + QR併用（Moncler方式）</strong><br>
+          表面QR → 復興の「今」、裏面NFC → 被災の「記憶」。
+          月500枚: ランニング約28,000-67,500円。
+        </div>
+      </div>
+    </div>
+    <div class="slide-number">06 / 12</div>
+    <div class="brand-bar"></div>
+  </div>
+</body>
+</html>

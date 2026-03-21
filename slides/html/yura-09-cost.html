@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="/slides/html/common.css">
+<style>
+  .slide {
+    padding: 80px;
+    display: flex;
+    flex-direction: column;
+  }
+  .header { z-index: 6; position: relative; margin-bottom: 32px; }
+  h2 { font-size: 38px; font-weight: 900; }
+  .content { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; flex: 1; z-index: 6; position: relative; }
+  /* Stacked bar chart */
+  .chart-container { position: relative; }
+  .chart-title { font-size: 16px; font-weight: 700; color: var(--text-primary); margin-bottom: 20px; }
+  .stacked-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 48px;
+    height: 340px;
+    padding-bottom: 40px;
+    padding-top: 40px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    justify-content: center;
+  }
+  .stack-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100px;
+  }
+  .stack-bar {
+    width: 80px;
+    display: flex;
+    flex-direction: column;
+  }
+  .stack-seg {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  .stack-total {
+    font-family: 'Inter';
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+    text-align: center;
+  }
+  .stack-label {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-top: 12px;
+    text-align: center;
+  }
+  .stack-legend {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 16px;
+  }
+  .stack-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--text-body);
+  }
+  .stack-legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+  }
+  /* Right: lot comparison + NFC costs */
+  .lot-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 4px;
+  }
+  .lot-table th {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-align: left;
+    padding: 8px 14px;
+    letter-spacing: 1px;
+  }
+  .lot-table td {
+    padding: 12px 14px;
+    background: var(--card-bg);
+    font-size: 15px;
+    color: var(--text-body);
+  }
+  .lot-table td:first-child { border-radius: 8px 0 0 8px; font-weight: 600; color: var(--text-secondary); }
+  .lot-table td:last-child { border-radius: 0 8px 8px 0; }
+  .lot-table .highlight td {
+    background: rgba(42,157,143,0.08);
+    border-top: 1px solid rgba(42,157,143,0.15);
+    border-bottom: 1px solid rgba(42,157,143,0.15);
+  }
+  .lot-table .highlight td:first-child { border-left: 1px solid rgba(42,157,143,0.15); }
+  .lot-table .highlight td:last-child { border-right: 1px solid rgba(42,157,143,0.15); }
+  .nfc-cost-card {
+    margin-top: 20px;
+    padding: 20px 24px;
+    border-radius: 12px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+  }
+  .nfc-cost-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+  }
+  .nfc-cost-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+  }
+  .nfc-cost-item {
+    text-align: center;
+    padding: 12px;
+    border-radius: 8px;
+    background: rgba(139,126,200,0.06);
+    border: 1px solid rgba(139,126,200,0.12);
+  }
+  .nfc-cost-val {
+    font-family: 'Inter';
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--purple);
+  }
+  .nfc-cost-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+  .total-box {
+    margin-top: 16px;
+    padding: 16px 20px;
+    border-radius: 10px;
+    background: rgba(42,157,143,0.08);
+    border: 1px solid rgba(42,157,143,0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .total-label { font-size: 15px; color: var(--text-body); }
+  .total-val { font-family: 'Inter'; font-size: 24px; font-weight: 900; color: var(--teal); text-shadow: 0 0 20px rgba(42,157,143,0.3); }
+</style>
+</head>
+<body>
+  <div class="slide">
+    <div class="header">
+      <div class="section-label">COST STRUCTURE</div>
+      <h2>原価分析 — 通常 vs リバーシブル</h2>
+    </div>
+    <div class="content">
+      <!-- Left: Stacked bar chart -->
+      <div class="chart-container">
+        <div class="chart-title">原価内訳比較（50枚ロット・円）</div>
+        <div class="stacked-chart">
+          <!-- Normal T-shirt -->
+          <div class="stack-col">
+            <div class="stack-total">1,500</div>
+            <div class="stack-bar" style="border-radius: 8px 8px 0 0; overflow: hidden;">
+              <div class="stack-seg" style="height: 36px; background: linear-gradient(180deg, var(--teal), rgba(42,157,143,0.6));">400</div>
+              <div class="stack-seg" style="height: 32px; background: linear-gradient(180deg, var(--gold), rgba(212,165,116,0.6));">550</div>
+              <div class="stack-seg" style="height: 22px; background: linear-gradient(180deg, var(--purple), rgba(139,126,200,0.6));">300</div>
+              <div class="stack-seg" style="height: 16px; background: linear-gradient(180deg, var(--coral), rgba(233,69,96,0.5));">150</div>
+              <div class="stack-seg" style="height: 12px; background: rgba(255,255,255,0.1);"></div>
+            </div>
+            <div class="stack-label">通常Tシャツ</div>
+          </div>
+          <!-- Reversible -->
+          <div class="stack-col">
+            <div class="stack-total" style="color: var(--gold);">4,000</div>
+            <div class="stack-bar" style="border-radius: 8px 8px 0 0; overflow: hidden;">
+              <div class="stack-seg" style="height: 56px; background: linear-gradient(180deg, var(--teal), rgba(42,157,143,0.6));">800</div>
+              <div class="stack-seg" style="height: 65px; background: linear-gradient(180deg, var(--gold), rgba(212,165,116,0.6));">1,100</div>
+              <div class="stack-seg" style="height: 44px; background: linear-gradient(180deg, var(--purple), rgba(139,126,200,0.6));">750</div>
+              <div class="stack-seg" style="height: 30px; background: linear-gradient(180deg, var(--coral), rgba(233,69,96,0.5));">200</div>
+              <div class="stack-seg" style="height: 20px; background: rgba(255,255,255,0.1);">150</div>
+            </div>
+            <div class="stack-label">リバーシブル</div>
+          </div>
+          <!-- Reversible + NFC/QR -->
+          <div class="stack-col">
+            <div class="stack-total" style="color: var(--teal); text-shadow: 0 0 15px rgba(42,157,143,0.3);">4,150</div>
+            <div class="stack-bar" style="border-radius: 8px 8px 0 0; overflow: hidden;">
+              <div class="stack-seg" style="height: 56px; background: linear-gradient(180deg, var(--teal), rgba(42,157,143,0.6));">800</div>
+              <div class="stack-seg" style="height: 65px; background: linear-gradient(180deg, var(--gold), rgba(212,165,116,0.6));">1,100</div>
+              <div class="stack-seg" style="height: 44px; background: linear-gradient(180deg, var(--purple), rgba(139,126,200,0.6));">750</div>
+              <div class="stack-seg" style="height: 34px; background: linear-gradient(180deg, var(--coral), rgba(233,69,96,0.5));">350</div>
+              <div class="stack-seg" style="height: 20px; background: rgba(255,255,255,0.1);">150</div>
+            </div>
+            <div class="stack-label">リバーシブル<br>+ QR/NFC</div>
+          </div>
+        </div>
+        <div class="stack-legend">
+          <div class="stack-legend-item"><div class="stack-legend-dot" style="background: var(--teal);"></div>生地費</div>
+          <div class="stack-legend-item"><div class="stack-legend-dot" style="background: var(--gold);"></div>プリント費</div>
+          <div class="stack-legend-item"><div class="stack-legend-dot" style="background: var(--purple);"></div>縫製工賃</div>
+          <div class="stack-legend-item"><div class="stack-legend-dot" style="background: var(--coral);"></div>副資材</div>
+          <div class="stack-legend-item"><div class="stack-legend-dot" style="background: rgba(255,255,255,0.15);"></div>検品</div>
+        </div>
+      </div>
+
+      <!-- Right: Lot table + NFC costs -->
+      <div>
+        <div class="chart-title">ロット別原価 → 小売価格</div>
+        <table class="lot-table">
+          <thead>
+            <tr><th>ロット</th><th>原価</th><th>小売価格</th><th>粗利率</th></tr>
+          </thead>
+          <tbody>
+            <tr class="highlight">
+              <td>50枚</td>
+              <td>3,500-4,500円</td>
+              <td style="color: var(--gold); font-weight: 700;">8,800-12,000円</td>
+              <td>60-63%</td>
+            </tr>
+            <tr>
+              <td>100枚</td>
+              <td>2,800-3,500円</td>
+              <td>7,800-9,800円</td>
+              <td>64-66%</td>
+            </tr>
+            <tr>
+              <td>300枚</td>
+              <td>2,200-2,800円</td>
+              <td>6,800-8,800円</td>
+              <td>68-70%</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="nfc-cost-card">
+          <div class="nfc-cost-title">QR/NFC 追加コスト（月500枚時）</div>
+          <div class="nfc-cost-grid">
+            <div class="nfc-cost-item">
+              <div class="nfc-cost-val">65</div>
+              <div class="nfc-cost-label">NFC単価（円）</div>
+            </div>
+            <div class="nfc-cost-item">
+              <div class="nfc-cost-val">30</div>
+              <div class="nfc-cost-label">QR単価（円）</div>
+            </div>
+            <div class="nfc-cost-item">
+              <div class="nfc-cost-val">~150</div>
+              <div class="nfc-cost-label">NFC+QR合計（円）</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="total-box">
+          <div class="total-label">月間ランニング（NFC+QR+SaaS）</div>
+          <div class="total-val">28,000 - 67,500円</div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-number">09 / 12</div>
+    <div class="brand-bar"></div>
+  </div>
+</body>
+</html>

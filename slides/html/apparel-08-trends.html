@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="/slides/html/common.css">
+<style>
+  .slide {
+    background-color: #070710;
+    background-image:
+      radial-gradient(ellipse 80% 60% at 15% 20%, rgba(30, 15, 60, 0.7) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 50% at 85% 75%, rgba(15, 25, 60, 0.5) 0%, transparent 65%);
+    padding: 80px 100px;
+  }
+  .slide::before {
+    content: ''; position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-repeat: repeat; background-size: 256px 256px;
+    opacity: 0.03; mix-blend-mode: overlay; pointer-events: none; z-index: 5;
+  }
+  .header { position: relative; z-index: 10; margin-bottom: 40px; }
+  .header h2 { font-size: 48px; font-weight: 700; color: #fff; margin-top: 8px; }
+
+  .content { position: relative; z-index: 10; }
+
+  .trend-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 32px;
+  }
+
+  .trend-card {
+    background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.015) 100%);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    padding: 28px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .trend-icon-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .trend-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .trend-icon.teal { background: rgba(42,157,143,0.15); }
+  .trend-icon.gold { background: rgba(212,165,116,0.15); }
+  .trend-icon.purple { background: rgba(139,126,200,0.15); }
+  .trend-icon.coral { background: rgba(233,69,96,0.15); }
+
+  .trend-title {
+    font-size: 22px; font-weight: 700; color: #fff;
+  }
+  .trend-stat {
+    font-family: 'Inter', sans-serif;
+    font-size: 28px; font-weight: 900;
+    line-height: 1;
+  }
+  .trend-stat.teal { color: var(--teal); text-shadow: 0 0 6px rgba(42,157,143,0.3); }
+  .trend-stat.gold { color: var(--gold); text-shadow: 0 0 6px rgba(212,165,116,0.3); }
+  .trend-stat.purple { color: var(--purple); text-shadow: 0 0 6px rgba(139,126,200,0.3); }
+  .trend-stat.coral { color: var(--coral); text-shadow: 0 0 6px rgba(233,69,96,0.3); }
+  .trend-stat-label {
+    font-size: 18px; color: rgba(255,255,255,0.35); margin-top: 4px;
+  }
+  .trend-desc {
+    font-size: 18px; color: rgba(255,255,255,0.4); line-height: 1.7;
+  }
+  .trend-tag {
+    display: inline-block;
+    font-size: 16px;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-weight: 600;
+  }
+  .trend-tag.positive { background: rgba(42,157,143,0.12); color: var(--teal); }
+  .trend-tag.watch { background: rgba(212,165,116,0.12); color: var(--gold); }
+
+  /* 下段: YURA追い風サマリー */
+  .tailwind-bar {
+    background: linear-gradient(135deg, rgba(42,157,143,0.08) 0%, rgba(212,165,116,0.05) 100%);
+    border: 1px solid rgba(42,157,143,0.15);
+    border-radius: 16px;
+    padding: 24px 32px;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
+  .tailwind-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px; font-weight: 600; letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--teal);
+    flex-shrink: 0;
+  }
+  .tailwind-items {
+    display: flex; gap: 24px; flex-wrap: wrap;
+  }
+  .tw-item {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 18px; color: rgba(255,255,255,0.55);
+  }
+  .tw-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--teal);
+    box-shadow: 0 0 6px rgba(42,157,143,0.4);
+    flex-shrink: 0;
+  }
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="slide-number">08 / 09</div>
+  <div class="header">
+    <div class="section-label">MARKET TRENDS 2025-2026</div>
+    <h2>最新トレンド &amp; YURAへの追い風</h2>
+  </div>
+
+  <div class="content">
+    <div class="trend-grid">
+      <!-- サステナブル -->
+      <div class="trend-card">
+        <div class="trend-icon-row">
+          <div class="trend-icon teal">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2a9d8f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m7.5 12 3 3 6-6"/>
+            </svg>
+          </div>
+          <div class="trend-title">サステナブル消費</div>
+        </div>
+        <div>
+          <div class="trend-stat teal">1.28兆円</div>
+          <div class="trend-stat-label">リユース市場 / 前年+13.9%</div>
+        </div>
+        <div class="trend-desc">古着市場が急拡大。2030年にはファストファッションの2倍に。エシカル消費意識はまだ12%と伸びしろ大</div>
+        <div><span class="trend-tag positive">YURA適合: 高</span></div>
+      </div>
+
+      <!-- Z世代 -->
+      <div class="trend-card">
+        <div class="trend-icon-row">
+          <div class="trend-icon gold">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d4a574" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </div>
+          <div class="trend-title">Z世代の消費変化</div>
+        </div>
+        <div>
+          <div class="trend-stat gold">50%</div>
+          <div class="trend-stat-label">環境意識あり（Z世代）</div>
+        </div>
+        <div class="trend-desc">「量より質」志向、エモーショナル消費、ストーリー重視。推し活・応援消費との相性も良好</div>
+        <div><span class="trend-tag positive">YURA適合: 高</span></div>
+      </div>
+
+      <!-- D2C + CF -->
+      <div class="trend-card">
+        <div class="trend-icon-row">
+          <div class="trend-icon purple">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8b7ec8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2v20M2 12h20"/>
+            </svg>
+          </div>
+          <div class="trend-title">D2C x CF市場</div>
+        </div>
+        <div>
+          <div class="trend-stat purple">3兆円+</div>
+          <div class="trend-stat-label">D2C市場 / 年+15-20%</div>
+        </div>
+        <div class="trend-desc">CAMPFIRE累計4,500件超。ALL YOURSの24ヶ月連続CFモデルが証明した「ファンづくり型」が主流に</div>
+        <div><span class="trend-tag positive">YURA適合: 高</span></div>
+      </div>
+
+      <!-- ライブコマース -->
+      <div class="trend-card">
+        <div class="trend-icon-row">
+          <div class="trend-icon coral">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e94560" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+            </svg>
+          </div>
+          <div class="trend-title">ライブコマース</div>
+        </div>
+        <div>
+          <div class="trend-stat coral">2,000億円</div>
+          <div class="trend-stat-label">2026年予測 / 年+30%</div>
+        </div>
+        <div class="trend-desc">アパレルと最も相性良好。ストーリーテリング型のYURAコンセプトはライブ映えする</div>
+        <div><span class="trend-tag watch">検討余地あり</span></div>
+      </div>
+
+      <!-- 地方ブランド -->
+      <div class="trend-card">
+        <div class="trend-icon-row">
+          <div class="trend-icon teal">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2a9d8f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+          </div>
+          <div class="trend-title">地方発ブランド</div>
+        </div>
+        <div>
+          <div class="trend-stat teal">800+</div>
+          <div class="trend-stat-label">Factelier提携工場数</div>
+        </div>
+        <div class="trend-desc">シタテル5,300工場、Factelier800工場。地方の縫製技術を活かすD2Cプラットフォームが急成長</div>
+        <div><span class="trend-tag positive">YURA適合: 高</span></div>
+      </div>
+
+      <!-- 多機能ウェア -->
+      <div class="trend-card">
+        <div class="trend-icon-row">
+          <div class="trend-icon gold">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d4a574" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <div class="trend-title">多機能・変形ウェア</div>
+        </div>
+        <div>
+          <div class="trend-stat gold">2WAY</div>
+          <div class="trend-stat-label">リバーシブル需要拡大</div>
+        </div>
+        <div class="trend-desc">Makuakeで3WAYデニムギア等が人気。機能性 x ファッション性の融合が消費者に支持されている</div>
+        <div><span class="trend-tag positive">YURA適合: 高</span></div>
+      </div>
+    </div>
+
+    <!-- YURA追い風サマリー -->
+    <div class="tailwind-bar">
+      <div class="tailwind-label">YURAへの追い風</div>
+      <div class="tailwind-items">
+        <div class="tw-item"><div class="tw-dot"></div>エシカル消費の伸びしろ</div>
+        <div class="tw-item"><div class="tw-dot"></div>ストーリー重視のZ世代</div>
+        <div class="tw-item"><div class="tw-dot"></div>CF→D2Cの成功モデル確立</div>
+        <div class="tw-item"><div class="tw-dot"></div>地方製造x直販の追い風</div>
+        <div class="tw-item"><div class="tw-dot"></div>リバーシブル需要の拡大</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="brand-bar"></div>
+</div>
+</body>
+</html>

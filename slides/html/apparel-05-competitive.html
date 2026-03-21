@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="/slides/html/common.css">
+<style>
+  .slide {
+    background-color: #070710;
+    background-image:
+      radial-gradient(ellipse 80% 60% at 15% 20%, rgba(30, 15, 60, 0.7) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 50% at 85% 75%, rgba(15, 25, 60, 0.5) 0%, transparent 65%);
+    padding: 80px 100px;
+  }
+  .slide::before {
+    content: ''; position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-repeat: repeat; background-size: 256px 256px;
+    opacity: 0.03; mix-blend-mode: overlay; pointer-events: none; z-index: 5;
+  }
+  .header { position: relative; z-index: 10; margin-bottom: 40px; }
+  .header h2 { font-size: 48px; font-weight: 700; color: #fff; margin-top: 8px; }
+
+  .content { display: grid; grid-template-columns: 1.2fr 1fr; gap: 48px; position: relative; z-index: 10; }
+
+  /* ポジショニングマップ */
+  .map-container {
+    background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    padding: 32px;
+    position: relative;
+    height: 560px;
+  }
+  .map-title {
+    font-size: 20px; font-weight: 600; color: rgba(255,255,255,0.5); margin-bottom: 20px;
+  }
+  .map-area {
+    position: relative;
+    width: 100%;
+    height: 460px;
+  }
+  /* 軸 */
+  .axis-x {
+    position: absolute;
+    top: 50%;
+    left: 24px; right: 24px;
+    height: 1px;
+    background: rgba(255,255,255,0.08);
+  }
+  .axis-y {
+    position: absolute;
+    left: 50%;
+    top: 24px; bottom: 24px;
+    width: 1px;
+    background: rgba(255,255,255,0.08);
+  }
+  .axis-label {
+    position: absolute;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 18px;
+    color: rgba(255,255,255,0.25);
+    letter-spacing: 1px;
+  }
+  .ax-top { top: 4px; left: 50%; transform: translateX(-50%); }
+  .ax-bottom { bottom: 4px; left: 50%; transform: translateX(-50%); }
+  .ax-left { left: 0; top: 50%; transform: translateY(-50%); }
+  .ax-right { right: 0; top: 50%; transform: translateY(-50%); }
+
+  /* プロットポイント */
+  .plot {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .plot-dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .plot-dot.yura {
+    width: 20px; height: 20px;
+    background: var(--teal);
+    box-shadow: 0 0 12px rgba(42,157,143,0.5), 0 0 24px rgba(42,157,143,0.2);
+  }
+  .plot-dot.gray { background: rgba(255,255,255,0.15); }
+  .plot-dot.gold-d { background: rgba(212,165,116,0.4); }
+  .plot-name {
+    font-size: 18px;
+    color: rgba(255,255,255,0.4);
+    white-space: nowrap;
+  }
+  .plot-name.yura { color: var(--teal); font-weight: 700; font-size: 22px; }
+
+  /* 右カラム */
+  .right-col { display: flex; flex-direction: column; gap: 20px; }
+
+  .finding-card {
+    background: linear-gradient(135deg, rgba(42,157,143,0.08) 0%, rgba(42,157,143,0.02) 100%);
+    border: 1px solid rgba(42,157,143,0.2);
+    border-radius: 14px;
+    padding: 24px;
+  }
+  .finding-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 20px; font-weight: 600; letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 10px;
+  }
+  .finding-title {
+    font-size: 28px; font-weight: 700; color: #fff;
+    margin-bottom: 8px;
+    text-shadow: 0 0 20px rgba(42,157,143,0.15);
+  }
+  .finding-desc {
+    font-size: 20px; color: rgba(255,255,255,0.45); line-height: 1.7;
+  }
+
+  .comp-list {
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .comp-item {
+    background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.015) 100%);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    padding: 16px 20px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .comp-icon {
+    width: 36px; height: 36px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(255,255,255,0.05);
+    font-family: 'Inter', sans-serif;
+    font-size: 18px; font-weight: 700; color: rgba(255,255,255,0.4);
+    flex-shrink: 0;
+  }
+  .comp-text h4 { font-size: 20px; font-weight: 600; color: rgba(255,255,255,0.7); margin-bottom: 3px; }
+  .comp-text p { font-size: 18px; color: rgba(255,255,255,0.35); }
+  .comp-verdict {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    margin-left: auto;
+    padding: 3px 10px;
+    border-radius: 20px;
+    flex-shrink: 0;
+  }
+  .comp-verdict.low { background: rgba(42,157,143,0.15); color: var(--teal); }
+  .comp-verdict.mid { background: rgba(212,165,116,0.15); color: var(--gold); }
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="slide-number">05 / 09</div>
+  <div class="header">
+    <div class="section-label">COMPETITIVE LANDSCAPE</div>
+    <h2>競合分析 &amp; ポジショニング</h2>
+  </div>
+
+  <div class="content">
+    <!-- ポジショニングマップ -->
+    <div class="map-container">
+      <div class="map-title">ポジショニングマップ</div>
+      <div class="map-area">
+        <div class="axis-x"></div>
+        <div class="axis-y"></div>
+        <div class="axis-label ax-top">デザイン性 高</div>
+        <div class="axis-label ax-bottom">デザイン性 低</div>
+        <div class="axis-label ax-left">一過性</div>
+        <div class="axis-label ax-right">継続性</div>
+
+        <!-- YURA: 右上（デザイン高 x 継続性） -->
+        <div class="plot" style="top:12%; right:15%;">
+          <div class="plot-dot yura"></div>
+          <div class="plot-name yura">YURA</div>
+        </div>
+        <!-- チャリティーT -->
+        <div class="plot" style="bottom:25%; left:18%;">
+          <div class="plot-dot gray"></div>
+          <div class="plot-name">震災チャリティーT</div>
+        </div>
+        <!-- TOMS -->
+        <div class="plot" style="top:35%; right:25%;">
+          <div class="plot-dot gold-d"></div>
+          <div class="plot-name">TOMS</div>
+        </div>
+        <!-- EAST LOOP -->
+        <div class="plot" style="top:40%; left:35%;">
+          <div class="plot-dot gold-d"></div>
+          <div class="plot-name">EAST LOOP</div>
+        </div>
+        <!-- ご当地T -->
+        <div class="plot" style="bottom:18%; left:40%;">
+          <div class="plot-dot gray"></div>
+          <div class="plot-name">ご当地Tシャツ</div>
+        </div>
+        <!-- ALL YOURS -->
+        <div class="plot" style="top:28%; right:35%;">
+          <div class="plot-dot gold-d"></div>
+          <div class="plot-name">ALL YOURS</div>
+        </div>
+        <!-- Beautiful Disaster -->
+        <div class="plot" style="top:32%; left:20%;">
+          <div class="plot-dot gray"></div>
+          <div class="plot-name">Beautiful Disaster</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 右: 核心発見 + 競合リスト -->
+    <div class="right-col">
+      <div class="finding-card">
+        <div class="finding-label">Key Finding</div>
+        <div class="finding-title">ブルーオーシャン</div>
+        <div class="finding-desc">
+          「風化防止」を明確にミッションとして掲げた<br>
+          ファッションブランドは<strong style="color:var(--teal);">世界に存在しない</strong>。<br>
+          記憶のアーカイブ x デザイン x 継続性の<br>
+          交差点がYURAの独自ポジション。
+        </div>
+      </div>
+
+      <div class="comp-list">
+        <div class="comp-item">
+          <div class="comp-icon">T</div>
+          <div class="comp-text">
+            <h4>震災チャリティーT</h4>
+            <p>一過性・メッセージ重視・デザイン性低</p>
+          </div>
+          <div class="comp-verdict low">低リスク</div>
+        </div>
+        <div class="comp-item">
+          <div class="comp-icon">TM</div>
+          <div class="comp-text">
+            <h4>TOMS / Bombas</h4>
+            <p>1:1寄付モデル・震災特化ではない</p>
+          </div>
+          <div class="comp-verdict low">低リスク</div>
+        </div>
+        <div class="comp-item">
+          <div class="comp-icon">EL</div>
+          <div class="comp-text">
+            <h4>EAST LOOP</h4>
+            <p>被災地生産・ニット小物・限定的展開</p>
+          </div>
+          <div class="comp-verdict mid">参考</div>
+        </div>
+        <div class="comp-item">
+          <div class="comp-icon">SP</div>
+          <div class="comp-text">
+            <h4>Snow Peak LOCAL WEAR</h4>
+            <p>地方産地コラボ・アウトドア文脈</p>
+          </div>
+          <div class="comp-verdict mid">参考</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="brand-bar"></div>
+</div>
+</body>
+</html>

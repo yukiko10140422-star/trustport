@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="/slides/html/common.css">
+<style>
+  .slide {
+    background-color: #070710;
+    background-image:
+      radial-gradient(ellipse 80% 60% at 15% 20%, rgba(30, 15, 60, 0.7) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 50% at 85% 75%, rgba(15, 25, 60, 0.5) 0%, transparent 65%),
+      radial-gradient(ellipse 40% 35% at 50% 50%, rgba(80, 50, 20, 0.12) 0%, transparent 60%);
+    padding: 80px 100px;
+  }
+  .slide::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-repeat: repeat; background-size: 256px 256px;
+    opacity: 0.03; mix-blend-mode: overlay; pointer-events: none; z-index: 5;
+  }
+
+  .header { position: relative; z-index: 10; margin-bottom: 48px; }
+
+  .kpi-row {
+    display: flex;
+    gap: 32px;
+    margin-bottom: 48px;
+    position: relative;
+    z-index: 10;
+  }
+
+  .kpi-card {
+    flex: 1;
+    background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-top-color: rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2), 0 8px 24px rgba(0,0,0,0.15);
+    text-align: center;
+  }
+  .kpi-label {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 12px;
+    font-family: 'Inter', sans-serif;
+  }
+  .kpi-value {
+    font-family: 'Inter', sans-serif;
+    font-size: 42px;
+    font-weight: 900;
+    margin-bottom: 8px;
+    line-height: 1;
+  }
+  .kpi-value.teal { color: var(--teal); text-shadow: 0 0 8px rgba(42,157,143,0.3); }
+  .kpi-value.gold { color: var(--gold); text-shadow: 0 0 8px rgba(212,165,116,0.3); }
+  .kpi-value.purple { color: var(--purple); text-shadow: 0 0 8px rgba(139,126,200,0.3); }
+  .kpi-value.coral { color: var(--coral); text-shadow: 0 0 8px rgba(233,69,96,0.3); }
+  .kpi-unit {
+    font-size: 18px;
+    color: rgba(255,255,255,0.4);
+  }
+
+  .charts-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    position: relative;
+    z-index: 10;
+  }
+
+  .chart-card {
+    background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.015) 100%);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  }
+  .chart-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 24px;
+    font-family: 'Noto Sans JP', sans-serif;
+  }
+
+  /* 棒グラフ */
+  .bar-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+    height: 220px;
+    padding-bottom: 36px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    position: relative;
+  }
+  .bar-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100%;
+  }
+  .bar-val {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 6px;
+  }
+  .bar {
+    width: 80%;
+    min-height: 8px;
+    border-radius: 6px 6px 0 0;
+  }
+  .bar-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    color: rgba(255,255,255,0.3);
+    margin-top: 8px;
+  }
+
+  /* ドーナツ */
+  .donut-container {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+  }
+  .donut {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: conic-gradient(
+      var(--teal) 0deg 84deg,
+      var(--gold) 84deg 174deg,
+      var(--purple) 174deg 234deg,
+      rgba(255,255,255,0.06) 234deg 360deg
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 30px rgba(42,157,143,0.1);
+    flex-shrink: 0;
+  }
+  .donut-inner {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: #0c0c18;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .donut-kpi {
+    font-family: 'Inter', sans-serif;
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--teal);
+  }
+  .donut-kpi-label {
+    font-size: 18px;
+    color: rgba(255,255,255,0.4);
+    margin-top: 4px;
+  }
+  .donut-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .legend-text {
+    font-size: 18px;
+    color: rgba(255,255,255,0.5);
+  }
+  .legend-text strong {
+    color: rgba(255,255,255,0.8);
+    font-weight: 600;
+  }
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="slide-number">03 / 09</div>
+
+  <div class="header">
+    <div class="section-label">MARKET ANALYSIS</div>
+    <div style="font-size: 48px; font-weight: 700; color: #fff;">日本アパレル市場の現在地</div>
+  </div>
+
+  <!-- KPI Row -->
+  <div class="kpi-row">
+    <div class="kpi-card">
+      <div class="kpi-label">Market Size 2024</div>
+      <div class="kpi-value teal">8.5<span style="font-size:24px;">兆円</span></div>
+      <div class="kpi-unit">前年比 +1.7% / 4年連続成長</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">D2C Market</div>
+      <div class="kpi-value gold">3<span style="font-size:24px;">兆円+</span></div>
+      <div class="kpi-unit">2025年見込 / 年成長率15-20%</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">EC Market</div>
+      <div class="kpi-value purple">2.8<span style="font-size:24px;">兆円</span></div>
+      <div class="kpi-unit">EC化率 23.4% / 10年で3倍</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Reuse Market</div>
+      <div class="kpi-value coral">1.28<span style="font-size:24px;">兆円</span></div>
+      <div class="kpi-unit">前年比 +13.9%</div>
+    </div>
+  </div>
+
+  <!-- Charts Row -->
+  <div class="charts-row">
+    <!-- 棒グラフ: EC化率推移 -->
+    <div class="chart-card">
+      <div class="chart-title">アパレルEC化率の推移</div>
+      <div class="bar-chart">
+        <div class="bar-item">
+          <div class="bar-val">8.1%</div>
+          <div class="bar" style="height:35%; background:linear-gradient(180deg, rgba(42,157,143,0.5), rgba(42,157,143,0.15));"></div>
+          <div class="bar-label">2014</div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-val">9.0%</div>
+          <div class="bar" style="height:40%; background:linear-gradient(180deg, rgba(42,157,143,0.55), rgba(42,157,143,0.18));"></div>
+          <div class="bar-label">2016</div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-val">13.9%</div>
+          <div class="bar" style="height:58%; background:linear-gradient(180deg, rgba(42,157,143,0.6), rgba(42,157,143,0.2));"></div>
+          <div class="bar-label">2019</div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-val">19.4%</div>
+          <div class="bar" style="height:78%; background:linear-gradient(180deg, rgba(42,157,143,0.7), rgba(42,157,143,0.25));"></div>
+          <div class="bar-label">2021</div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-val">21.6%</div>
+          <div class="bar" style="height:86%; background:linear-gradient(180deg, rgba(42,157,143,0.8), rgba(42,157,143,0.3));"></div>
+          <div class="bar-label">2023</div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-val">23.4%</div>
+          <div class="bar" style="height:95%; background:linear-gradient(180deg, rgba(42,157,143,1), rgba(42,157,143,0.4));"></div>
+          <div class="bar-label">2024</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ドーナツ: 成長セグメント -->
+    <div class="chart-card">
+      <div class="chart-title">注目セグメント構成比</div>
+      <div class="donut-container">
+        <div class="donut">
+          <div class="donut-inner">
+            <div class="donut-kpi">3市場</div>
+            <div class="donut-kpi-label">高成長領域</div>
+          </div>
+        </div>
+        <div class="donut-legend">
+          <div class="legend-item">
+            <div class="legend-dot" style="background:var(--teal);"></div>
+            <div class="legend-text"><strong>D2C</strong> 年+15-20%</div>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background:var(--gold);"></div>
+            <div class="legend-text"><strong>リユース</strong> 年+13.9%</div>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background:var(--purple);"></div>
+            <div class="legend-text"><strong>ライブコマース</strong> 年+30%</div>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background:rgba(255,255,255,0.06);"></div>
+            <div class="legend-text"><strong>総合市場</strong> 年+1.7%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="brand-bar"></div>
+</div>
+</body>
+</html>

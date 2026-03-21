@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="/slides/html/common.css">
+<style>
+  .slide {
+    background-color: #070710;
+    background-image:
+      radial-gradient(ellipse 80% 60% at 15% 20%, rgba(30, 15, 60, 0.7) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 50% at 85% 75%, rgba(15, 25, 60, 0.5) 0%, transparent 65%);
+    padding: 80px 100px;
+  }
+  .slide::before {
+    content: ''; position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-repeat: repeat; background-size: 256px 256px;
+    opacity: 0.03; mix-blend-mode: overlay; pointer-events: none; z-index: 5;
+  }
+  .header { position: relative; z-index: 10; margin-bottom: 48px; }
+  .header h2 { font-size: 48px; font-weight: 700; color: #fff; margin-top: 8px; }
+
+  .content { position: relative; z-index: 10; }
+
+  /* タイムライン */
+  .timeline {
+    position: relative;
+    padding-left: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .timeline-line {
+    position: absolute;
+    left: 160px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, var(--teal) 0%, var(--gold) 50%, var(--purple) 100%);
+    opacity: 0.3;
+  }
+
+  .phase {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+    padding: 24px 0;
+    position: relative;
+  }
+
+  .phase-date {
+    width: 120px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .phase-date-main {
+    font-family: 'Inter', sans-serif;
+    font-size: 20px; font-weight: 700; color: rgba(255,255,255,0.6);
+  }
+  .phase-date-sub {
+    font-size: 18px; color: rgba(255,255,255,0.25); margin-top: 2px;
+  }
+
+  .phase-dot {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 2;
+    margin-top: 2px;
+  }
+  .phase-dot.teal { background: var(--teal); box-shadow: 0 0 10px rgba(42,157,143,0.5); }
+  .phase-dot.gold { background: var(--gold); box-shadow: 0 0 10px rgba(212,165,116,0.5); }
+  .phase-dot.purple { background: var(--purple); box-shadow: 0 0 10px rgba(139,126,200,0.5); }
+
+  .phase-content {
+    flex: 1;
+    background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.015) 100%);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    padding: 24px 28px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  }
+  .phase.current .phase-content {
+    border-color: rgba(42,157,143,0.25);
+    background: linear-gradient(135deg, rgba(42,157,143,0.06) 0%, rgba(42,157,143,0.02) 100%);
+  }
+
+  .phase-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .phase-title {
+    font-size: 24px; font-weight: 700; color: #fff;
+  }
+  .phase-badge {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px; font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 12px;
+  }
+  .phase-badge.now { background: rgba(42,157,143,0.2); color: var(--teal); }
+  .phase-badge.next { background: rgba(212,165,116,0.15); color: var(--gold); }
+  .phase-badge.future { background: rgba(139,126,200,0.15); color: var(--purple); }
+
+  .phase-tasks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .task {
+    font-size: 18px;
+    color: rgba(255,255,255,0.45);
+    padding: 6px 14px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.04);
+  }
+  .task.done {
+    background: rgba(42,157,143,0.08);
+    border-color: rgba(42,157,143,0.15);
+    color: var(--teal);
+  }
+
+  /* 下部: 完了済みリサーチ */
+  .completed-bar {
+    margin-top: 32px;
+    background: linear-gradient(135deg, rgba(42,157,143,0.06) 0%, rgba(42,157,143,0.02) 100%);
+    border: 1px solid rgba(42,157,143,0.12);
+    border-radius: 14px;
+    padding: 20px 28px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+  .completed-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px; font-weight: 600; letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--teal);
+    flex-shrink: 0;
+  }
+  .completed-items {
+    display: flex; flex-wrap: wrap; gap: 8px;
+  }
+  .completed-item {
+    font-size: 18px;
+    color: rgba(42,157,143,0.7);
+    padding: 4px 12px;
+    border-radius: 8px;
+    background: rgba(42,157,143,0.08);
+    border: 1px solid rgba(42,157,143,0.12);
+  }
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="slide-number">09 / 09</div>
+  <div class="header">
+    <div class="section-label">ROADMAP & NEXT STEPS</div>
+    <h2>ロードマップ</h2>
+  </div>
+
+  <div class="content">
+    <div class="timeline">
+      <div class="timeline-line"></div>
+
+      <!-- Phase 1: 現在 -->
+      <div class="phase current">
+        <div class="phase-date">
+          <div class="phase-date-main">2026 Q1-Q2</div>
+          <div class="phase-date-sub">3月〜6月</div>
+        </div>
+        <div class="phase-dot teal"></div>
+        <div class="phase-content">
+          <div class="phase-header">
+            <div class="phase-title">Phase 1: Makuakeローンチ準備</div>
+            <div class="phase-badge now">NOW</div>
+          </div>
+          <div class="phase-tasks">
+            <div class="task done">先行事例リサーチ</div>
+            <div class="task done">ターゲティング分析</div>
+            <div class="task done">競合・商標調査</div>
+            <div class="task">リバーシブル技術検証</div>
+            <div class="task">三恵クレア打合せ</div>
+            <div class="task">プロトタイプ制作</div>
+            <div class="task">Makuakeページ設計</div>
+            <div class="task">写真・動画撮影</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 2 -->
+      <div class="phase">
+        <div class="phase-date">
+          <div class="phase-date-main">2026 Q3</div>
+          <div class="phase-date-sub">7月〜9月</div>
+        </div>
+        <div class="phase-dot gold"></div>
+        <div class="phase-content">
+          <div class="phase-header">
+            <div class="phase-title">Phase 2: CF実施 &amp; D2C準備</div>
+            <div class="phase-badge next">NEXT</div>
+          </div>
+          <div class="phase-tasks">
+            <div class="task">Makuake公開（目標50-100万円）</div>
+            <div class="task">SNSプロモーション</div>
+            <div class="task">Shopify EC構築</div>
+            <div class="task">ファンコミュニティ立ち上げ</div>
+            <div class="task">初回生産・品質管理</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 3 -->
+      <div class="phase">
+        <div class="phase-date">
+          <div class="phase-date-main">2026 Q4-</div>
+          <div class="phase-date-sub">10月〜</div>
+        </div>
+        <div class="phase-dot purple"></div>
+        <div class="phase-content">
+          <div class="phase-header">
+            <div class="phase-title">Phase 3: D2C本格展開 &amp; 拡大</div>
+            <div class="phase-badge future">FUTURE</div>
+          </div>
+          <div class="phase-tasks">
+            <div class="task">D2C EC本格稼働</div>
+            <div class="task">第2弾コレクション</div>
+            <div class="task">セレクトショップ卸開始</div>
+            <div class="task">ポップアップストア</div>
+            <div class="task">ライブコマース検討</div>
+            <div class="task">デジタルアーカイブ連動</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 完了済みリサーチ -->
+    <div class="completed-bar">
+      <div class="completed-label">Completed Research (6 Reports)</div>
+      <div class="completed-items">
+        <div class="completed-item">先行事例調査</div>
+        <div class="completed-item">競合分析</div>
+        <div class="completed-item">ターゲティング</div>
+        <div class="completed-item">福島アパレル産業</div>
+        <div class="completed-item">景観プリント市場</div>
+        <div class="completed-item">D2Cモデル調査</div>
+        <div class="completed-item">記憶xファッション</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="brand-bar"></div>
+</div>
+</body>
+</html>

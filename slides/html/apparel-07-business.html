@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="/slides/html/common.css">
+<style>
+  .slide {
+    background-color: #070710;
+    background-image:
+      radial-gradient(ellipse 80% 60% at 15% 20%, rgba(30, 15, 60, 0.7) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 50% at 85% 75%, rgba(15, 25, 60, 0.5) 0%, transparent 65%);
+    padding: 80px 100px;
+  }
+  .slide::before {
+    content: ''; position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-repeat: repeat; background-size: 256px 256px;
+    opacity: 0.03; mix-blend-mode: overlay; pointer-events: none; z-index: 5;
+  }
+  .header { position: relative; z-index: 10; margin-bottom: 40px; }
+  .header h2 { font-size: 48px; font-weight: 700; color: #fff; margin-top: 8px; }
+
+  .content { position: relative; z-index: 10; }
+
+  /* フロー図 */
+  .flow-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 48px;
+  }
+
+  .flow-step {
+    background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    padding: 28px 32px;
+    width: 280px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  }
+  .flow-step.active {
+    border-color: rgba(42,157,143,0.3);
+    background: linear-gradient(135deg, rgba(42,157,143,0.08) 0%, rgba(42,157,143,0.02) 100%);
+  }
+  .flow-step-num {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px; font-weight: 600; letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    margin-bottom: 8px;
+  }
+  .flow-step.active .flow-step-num { color: var(--teal); }
+  .flow-step-title {
+    font-size: 24px; font-weight: 700; color: #fff;
+    margin-bottom: 6px;
+  }
+  .flow-step-desc {
+    font-size: 18px; color: rgba(255,255,255,0.4); line-height: 1.6;
+  }
+  .flow-step-kpi {
+    font-family: 'Inter', sans-serif;
+    font-size: 28px; font-weight: 900;
+    margin-top: 12px;
+  }
+  .flow-step-kpi.teal { color: var(--teal); text-shadow: 0 0 6px rgba(42,157,143,0.3); }
+  .flow-step-kpi.gold { color: var(--gold); text-shadow: 0 0 6px rgba(212,165,116,0.3); }
+  .flow-step-kpi.purple { color: var(--purple); text-shadow: 0 0 6px rgba(139,126,200,0.3); }
+
+  .flow-arrow {
+    color: rgba(255,255,255,0.15);
+    font-size: 28px;
+    margin: 0 16px;
+    flex-shrink: 0;
+  }
+
+  /* 下段: 価格・参考モデル */
+  .bottom-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+  }
+
+  .info-card {
+    background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.015) 100%);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    padding: 28px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  }
+  .info-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px; font-weight: 600; letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 16px;
+  }
+
+  /* 価格帯バー */
+  .price-range {
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .price-item {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .price-label {
+    font-size: 18px; color: rgba(255,255,255,0.5); width: 80px; flex-shrink: 0;
+  }
+  .price-bar-bg {
+    flex: 1; height: 8px; border-radius: 4px;
+    background: rgba(255,255,255,0.04);
+    position: relative;
+  }
+  .price-bar {
+    height: 100%; border-radius: 4px;
+    position: absolute; left: 0; top: 0;
+  }
+  .price-value {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px; font-weight: 700; width: 80px; text-align: right; flex-shrink: 0;
+  }
+
+  /* 参考モデル */
+  .ref-list {
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .ref-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.02);
+  }
+  .ref-star {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px; color: var(--gold);
+    flex-shrink: 0;
+  }
+  .ref-name {
+    font-size: 18px; font-weight: 600; color: rgba(255,255,255,0.6);
+  }
+  .ref-detail {
+    font-size: 18px; color: rgba(255,255,255,0.3); margin-left: auto;
+  }
+
+  /* 収益モデル */
+  .revenue-items {
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .rev-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .rev-name { font-size: 18px; color: rgba(255,255,255,0.5); }
+  .rev-value { font-family: 'Inter', sans-serif; font-size: 18px; font-weight: 700; color: rgba(255,255,255,0.7); }
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="slide-number">07 / 09</div>
+  <div class="header">
+    <div class="section-label">BUSINESS MODEL</div>
+    <h2>ビジネスモデル &amp; 収益構造</h2>
+  </div>
+
+  <div class="content">
+    <!-- フロー図 -->
+    <div class="flow-container">
+      <div class="flow-step active">
+        <div class="flow-step-num">Phase 1</div>
+        <div class="flow-step-title">Makuake CF</div>
+        <div class="flow-step-desc">テストマーケティング<br>初期ファン獲得</div>
+        <div class="flow-step-kpi teal">50-100万円</div>
+      </div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-step">
+        <div class="flow-step-num">Phase 2</div>
+        <div class="flow-step-title">D2C EC</div>
+        <div class="flow-step-desc">Shopify自社EC開設<br>ファンコミュニティ構築</div>
+        <div class="flow-step-kpi gold">月商50-100万</div>
+      </div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-step">
+        <div class="flow-step-num">Phase 3</div>
+        <div class="flow-step-title">卸展開</div>
+        <div class="flow-step-desc">セレクトショップ卸<br>ポップアップ展開</div>
+        <div class="flow-step-kpi purple">年商1,000万+</div>
+      </div>
+    </div>
+
+    <!-- 下段 -->
+    <div class="bottom-grid">
+      <!-- 価格帯 -->
+      <div class="info-card">
+        <div class="info-label">Price Range</div>
+        <div class="price-range">
+          <div class="price-item">
+            <div class="price-label">Tシャツ</div>
+            <div class="price-bar-bg"><div class="price-bar" style="width:55%; background:linear-gradient(90deg,var(--teal),rgba(42,157,143,0.3));"></div></div>
+            <div class="price-value" style="color:var(--teal);">5-8K</div>
+          </div>
+          <div class="price-item">
+            <div class="price-label">リバーシブル</div>
+            <div class="price-bar-bg"><div class="price-bar" style="width:70%; background:linear-gradient(90deg,var(--gold),rgba(212,165,116,0.3));"></div></div>
+            <div class="price-value" style="color:var(--gold);">7-10K</div>
+          </div>
+          <div class="price-item">
+            <div class="price-label">アウター</div>
+            <div class="price-bar-bg"><div class="price-bar" style="width:90%; background:linear-gradient(90deg,var(--purple),rgba(139,126,200,0.3));"></div></div>
+            <div class="price-value" style="color:var(--purple);">15-25K</div>
+          </div>
+          <div class="price-item">
+            <div class="price-label">限定コラボ</div>
+            <div class="price-bar-bg"><div class="price-bar" style="width:100%; background:linear-gradient(90deg,var(--coral),rgba(233,69,96,0.3));"></div></div>
+            <div class="price-value" style="color:var(--coral);">10-30K</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 参考モデル -->
+      <div class="info-card">
+        <div class="info-label">Reference Models</div>
+        <div class="ref-list">
+          <div class="ref-item">
+            <div class="ref-star">***</div>
+            <div class="ref-name">SP LOCAL WEAR</div>
+            <div class="ref-detail">地方産地コラボ</div>
+          </div>
+          <div class="ref-item">
+            <div class="ref-star">***</div>
+            <div class="ref-name">ALL YOURS</div>
+            <div class="ref-detail">CF発 / 5,800万円</div>
+          </div>
+          <div class="ref-item">
+            <div class="ref-star">**</div>
+            <div class="ref-name">EAST LOOP</div>
+            <div class="ref-detail">被災地生産50%還元</div>
+          </div>
+          <div class="ref-item">
+            <div class="ref-star">**</div>
+            <div class="ref-name">Factelier</div>
+            <div class="ref-detail">工場直販D2C</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 収益構造 -->
+      <div class="info-card">
+        <div class="info-label">Revenue Structure</div>
+        <div class="revenue-items">
+          <div class="rev-item">
+            <div class="rev-name">D2C EC売上</div>
+            <div class="rev-value">60%</div>
+          </div>
+          <div class="rev-item">
+            <div class="rev-name">CF/限定ドロップ</div>
+            <div class="rev-value">20%</div>
+          </div>
+          <div class="rev-item">
+            <div class="rev-name">卸・ポップアップ</div>
+            <div class="rev-value">15%</div>
+          </div>
+          <div class="rev-item">
+            <div class="rev-name">コラボ・ライセンス</div>
+            <div class="rev-value">5%</div>
+          </div>
+        </div>
+        <div style="margin-top:16px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.06);">
+          <div style="font-size:18px; color:rgba(255,255,255,0.3);">製造: 三恵クレア（福島・南相馬）</div>
+          <div style="font-size:18px; color:rgba(255,255,255,0.3); margin-top:4px;">50年の縫製技術 / 少量ロット対応</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="brand-bar"></div>
+</div>
+</body>
+</html>

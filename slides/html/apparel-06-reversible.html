@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="/slides/html/common.css">
+<style>
+  .slide {
+    background-color: #070710;
+    background-image:
+      radial-gradient(ellipse 80% 60% at 20% 30%, rgba(80, 50, 20, 0.3) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 50% at 80% 70%, rgba(30, 15, 60, 0.4) 0%, transparent 65%),
+      radial-gradient(ellipse 40% 35% at 50% 50%, rgba(42,157,143,0.08) 0%, transparent 60%);
+    padding: 80px 100px;
+  }
+  .slide::before {
+    content: ''; position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-repeat: repeat; background-size: 256px 256px;
+    opacity: 0.03; mix-blend-mode: overlay; pointer-events: none; z-index: 5;
+  }
+  .header { position: relative; z-index: 10; margin-bottom: 48px; }
+  .header h2 { font-size: 48px; font-weight: 700; color: #fff; margin-top: 8px; }
+
+  .main-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    position: relative; z-index: 10;
+    align-items: center;
+  }
+
+  /* 左: リバーシブル図解 */
+  .reversible-visual {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .tshirt-container {
+    position: relative;
+    width: 480px;
+    height: 400px;
+  }
+
+  /* 表面カード */
+  .face-card {
+    position: absolute;
+    width: 220px;
+    height: 300px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    text-align: center;
+  }
+  .face-front {
+    left: 0; top: 0;
+    background: linear-gradient(135deg, rgba(42,157,143,0.15) 0%, rgba(42,157,143,0.05) 100%);
+    border: 1px solid rgba(42,157,143,0.3);
+    box-shadow: 0 8px 32px rgba(42,157,143,0.1);
+    z-index: 2;
+  }
+  .face-back {
+    right: 0; top: 40px;
+    background: linear-gradient(135deg, rgba(194,124,94,0.15) 0%, rgba(194,124,94,0.05) 100%);
+    border: 1px solid rgba(194,124,94,0.3);
+    box-shadow: 0 8px 32px rgba(194,124,94,0.1);
+    z-index: 1;
+  }
+
+  .face-icon {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 20px;
+  }
+  .face-front .face-icon {
+    background: rgba(42,157,143,0.2);
+  }
+  .face-back .face-icon {
+    background: rgba(194,124,94,0.2);
+  }
+
+  .face-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px; font-weight: 600; letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .face-front .face-label { color: var(--teal); }
+  .face-back .face-label { color: var(--terracotta); }
+
+  .face-title {
+    font-size: 26px; font-weight: 700; color: #fff;
+    margin-bottom: 8px;
+  }
+  .face-desc {
+    font-size: 18px;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.6;
+  }
+
+  /* 矢印SVG */
+  .arrow-svg {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 3;
+  }
+
+  .choice-text {
+    font-size: 20px;
+    color: rgba(255,255,255,0.5);
+    text-align: center;
+    font-style: italic;
+    line-height: 1.6;
+  }
+  .choice-text em {
+    color: var(--gold);
+    font-style: normal;
+    font-weight: 600;
+  }
+
+  /* 右: メリット＋検討事項 */
+  .right-col { display: flex; flex-direction: column; gap: 24px; }
+
+  .idea-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    background: rgba(212,165,116,0.12);
+    border: 1px solid rgba(212,165,116,0.25);
+    border-radius: 20px;
+    font-family: 'Inter', sans-serif;
+    font-size: 18px; font-weight: 600; letter-spacing: 2px;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+
+  .benefit-list {
+    display: flex; flex-direction: column; gap: 16px;
+  }
+  .benefit-item {
+    display: flex; align-items: flex-start; gap: 16px;
+  }
+  .benefit-num {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: rgba(42,157,143,0.15);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px; font-weight: 900; color: var(--teal);
+    flex-shrink: 0;
+  }
+  .benefit-text h4 {
+    font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 4px;
+  }
+  .benefit-text p {
+    font-size: 18px; color: rgba(255,255,255,0.4); line-height: 1.6;
+  }
+
+  .todo-card {
+    background: linear-gradient(135deg, rgba(212,165,116,0.08) 0%, rgba(212,165,116,0.02) 100%);
+    border: 1px solid rgba(212,165,116,0.15);
+    border-radius: 14px;
+    padding: 20px 24px;
+  }
+  .todo-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px; font-weight: 600; letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .todo-list {
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .todo-item {
+    font-size: 18px; color: rgba(255,255,255,0.4);
+    padding-left: 16px;
+    position: relative;
+  }
+  .todo-item::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 6px;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: rgba(212,165,116,0.4);
+  }
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="slide-number">06 / 09</div>
+  <div class="header">
+    <div class="section-label">DESIGN CONCEPT</div>
+    <h2>リバーシブルデザイン構想</h2>
+  </div>
+
+  <div class="main-content">
+    <!-- 左: ビジュアル -->
+    <div class="reversible-visual">
+      <div class="tshirt-container">
+        <div class="face-card face-front">
+          <div class="face-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#2a9d8f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/>
+            </svg>
+          </div>
+          <div class="face-label">Front / Present</div>
+          <div class="face-title">現在の美</div>
+          <div class="face-desc">
+            復興した風景<br>
+            希望・再生・力強さ<br>
+            日常に纏える美しさ
+          </div>
+        </div>
+        <div class="face-card face-back">
+          <div class="face-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#c27c5e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2"/><path d="m8 15 2-2-2-2"/><path d="m14 15 2-2-2-2"/>
+            </svg>
+          </div>
+          <div class="face-label">Back / Past</div>
+          <div class="face-title">過去の記憶</div>
+          <div class="face-desc">
+            被災直後の景観<br>
+            喪失・痛み・記録<br>
+            忘れてはならない風景
+          </div>
+        </div>
+
+        <!-- 反転矢印 -->
+        <svg class="arrow-svg" width="60" height="60" viewBox="0 0 60 60">
+          <circle cx="30" cy="30" r="28" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+          <path d="M20 25 L30 18 L30 22 L38 22 L38 28 L30 28 L30 32 Z" fill="rgba(42,157,143,0.6)"/>
+          <path d="M40 35 L30 42 L30 38 L22 38 L22 32 L30 32 L30 28 Z" fill="rgba(194,124,94,0.6)"/>
+        </svg>
+      </div>
+
+      <div class="choice-text">
+        「今日はどちらを見せるか」<br>
+        着る人が <em>自分で選ぶ</em> という行為が<br>
+        風化防止を日常に落とし込む
+      </div>
+    </div>
+
+    <!-- 右: メリット＋検討事項 -->
+    <div class="right-col">
+      <div class="idea-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#d4a574" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2v8l4-2"/><circle cx="12" cy="14" r="8"/>
+        </svg>
+        OWNER'S IDEA / 2026-03-12
+      </div>
+
+      <div class="benefit-list">
+        <div class="benefit-item">
+          <div class="benefit-num">1</div>
+          <div class="benefit-text">
+            <h4>コンセプトの物理的体現</h4>
+            <p>「記憶の揺らぎを力に変える」を1枚の服で表現。2つの時間軸を内包する</p>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-num">2</div>
+          <div class="benefit-text">
+            <h4>チャリティーTとの決定的差別化</h4>
+            <p>一過性メッセージではなく、着用のたびに記憶と対話するインタラクティブ性</p>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-num">3</div>
+          <div class="benefit-text">
+            <h4>話題性とSNS拡散力</h4>
+            <p>表裏を見せるコンテンツ → ストーリーテリングの起点。UGC創出が見込める</p>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-num">4</div>
+          <div class="benefit-text">
+            <h4>多機能ウェアトレンド合致</h4>
+            <p>2WAY/リバーシブルの市場拡大中。Makuakeでも変形アパレルが人気カテゴリ</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="todo-card">
+        <div class="todo-label">Next: 検討事項</div>
+        <div class="todo-list">
+          <div class="todo-item">リバーシブルTシャツの製造技術・コスト調査</div>
+          <div class="todo-item">両面プリント品質テスト（DTG vs 昇華転写）</div>
+          <div class="todo-item">重量・着心地への影響評価</div>
+          <div class="todo-item">価格帯シミュレーション（+1,500〜2,000円想定）</div>
+          <div class="todo-item">三恵クレアへの技術相談</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="brand-bar"></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="/slides/html/common.css">
+<style>
+  .slide {
+    padding: 80px;
+    display: flex;
+    flex-direction: column;
+    background-image:
+      radial-gradient(ellipse 70% 50% at 85% 25%, rgba(233,69,96,0.06) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 50% at 15% 75%, rgba(42,157,143,0.06) 0%, transparent 65%);
+  }
+  .header { z-index: 6; position: relative; margin-bottom: 32px; }
+  h2 { font-size: 38px; font-weight: 900; }
+  h2 span { color: var(--coral); }
+  .content { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; flex: 1; z-index: 6; position: relative; }
+  /* Risk cards */
+  .risk-list { display: flex; flex-direction: column; gap: 14px; }
+  .risk-card {
+    padding: 20px 24px;
+    border-radius: 12px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .risk-level {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-family: 'Inter';
+    font-size: 14px;
+    font-weight: 900;
+  }
+  .risk-high {
+    background: rgba(233,69,96,0.15);
+    border: 1px solid rgba(233,69,96,0.3);
+    color: var(--coral);
+  }
+  .risk-med {
+    background: rgba(212,165,116,0.15);
+    border: 1px solid rgba(212,165,116,0.3);
+    color: var(--gold);
+  }
+  .risk-low {
+    background: rgba(42,157,143,0.15);
+    border: 1px solid rgba(42,157,143,0.3);
+    color: var(--teal);
+  }
+  .risk-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+  .risk-desc {
+    font-size: 13px;
+    color: var(--text-body);
+    line-height: 1.5;
+  }
+  /* Mitigation */
+  .mitigation-list { display: flex; flex-direction: column; gap: 14px; }
+  .mit-card {
+    padding: 20px 24px;
+    border-radius: 12px;
+    border-left: 3px solid var(--teal);
+    background: var(--card-bg);
+    border-top: 1px solid var(--card-border);
+    border-right: 1px solid var(--card-border);
+    border-bottom: 1px solid var(--card-border);
+  }
+  .mit-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--teal);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .mit-desc {
+    font-size: 14px;
+    color: var(--text-body);
+    line-height: 1.6;
+  }
+  /* Progress ring */
+  .risk-matrix {
+    margin-top: 16px;
+    padding: 20px;
+    border-radius: 12px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    text-align: center;
+  }
+  .risk-matrix-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+  }
+  .rings {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+  }
+  .ring-item { text-align: center; }
+  .ring-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 8px;
+  }
+  .ring-val {
+    font-family: 'Inter';
+    font-size: 14px;
+    font-weight: 700;
+  }
+</style>
+</head>
+<body>
+  <div class="slide">
+    <div class="header">
+      <div class="section-label">RISK ANALYSIS</div>
+      <h2><span>反証と対策</span> — Devil's Advocate</h2>
+    </div>
+    <div class="content">
+      <!-- Left: Risks -->
+      <div class="risk-list">
+        <div class="risk-card">
+          <div class="risk-level risk-high">HIGH</div>
+          <div>
+            <div class="risk-title">不謹慎狩りリスク</div>
+            <div class="risk-desc">「被災地の記憶を商品化」への批判。日本人の約30%が「不謹慎」と感じる可能性がある。</div>
+          </div>
+        </div>
+        <div class="risk-card">
+          <div class="risk-level risk-med">MED</div>
+          <div>
+            <div class="risk-title">QRスキャン率の現実</div>
+            <div class="risk-desc">意向56%に対し、実際のスキャン率は5-15%。デジタル体験の効果が限定的になるリスク。</div>
+          </div>
+        </div>
+        <div class="risk-card">
+          <div class="risk-level risk-med">MED</div>
+          <div>
+            <div class="risk-title">リバーシブル着用実態</div>
+            <div class="risk-desc">多くの消費者が「片面しか着ない」可能性。裏面のストーリーが活かされない。</div>
+          </div>
+        </div>
+        <div class="risk-card">
+          <div class="risk-level risk-med">MED</div>
+          <div>
+            <div class="risk-title">価格帯の高さ</div>
+            <div class="risk-desc">8,800-12,000円はTシャツとして高い。「ストーリー価値」だけで正当化は困難。</div>
+          </div>
+        </div>
+        <div class="risk-card">
+          <div class="risk-level risk-low">LOW</div>
+          <div>
+            <div class="risk-title">NFC小ロットコスト</div>
+            <div class="risk-desc">少量時$5-15/枚でコスト30-100%増。Phase2以降に段階的に導入することで回避可能。</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Mitigations -->
+      <div>
+        <div class="mitigation-list">
+          <div class="mit-card">
+            <div class="mit-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              「残酷な過去」を「記憶の力」にリフレーム
+            </div>
+            <div class="mit-desc">裏面の表現を「被害」から「記憶を未来に繋ぐ力」へ。ポジティブな文脈で風化防止を語る。</div>
+          </div>
+          <div class="mit-card">
+            <div class="mit-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+              被災者コミュニティの合意取得
+            </div>
+            <div class="mit-desc">制作プロセスに被災者を参加させ、「当事者と共に作るブランド」として正当性を確保。</div>
+          </div>
+          <div class="mit-card">
+            <div class="mit-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg>
+              QRはPhase1、NFCはPhase2で段階導入
+            </div>
+            <div class="mit-desc">初期はQR織りネーム（低コスト）で検証。反応を見てNFC導入を判断。</div>
+          </div>
+          <div class="mit-card">
+            <div class="mit-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+              #FlipForMemory キャンペーン
+            </div>
+            <div class="mit-desc">裏返す行為自体をSNSコンテンツに。「着る→裏返す→シェア」の体験設計でスキャン率を補完。</div>
+          </div>
+        </div>
+
+        <div class="risk-matrix">
+          <div class="risk-matrix-title">リスク対策後の影響度</div>
+          <div class="rings">
+            <div class="ring-item">
+              <svg width="70" height="70" viewBox="0 0 70 70">
+                <circle cx="35" cy="35" r="30" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="6"/>
+                <circle cx="35" cy="35" r="30" fill="none" stroke="var(--teal)" stroke-width="6" stroke-dasharray="56.5 188.5" stroke-dashoffset="0" transform="rotate(-90 35 35)" stroke-linecap="round"/>
+              </svg>
+              <div class="ring-val" style="color: var(--teal);">30%</div>
+              <div class="ring-label">不謹慎</div>
+            </div>
+            <div class="ring-item">
+              <svg width="70" height="70" viewBox="0 0 70 70">
+                <circle cx="35" cy="35" r="30" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="6"/>
+                <circle cx="35" cy="35" r="30" fill="none" stroke="var(--gold)" stroke-width="6" stroke-dasharray="47 188.5" stroke-dashoffset="0" transform="rotate(-90 35 35)" stroke-linecap="round"/>
+              </svg>
+              <div class="ring-val" style="color: var(--gold);">25%</div>
+              <div class="ring-label">スキャン率</div>
+            </div>
+            <div class="ring-item">
+              <svg width="70" height="70" viewBox="0 0 70 70">
+                <circle cx="35" cy="35" r="30" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="6"/>
+                <circle cx="35" cy="35" r="30" fill="none" stroke="var(--purple)" stroke-width="6" stroke-dasharray="37.7 188.5" stroke-dashoffset="0" transform="rotate(-90 35 35)" stroke-linecap="round"/>
+              </svg>
+              <div class="ring-val" style="color: var(--purple);">20%</div>
+              <div class="ring-label">着用偏り</div>
+            </div>
+            <div class="ring-item">
+              <svg width="70" height="70" viewBox="0 0 70 70">
+                <circle cx="35" cy="35" r="30" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="6"/>
+                <circle cx="35" cy="35" r="30" fill="none" stroke="var(--coral)" stroke-width="6" stroke-dasharray="37.7 188.5" stroke-dashoffset="0" transform="rotate(-90 35 35)" stroke-linecap="round"/>
+              </svg>
+              <div class="ring-val" style="color: var(--coral);">20%</div>
+              <div class="ring-label">価格抵抗</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-number">10 / 12</div>
+    <div class="brand-bar"></div>
+  </div>
+</body>
+</html>

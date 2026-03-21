@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="/slides/html/common.css">
+<style>
+  .slide {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+  }
+
+  .content-side {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 60px 80px 100px;
+    background: linear-gradient(135deg, var(--dark-bg) 0%, var(--dark-bg-95) 100%);
+  }
+
+  .title {
+    font-family: 'Inter', sans-serif;
+    font-size: 68px;
+    font-weight: 900;
+    line-height: 1.1;
+    background: linear-gradient(135deg, #ffffff 0%, var(--ivory) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12px;
+  }
+
+  .subtitle {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 48px;
+    letter-spacing: 1px;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 40px;
+  }
+
+  .stat-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 28px;
+  }
+
+  .stat-value {
+    font-family: 'Inter', sans-serif;
+    font-size: 36px;
+    font-weight: 900;
+    margin-bottom: 8px;
+  }
+
+  .stat-card:nth-child(1) .stat-value { color: var(--teal); }
+  .stat-card:nth-child(2) .stat-value { color: var(--terracotta); }
+  .stat-card:nth-child(3) .stat-value { color: var(--purple); }
+  .stat-card:nth-child(4) .stat-value { color: var(--gold); }
+
+  .stat-label {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  .source {
+    font-size: 12px;
+    color: rgba(255,255,255,0.3);
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+  <div class="slide">
+    <div class="content-side">
+      <div class="section-label">Market Opportunity</div>
+      <div class="title">MARKET</div>
+      <div class="subtitle">エシカルファッション市場の成長</div>
+
+      <div class="stats">
+        <div class="stat-card">
+          <div class="stat-value">8.25兆円</div>
+          <div class="stat-label">グローバル<br>エシカルファッション市場</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">CAGR 9.1%</div>
+          <div class="stat-label">年平均成長率<br>2024-2030</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">73%</div>
+          <div class="stat-label">Z世代の<br>サステナブル消費意向</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">2.8倍</div>
+          <div class="stat-label">エシカル商品の<br>EC成長率（vs一般）</div>
+        </div>
+      </div>
+
+      <div class="source">出典: Grand View Research, McKinsey Fashion Report 2025</div>
+    </div>
+
+    <div class="image-side">
+      <img src="/outputs/images/market-opportunity.png" alt="Market">
+    </div>
+
+    <div class="brand-bar"></div>
+    <div class="slide-number">05 / 07</div>
+  </div>
+</body>
+</html>

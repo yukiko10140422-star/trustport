@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="/slides/html/common.css">
+<style>
+  .slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image:
+      radial-gradient(ellipse 90% 70% at 20% 30%, rgba(42,157,143,0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 70% 60% at 80% 75%, rgba(212,165,116,0.08) 0%, transparent 65%),
+      radial-gradient(ellipse 50% 40% at 50% 50%, rgba(139,126,200,0.05) 0%, transparent 60%);
+  }
+  .center-content {
+    text-align: center;
+    z-index: 6;
+    position: relative;
+  }
+  .brand-name {
+    font-family: 'Inter', sans-serif;
+    font-size: 140px;
+    font-weight: 900;
+    letter-spacing: 24px;
+    background: linear-gradient(135deg, #ffffff 0%, var(--ivory) 50%, var(--gold) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
+    margin-bottom: 16px;
+  }
+  .brand-tagline {
+    font-size: 28px;
+    font-weight: 300;
+    color: var(--text-secondary);
+    letter-spacing: 8px;
+    margin-bottom: 48px;
+  }
+  .report-title {
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--teal);
+    letter-spacing: 4px;
+    margin-bottom: 16px;
+  }
+  .report-subtitle {
+    font-size: 18px;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+  }
+  .divider-center {
+    width: 120px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--teal), var(--gold), transparent);
+    margin: 32px auto;
+  }
+  /* Decorative rings */
+  .ring1 {
+    width: 600px; height: 600px;
+    top: -100px; left: -150px;
+    border-color: rgba(42,157,143,0.06);
+  }
+  .ring2 {
+    width: 800px; height: 800px;
+    bottom: -200px; right: -200px;
+    border-color: rgba(212,165,116,0.04);
+  }
+  .ring3 {
+    width: 400px; height: 400px;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    border-color: rgba(255,255,255,0.03);
+  }
+  /* Light leak */
+  .light-leak {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: 1;
+  }
+  .leak-1 {
+    top: -100px;
+    right: 200px;
+    background: rgba(42,157,143,0.08);
+  }
+  .leak-2 {
+    bottom: -50px;
+    left: 300px;
+    background: rgba(212,165,116,0.06);
+  }
+  .date-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: var(--text-muted);
+    letter-spacing: 3px;
+    position: absolute;
+    bottom: 48px;
+    right: 48px;
+    z-index: 10;
+  }
+</style>
+</head>
+<body>
+  <div class="slide">
+    <div class="deco-ring ring1"></div>
+    <div class="deco-ring ring2"></div>
+    <div class="deco-ring ring3"></div>
+    <div class="light-leak leak-1"></div>
+    <div class="light-leak leak-2"></div>
+    <div class="center-content">
+      <div class="report-title">COMPREHENSIVE RESEARCH REPORT</div>
+      <div class="brand-name">YURA</div>
+      <div class="brand-tagline">記憶の揺らぎを力に変える</div>
+      <div class="divider-center"></div>
+      <div class="report-subtitle">被災地デジタルアーカイブ × アパレルブランド</div>
+      <div style="margin-top: 8px; font-size: 16px; color: var(--text-muted); letter-spacing: 2px;">
+        QR/NFC技術 ・ リバーシブルデザイン ・ 市場戦略
+      </div>
+    </div>
+    <div class="date-label">2026.03.13</div>
+    <div class="brand-bar"></div>
+  </div>
+</body>
+</html>

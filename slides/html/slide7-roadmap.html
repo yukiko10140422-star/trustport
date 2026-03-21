@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="/slides/html/common.css">
+<style>
+  .slide {
+    display: flex;
+    flex-direction: column;
+    padding: 80px 100px;
+    background: linear-gradient(135deg, var(--dark-bg) 0%, #16213e 100%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* 右下に薄いロードマップ画像 */
+  .bg-accent {
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 500px;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.15;
+    mask-image: linear-gradient(270deg, rgba(0,0,0,0.6) 0%, transparent 100%);
+    -webkit-mask-image: linear-gradient(270deg, rgba(0,0,0,0.6) 0%, transparent 100%);
+    z-index: 0;
+  }
+
+  .content { position: relative; z-index: 1; }
+
+  .header { margin-bottom: 60px; }
+
+  .title {
+    font-family: 'Inter', sans-serif;
+    font-size: 64px;
+    font-weight: 900;
+    background: linear-gradient(135deg, #ffffff 0%, var(--ivory) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12px;
+  }
+
+  .subtitle {
+    font-size: 24px;
+    font-weight: 500;
+    color: var(--gold);
+    letter-spacing: 1px;
+  }
+
+  /* タイムライン */
+  .timeline {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    position: relative;
+  }
+
+  /* 水平ライン */
+  .timeline::before {
+    content: '';
+    position: absolute;
+    top: 40px;
+    left: 60px;
+    right: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--teal), var(--terracotta), var(--gold));
+    z-index: 0;
+  }
+
+  .phase {
+    position: relative;
+    z-index: 1;
+  }
+
+  .phase-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin: 30px auto 32px;
+    position: relative;
+  }
+
+  .phase-dot::after {
+    content: '';
+    position: absolute;
+    top: -6px; left: -6px;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    opacity: 0.2;
+  }
+
+  .phase:nth-child(1) .phase-dot { background: var(--teal); }
+  .phase:nth-child(1) .phase-dot::after { background: var(--teal); }
+  .phase:nth-child(2) .phase-dot { background: var(--terracotta); }
+  .phase:nth-child(2) .phase-dot::after { background: var(--terracotta); }
+  .phase:nth-child(3) .phase-dot { background: var(--gold); }
+  .phase:nth-child(3) .phase-dot::after { background: var(--gold); }
+
+  .phase-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 36px 32px;
+    text-align: center;
+  }
+
+  .phase-period {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .phase:nth-child(1) .phase-period { color: var(--teal); }
+  .phase:nth-child(2) .phase-period { color: var(--terracotta); }
+  .phase:nth-child(3) .phase-period { color: var(--gold); }
+
+  .phase-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 16px;
+  }
+
+  .phase-items {
+    list-style: none;
+    text-align: left;
+    padding: 0;
+  }
+
+  .phase-items li {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text-muted);
+    padding: 6px 0;
+    padding-left: 20px;
+    position: relative;
+  }
+
+  .phase-items li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 14px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.3);
+  }
+</style>
+</head>
+<body>
+  <div class="slide">
+    <img class="bg-accent" src="/outputs/images/roadmap.png" alt="bg">
+
+    <div class="content">
+      <div class="header">
+        <div class="section-label">Growth Strategy</div>
+        <div class="title">ROADMAP</div>
+        <div class="subtitle">Makuake CF → D2C Shopify → 全国展開</div>
+      </div>
+
+      <div class="timeline">
+        <div class="phase">
+          <div class="phase-dot"></div>
+          <div class="phase-card">
+            <div class="phase-period">2026 Q3-Q4</div>
+            <div class="phase-title">Makuake CF</div>
+            <ul class="phase-items">
+              <li>クラウドファンディング開始</li>
+              <li>限定リバーシブルTシャツ販売</li>
+              <li>目標: 300万円 / 500人支援</li>
+              <li>ブランドストーリー動画制作</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="phase">
+          <div class="phase-dot"></div>
+          <div class="phase-card">
+            <div class="phase-period">2027 Q1-Q2</div>
+            <div class="phase-title">D2C Shopify</div>
+            <ul class="phase-items">
+              <li>自社EC（Shopify）オープン</li>
+              <li>定番コレクション展開</li>
+              <li>被災地アーカイブ特設ページ</li>
+              <li>SNSマーケティング本格化</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="phase">
+          <div class="phase-dot"></div>
+          <div class="phase-card">
+            <div class="phase-period">2027 Q3 -</div>
+            <div class="phase-title">全国展開</div>
+            <ul class="phase-items">
+              <li>セレクトショップ卸開始</li>
+              <li>ポップアップストア展開</li>
+              <li>被災地コラボイベント</li>
+              <li>年商目標: 3,000万円</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="brand-bar"></div>
+    <div class="slide-number">07 / 07</div>
+  </div>
+</body>
+</html>

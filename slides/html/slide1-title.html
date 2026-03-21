@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="/slides/html/common.css">
+<style>
+  .slide {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  /* 全面背景画像 + オーバーレイ（タイトルスライドのみ全面OK） */
+  .bg-image {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    z-index: 0;
+  }
+
+  /* 半透明オーバーレイ（45%） */
+  .overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: linear-gradient(
+      180deg,
+      rgba(26,26,46,0.35) 0%,
+      rgba(26,26,46,0.2) 40%,
+      rgba(26,26,46,0.4) 70%,
+      rgba(26,26,46,0.6) 100%
+    );
+    z-index: 1;
+  }
+
+  .center-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .brand-name {
+    font-family: 'Inter', sans-serif;
+    font-size: 140px;
+    font-weight: 900;
+    letter-spacing: 16px;
+    background: linear-gradient(180deg, #ffffff 0%, rgba(250,243,224,0.9) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
+    filter: drop-shadow(0 4px 24px rgba(0,0,0,0.3));
+  }
+
+  .tagline {
+    font-size: 28px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.9);
+    letter-spacing: 8px;
+    margin-top: 16px;
+  }
+
+  .tagline-divider {
+    width: 60px;
+    height: 2px;
+    background: var(--gold);
+    margin: 20px auto;
+    border-radius: 1px;
+  }
+
+  .sub-tagline {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 6px;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+  <div class="slide">
+    <img class="bg-image" src="/outputs/images/sunset-coast.png" alt="bg">
+    <div class="overlay"></div>
+    <div class="center-content">
+      <div class="brand-name">YURA</div>
+      <div class="tagline">被災地 × デジタルアーカイブ × アパレル</div>
+      <div class="tagline-divider"></div>
+      <div class="sub-tagline">Japanese Fashion Brand</div>
+    </div>
+    <div class="brand-bar"></div>
+    <div class="slide-number">01 / 07</div>
+  </div>
+</body>
+</html>

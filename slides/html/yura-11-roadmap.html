@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="/slides/html/common.css">
+<style>
+  .slide {
+    padding: 80px;
+    display: flex;
+    flex-direction: column;
+  }
+  .header { z-index: 6; position: relative; margin-bottom: 40px; }
+  h2 { font-size: 40px; font-weight: 900; }
+  .timeline {
+    display: flex;
+    gap: 0;
+    flex: 1;
+    z-index: 6;
+    position: relative;
+    align-items: stretch;
+  }
+  .phase {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  .phase-header {
+    padding: 16px 20px;
+    border-radius: 12px 12px 0 0;
+    text-align: center;
+    position: relative;
+  }
+  .phase-num {
+    font-family: 'Inter';
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    margin-bottom: 4px;
+  }
+  .phase-title {
+    font-size: 18px;
+    font-weight: 900;
+    margin-bottom: 4px;
+  }
+  .phase-period {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .phase-body {
+    flex: 1;
+    padding: 20px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-top: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .phase:first-child .phase-body { border-radius: 0 0 0 12px; }
+  .phase:last-child .phase-body { border-radius: 0 0 12px 0; }
+  .phase-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--text-body);
+    line-height: 1.5;
+  }
+  .phase-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-top: 5px;
+    flex-shrink: 0;
+  }
+  .phase-cost {
+    margin-top: auto;
+    padding: 12px;
+    border-radius: 8px;
+    text-align: center;
+    font-family: 'Inter';
+  }
+  .phase-cost-val {
+    font-size: 20px;
+    font-weight: 900;
+  }
+  .phase-cost-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+  /* Connector arrow between phases */
+  .phase-connector {
+    position: absolute;
+    right: -12px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    color: var(--text-muted);
+    font-size: 18px;
+  }
+  /* Revenue projection bar */
+  .revenue-bar {
+    margin-top: 24px;
+    z-index: 6;
+    position: relative;
+  }
+  .rev-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+  }
+  .rev-track {
+    display: flex;
+    height: 40px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: rgba(255,255,255,0.03);
+  }
+  .rev-seg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+  .rev-labels {
+    display: flex;
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .rev-labels > div { text-align: center; }
+</style>
+</head>
+<body>
+  <div class="slide">
+    <div class="header">
+      <div class="section-label">ROADMAP</div>
+      <h2>4フェーズ展開 — 検証から拡大へ</h2>
+    </div>
+    <div class="timeline">
+      <!-- Phase 1 -->
+      <div class="phase">
+        <div class="phase-header" style="background: linear-gradient(135deg, rgba(42,157,143,0.2), rgba(42,157,143,0.08));">
+          <div class="phase-num" style="color: var(--teal);">PHASE 1</div>
+          <div class="phase-title" style="color: var(--teal);">技術検証</div>
+          <div class="phase-period">0 - 3ヶ月</div>
+        </div>
+        <div class="phase-body">
+          <div class="phase-item">
+            <div class="phase-dot" style="background: var(--teal);"></div>
+            <span>DTFリバーシブルサンプル試作</span>
+          </div>
+          <div class="phase-item">
+            <div class="phase-dot" style="background: var(--teal);"></div>
+            <span>QR織りネーム + 簡易LP</span>
+          </div>
+          <div class="phase-item">
+            <div class="phase-dot" style="background: var(--teal);"></div>
+            <span>三恵クレアに打診・検証</span>
+          </div>
+          <div class="phase-item">
+            <div class="phase-dot" style="background: var(--teal);"></div>
+            <span>20回洗濯テスト</span>
+          </div>
+          <div class="phase-item">
+            <div class="phase-dot" style="background: var(--teal);"></div>
+            <span>被災者コミュニティ合意</span>
+          </div>
+          <div class="phase-cost" style="background: rgba(42,157,143,0.08); border: 1px solid rgba(42,157,143,0.2);">
+            <div class="phase-cost-val" style="color: var(--teal);">10-30万</div>
+            <div class="phase-cost-label">初期投資</div>
+          </div>
+        </div>
+        <div class="phase-connector">→</div>
+      </div>
+      <!-- Phase 2 -->
+      <div class="phase">
+        <div class="phase-header" style="background: linear-gradient(135deg, rgba(212,165,116,0.2), rgba(212,165,116,0.08));">
+          <div class="phase-num" style="color: var(--gold);">PHASE 2</div>
+          <div class="phase-title" style="color: var(--gold);">Makuake CF</div>
+          <div class="phase-period">3 - 6ヶ月</div>
+        </div>
+        <div class="phase-body">
+          <div class="phase-item">
+            <div class="phase-dot" style="background: var(--gold);"></div>
+            <span>プロトタイプ50枚生産</span>
+          </div>
+          <div class="phase-item">
+            <div class="phase-dot" style="background: var(--gold);"></div>
+            <span>Makuake CF ページ設計</span>
+          </div>
+          <div class="phase-item">
+            <div class="phase-dot" style="background: var(--gold);"></div>
+            <span>#FlipForMemory SNS展開</span>
+          </div>
+          <div class="phase-item">
+            <div class="phase-dot" style="background: var(--gold);"></div>
+            <span>被災地ストーリー撮影</span>
+          </div>
+          <div class="phase-item">
+            <div class="phase-dot" style="background: var(--gold);"></div>
+            <span>NFC導入テスト（10枚）</span>
+          </div>
+          <div class="phase-cost" style="background: rgba(212,165,116,0.08); border: 1px solid rgba(212,165,116,0.2);">
+            <div class="phase-cost-val" style="color: var(--gold);">30-80万</div>
+            <div class="phase-cost-label">CF + 生産費</div>
+          </div>
+        </div>
+        <div class="phase-connector">→</div>
+      </div>
+      <!-- Phase 3 -->
+      <div class="phase">
+        <div class="phase-header" style="background: linear-gradient(135deg, rgba(139,126,200,0.2), rgba(139,126,200,0.08));">
+          <div class="phase-num" style="color: var(--purple);">PHASE 3</div>
+          <div class="phase-title" style="color: var(--purple);">D2C拡大</div>
+          <div class="phase-period">6 - 12ヶ月</div>
+        </div>
+        <div class="phase-body">
+          <div class="phase-item">
+            <div class="phase-dot" style="background: var(--purple);"></div>
+            <span>Shopify D2C本格運用</span>
+          </div>
+          <div class="phase-item">
+            <div class="phase-dot" style="background: var(--purple);"></div>
+            <span>NFC全製品導入</span>
+          </div>
+          <div class="phase-item">
+            <div class="phase-dot" style="background: var(--purple);"></div>
+            <span>AR連動体験（被災前後重ね）</span>
+          </div>
+          <div class="phase-item">
+            <div class="phase-dot" style="background: var(--purple);"></div>
+            <span>セレクトショップ展開</span>
+          </div>
+          <div class="phase-item">
+            <div class="phase-dot" style="background: var(--purple);"></div>
+            <span>コミュニティ機能構築</span>
+          </div>
+          <div class="phase-cost" style="background: rgba(139,126,200,0.08); border: 1px solid rgba(139,126,200,0.2);">
+            <div class="phase-cost-val" style="color: var(--purple);">100-300万</div>
+            <div class="phase-cost-label">システム + 在庫</div>
+          </div>
+        </div>
+        <div class="phase-connector">→</div>
+      </div>
+      <!-- Phase 4 -->
+      <div class="phase">
+        <div class="phase-header" style="background: linear-gradient(135deg, rgba(233,69,96,0.2), rgba(233,69,96,0.08));">
+          <div class="phase-num" style="color: var(--coral);">PHASE 4</div>
+          <div class="phase-title" style="color: var(--coral);">グローバル</div>
+          <div class="phase-period">12ヶ月〜</div>
+        </div>
+        <div class="phase-body">
+          <div class="phase-item">
+            <div class="phase-dot" style="background: var(--coral);"></div>
+            <span>EU DPP対応</span>
+          </div>
+          <div class="phase-item">
+            <div class="phase-dot" style="background: var(--coral);"></div>
+            <span>ブロックチェーン統合</span>
+          </div>
+          <div class="phase-item">
+            <div class="phase-dot" style="background: var(--coral);"></div>
+            <span>NFTデジタルツイン</span>
+          </div>
+          <div class="phase-item">
+            <div class="phase-dot" style="background: var(--coral);"></div>
+            <span>海外展開（EU / APAC）</span>
+          </div>
+          <div class="phase-item">
+            <div class="phase-dot" style="background: var(--coral);"></div>
+            <span>寄付トラッキング透明化</span>
+          </div>
+          <div class="phase-cost" style="background: rgba(233,69,96,0.08); border: 1px solid rgba(233,69,96,0.2);">
+            <div class="phase-cost-val" style="color: var(--coral);">200-500万</div>
+            <div class="phase-cost-label">Web3 + 海外展開</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Revenue projection -->
+    <div class="revenue-bar">
+      <div class="rev-title">想定売上推移（楽観シナリオ）</div>
+      <div class="rev-track">
+        <div class="rev-seg" style="width: 10%; background: linear-gradient(90deg, rgba(42,157,143,0.4), rgba(42,157,143,0.3));">Y1</div>
+        <div class="rev-seg" style="width: 15%; background: linear-gradient(90deg, rgba(212,165,116,0.4), rgba(212,165,116,0.3));">Y2</div>
+        <div class="rev-seg" style="width: 20%; background: linear-gradient(90deg, rgba(139,126,200,0.4), rgba(139,126,200,0.3));">Y3</div>
+        <div class="rev-seg" style="width: 25%; background: linear-gradient(90deg, rgba(233,69,96,0.4), rgba(233,69,96,0.3));">Y4</div>
+        <div class="rev-seg" style="width: 30%; background: linear-gradient(90deg, rgba(42,157,143,0.6), rgba(42,157,143,0.4));">Y5</div>
+      </div>
+      <div class="rev-labels">
+        <div style="width: 10%;">18M</div>
+        <div style="width: 15%;">60M</div>
+        <div style="width: 20%;">150M</div>
+        <div style="width: 25%;">320M</div>
+        <div style="width: 30%;"><span style="color: var(--teal); font-weight: 700;">550M</span></div>
+      </div>
+    </div>
+
+    <div class="slide-number">11 / 12</div>
+    <div class="brand-bar"></div>
+  </div>
+</body>
+</html>

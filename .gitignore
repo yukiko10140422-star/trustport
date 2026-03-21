@@ -28,3 +28,6 @@ Thumbs.db
 apps/yura-qr/.env.local
 apps/yura-qr/node_modules/
 apps/vkei-ec/node_modules/
+
+# Remote control config (may contain host/IP info)
+configs/remote-control.json

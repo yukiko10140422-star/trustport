@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="/slides/html/common.css">
+<style>
+  .slide {
+    background-color: #070710;
+    background-image:
+      radial-gradient(ellipse 80% 60% at 15% 20%, rgba(30, 15, 60, 0.7) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 50% at 85% 75%, rgba(15, 25, 60, 0.5) 0%, transparent 65%);
+    padding: 80px 100px;
+  }
+  .slide::before {
+    content: ''; position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-repeat: repeat; background-size: 256px 256px;
+    opacity: 0.03; mix-blend-mode: overlay; pointer-events: none; z-index: 5;
+  }
+
+  .header { position: relative; z-index: 10; margin-bottom: 40px; }
+  .header h2 { font-size: 48px; font-weight: 700; color: #fff; margin-top: 8px; }
+
+  .main-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    position: relative;
+    z-index: 10;
+  }
+
+  /* 左: セグメント一覧 */
+  .segments {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .seg-card {
+    background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.015) 100%);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 14px;
+    padding: 24px 28px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  }
+  .seg-card.primary {
+    border-color: rgba(42,157,143,0.3);
+    background: linear-gradient(135deg, rgba(42,157,143,0.08) 0%, rgba(42,157,143,0.02) 100%);
+  }
+  .seg-badge {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Inter', sans-serif;
+    font-size: 22px; font-weight: 900;
+    flex-shrink: 0;
+  }
+  .seg-badge.a { background: rgba(42,157,143,0.2); color: var(--teal); }
+  .seg-badge.b { background: rgba(212,165,116,0.2); color: var(--gold); }
+  .seg-badge.c { background: rgba(139,126,200,0.2); color: var(--purple); }
+  .seg-badge.d { background: rgba(233,69,96,0.2); color: var(--coral); }
+
+  .seg-info h3 {
+    font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 4px;
+  }
+  .seg-info p {
+    font-size: 18px; color: rgba(255,255,255,0.4); line-height: 1.5;
+  }
+  .seg-tag {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    color: rgba(255,255,255,0.3);
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.08);
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  /* 右: ペルソナ＋コアターゲット */
+  .right-col {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .core-target {
+    background: linear-gradient(135deg, rgba(42,157,143,0.1) 0%, rgba(212,165,116,0.05) 100%);
+    border: 1px solid rgba(42,157,143,0.2);
+    border-radius: 16px;
+    padding: 28px;
+    text-align: center;
+  }
+  .core-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px; font-weight: 600; letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 12px;
+  }
+  .core-formula {
+    font-family: 'Inter', sans-serif;
+    font-size: 26px; font-weight: 700; color: #fff;
+    margin-bottom: 8px;
+  }
+  .core-formula .cross { color: var(--gold); margin: 0 8px; }
+  .core-detail {
+    font-size: 18px; color: rgba(255,255,255,0.45);
+    line-height: 1.7;
+  }
+  .core-tam {
+    font-family: 'Inter', sans-serif;
+    font-size: 32px; font-weight: 900;
+    color: var(--teal);
+    margin-top: 12px;
+    text-shadow: 0 0 10px rgba(42,157,143,0.3);
+  }
+  .core-tam span { font-size: 20px; color: rgba(255,255,255,0.5); font-weight: 400; }
+
+  /* ペルソナカード */
+  .personas {
+    display: flex;
+    gap: 16px;
+  }
+  .persona-card {
+    flex: 1;
+    background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.015) 100%);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  }
+  .persona-avatar {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 12px;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 20px; font-weight: 700;
+  }
+  .persona-card:nth-child(1) .persona-avatar { background: rgba(42,157,143,0.2); color: var(--teal); }
+  .persona-card:nth-child(2) .persona-avatar { background: rgba(212,165,116,0.2); color: var(--gold); }
+  .persona-card:nth-child(3) .persona-avatar { background: rgba(139,126,200,0.2); color: var(--purple); }
+
+  .persona-name {
+    font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 4px;
+  }
+  .persona-role {
+    font-size: 18px; color: rgba(255,255,255,0.4); margin-bottom: 10px;
+  }
+  .persona-tags {
+    display: flex; flex-wrap: wrap; gap: 4px;
+  }
+  .persona-tag {
+    font-size: 16px;
+    color: rgba(255,255,255,0.35);
+    padding: 2px 8px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  /* プログレスリング */
+  .ring-row {
+    display: flex; gap: 24px; justify-content: center;
+  }
+  .ring-item {
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+  }
+  .ring-label {
+    font-size: 18px; color: rgba(255,255,255,0.35);
+  }
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="slide-number">04 / 09</div>
+
+  <div class="header">
+    <div class="section-label">TARGET ANALYSIS</div>
+    <h2>ターゲットセグメント &amp; ペルソナ</h2>
+  </div>
+
+  <div class="main-grid">
+    <!-- 左: セグメント -->
+    <div class="segments">
+      <div class="seg-card primary">
+        <div class="seg-badge a">A</div>
+        <div class="seg-info">
+          <h3>アーバンミレニアル</h3>
+          <p>28-38歳 / 都市部 / SNS活動層 / 年収500万+</p>
+        </div>
+        <div class="seg-tag">Core</div>
+      </div>
+      <div class="seg-card primary">
+        <div class="seg-badge b">B</div>
+        <div class="seg-info">
+          <h3>ソーシャルコンシャス層</h3>
+          <p>25-45歳 / エシカル消費意識 / 量より質</p>
+        </div>
+        <div class="seg-tag">Core</div>
+      </div>
+      <div class="seg-card">
+        <div class="seg-badge c">C</div>
+        <div class="seg-info">
+          <h3>アート・カルチャー愛好層</h3>
+          <p>25-50歳 / 限定品好き / ギャラリー・展示会参加</p>
+        </div>
+        <div class="seg-tag">Sub</div>
+      </div>
+      <div class="seg-card">
+        <div class="seg-badge d">D</div>
+        <div class="seg-info">
+          <h3>被災地応援層</h3>
+          <p>30-60歳 / 風化防止に強い感情的動機</p>
+        </div>
+        <div class="seg-tag">Sub</div>
+      </div>
+    </div>
+
+    <!-- 右: コアターゲット＋ペルソナ -->
+    <div class="right-col">
+      <div class="core-target">
+        <div class="core-label">Core Target</div>
+        <div class="core-formula">
+          セグメント A <span class="cross">x</span> セグメント B
+        </div>
+        <div class="core-detail">
+          28-40歳 / 都市部在住 / 年収500万+ / SNS活動的<br>
+          エシカル消費意識 x ファッション感度の交差領域
+        </div>
+        <div class="core-tam">80-120<span>万人（推定TAM）</span></div>
+      </div>
+
+      <div class="personas">
+        <div class="persona-card">
+          <div class="persona-avatar">美</div>
+          <div class="persona-name">佐藤 美月</div>
+          <div class="persona-role">32歳 / UIデザイナー / 渋谷</div>
+          <div class="persona-tags">
+            <span class="persona-tag">エシカル消費</span>
+            <span class="persona-tag">SNS発信</span>
+            <span class="persona-tag">少数精鋭</span>
+          </div>
+        </div>
+        <div class="persona-card">
+          <div class="persona-avatar">拓</div>
+          <div class="persona-name">田中 拓海</div>
+          <div class="persona-role">35歳 / 広告プランナー / 目黒</div>
+          <div class="persona-tags">
+            <span class="persona-tag">ストーリー重視</span>
+            <span class="persona-tag">CF支援常連</span>
+          </div>
+        </div>
+        <div class="persona-card">
+          <div class="persona-avatar">和</div>
+          <div class="persona-name">鈴木 和子</div>
+          <div class="persona-role">48歳 / 教諭 / いわき出身</div>
+          <div class="persona-tags">
+            <span class="persona-tag">被災地出身</span>
+            <span class="persona-tag">風化防止</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- プログレスリング: Z世代環境意識 -->
+      <div class="ring-row">
+        <div class="ring-item">
+          <svg width="64" height="64" viewBox="0 0 64 64">
+            <circle cx="32" cy="32" r="26" fill="none" stroke="rgba(42,157,143,0.15)" stroke-width="4"/>
+            <circle cx="32" cy="32" r="26" fill="none" stroke="#2a9d8f" stroke-width="4"
+              stroke-dasharray="81.7 163.4" stroke-dashoffset="0" stroke-linecap="round"
+              transform="rotate(-90 32 32)" style="filter:drop-shadow(0 0 4px rgba(42,157,143,0.3));"/>
+            <text x="32" y="30" text-anchor="middle" font-family="Inter" font-size="14" font-weight="900" fill="#2a9d8f">50%</text>
+            <text x="32" y="41" text-anchor="middle" font-family="Inter" font-size="10" fill="rgba(255,255,255,0.3)">環境意識</text>
+          </svg>
+          <div class="ring-label">Z世代</div>
+        </div>
+        <div class="ring-item">
+          <svg width="64" height="64" viewBox="0 0 64 64">
+            <circle cx="32" cy="32" r="26" fill="none" stroke="rgba(212,165,116,0.15)" stroke-width="4"/>
+            <circle cx="32" cy="32" r="26" fill="none" stroke="#d4a574" stroke-width="4"
+              stroke-dasharray="40.8 163.4" stroke-dashoffset="0" stroke-linecap="round"
+              transform="rotate(-90 32 32)" style="filter:drop-shadow(0 0 4px rgba(212,165,116,0.3));"/>
+            <text x="32" y="30" text-anchor="middle" font-family="Inter" font-size="14" font-weight="900" fill="#d4a574">25%</text>
+            <text x="32" y="41" text-anchor="middle" font-family="Inter" font-size="10" fill="rgba(255,255,255,0.3)">購買行動</text>
+          </svg>
+          <div class="ring-label">エシカル考慮</div>
+        </div>
+        <div class="ring-item">
+          <svg width="64" height="64" viewBox="0 0 64 64">
+            <circle cx="32" cy="32" r="26" fill="none" stroke="rgba(139,126,200,0.15)" stroke-width="4"/>
+            <circle cx="32" cy="32" r="26" fill="none" stroke="#8b7ec8" stroke-width="4"
+              stroke-dasharray="19.6 163.4" stroke-dashoffset="0" stroke-linecap="round"
+              transform="rotate(-90 32 32)" style="filter:drop-shadow(0 0 4px rgba(139,126,200,0.3));"/>
+            <text x="32" y="30" text-anchor="middle" font-family="Inter" font-size="14" font-weight="900" fill="#8b7ec8">12%</text>
+            <text x="32" y="41" text-anchor="middle" font-family="Inter" font-size="10" fill="rgba(255,255,255,0.3)">認知率</text>
+          </svg>
+          <div class="ring-label">エシカル認知</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="brand-bar"></div>
+</div>
+</body>
+</html>

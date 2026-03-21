@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="/slides/html/common.css">
+<style>
+  .slide {
+    padding: 80px;
+    display: flex;
+    flex-direction: column;
+  }
+  .header {
+    z-index: 6;
+    position: relative;
+    margin-bottom: 48px;
+  }
+  h2 {
+    font-size: 40px;
+    font-weight: 900;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+  .content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    flex: 1;
+    z-index: 6;
+    position: relative;
+  }
+  .chart-section {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .chart-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+  }
+  /* Bar chart */
+  .bar-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 24px;
+    height: 280px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    position: relative;
+  }
+  .bar-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    justify-content: flex-end;
+  }
+  .bar {
+    width: 56px;
+    border-radius: 8px 8px 0 0;
+    position: relative;
+    min-height: 8px;
+  }
+  .bar-value {
+    position: absolute;
+    top: -28px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+    white-space: nowrap;
+  }
+  .bar-label {
+    margin-top: 12px;
+    font-size: 14px;
+    color: var(--text-muted);
+    text-align: center;
+  }
+  /* Donut chart */
+  .donut-container {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
+  .donut-wrap {
+    position: relative;
+    width: 200px;
+    height: 200px;
+  }
+  .donut {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    position: relative;
+  }
+  .donut-center {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: var(--dark-bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .donut-center-value {
+    font-family: 'Inter', sans-serif;
+    font-size: 32px;
+    font-weight: 900;
+    color: var(--teal);
+  }
+  .donut-center-label {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .legend {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+  }
+  .legend-text {
+    font-size: 15px;
+    color: var(--text-body);
+  }
+  .legend-val {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-left: auto;
+  }
+  /* KPI row */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 24px;
+  }
+  .kpi-mini {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+  }
+  .kpi-mini .kpi-value {
+    font-size: 28px;
+  }
+  .kpi-mini .kpi-label {
+    font-size: 13px;
+    margin-top: 4px;
+  }
+</style>
+</head>
+<body>
+  <div class="slide">
+    <div class="header">
+      <div class="section-label">MARKET OPPORTUNITY</div>
+      <h2>成長する2つの市場の交差点</h2>
+    </div>
+    <div class="content">
+      <!-- Left: Bar chart - market growth -->
+      <div class="chart-section">
+        <div class="chart-title">アートプリントTシャツ市場（グローバル / 億USD）</div>
+        <div class="bar-chart">
+          <div class="bar-group">
+            <div class="bar" style="height: 35%; background: linear-gradient(180deg, var(--teal), rgba(42,157,143,0.4));">
+              <div class="bar-value">54.2</div>
+            </div>
+            <div class="bar-label">2024</div>
+          </div>
+          <div class="bar-group">
+            <div class="bar" style="height: 45%; background: linear-gradient(180deg, var(--teal), rgba(42,157,143,0.4));">
+              <div class="bar-value">68</div>
+            </div>
+            <div class="bar-label">2025</div>
+          </div>
+          <div class="bar-group">
+            <div class="bar" style="height: 55%; background: linear-gradient(180deg, var(--teal), rgba(42,157,143,0.4));">
+              <div class="bar-value">76</div>
+            </div>
+            <div class="bar-label">2026</div>
+          </div>
+          <div class="bar-group">
+            <div class="bar" style="height: 65%; background: linear-gradient(180deg, var(--teal), rgba(42,157,143,0.4));">
+              <div class="bar-value">86</div>
+            </div>
+            <div class="bar-label">2028</div>
+          </div>
+          <div class="bar-group">
+            <div class="bar" style="height: 80%; background: linear-gradient(180deg, var(--gold), rgba(212,165,116,0.4));">
+              <div class="bar-value" style="color: var(--gold);">120.6</div>
+            </div>
+            <div class="bar-label">2031</div>
+          </div>
+        </div>
+        <div style="font-size: 14px; color: var(--text-muted); text-align: right;">CAGR 12.1%</div>
+
+        <div class="kpi-row">
+          <div class="kpi-mini">
+            <div class="kpi-value glow-teal" style="font-size: 24px;">1,500-2,000</div>
+            <div class="kpi-label">エシカルファッション市場（億円）</div>
+          </div>
+          <div class="kpi-mini">
+            <div class="kpi-value glow-gold" style="font-size: 24px; color: var(--gold);">8-12%</div>
+            <div class="kpi-label">年間成長率</div>
+          </div>
+          <div class="kpi-mini">
+            <div class="kpi-value" style="font-size: 24px; color: var(--purple);">~30%</div>
+            <div class="kpi-label">エシカル消費意識層</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Donut + NFC market -->
+      <div class="chart-section">
+        <div class="chart-title">NFC衣料市場の成長予測</div>
+        <div class="donut-container">
+          <div class="donut-wrap">
+            <div class="donut" style="background: conic-gradient(var(--teal) 0deg 96deg, var(--gold) 96deg 230deg, var(--purple) 230deg 310deg, rgba(255,255,255,0.08) 310deg 360deg);">
+              <div class="donut-center">
+                <div class="donut-center-value">$4.5B</div>
+                <div class="donut-center-label">2033年予測</div>
+              </div>
+            </div>
+          </div>
+          <div class="legend">
+            <div class="legend-item">
+              <div class="legend-dot" style="background: var(--teal);"></div>
+              <span class="legend-text">認証・真贋判定</span>
+              <span class="legend-val">27%</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot" style="background: var(--gold);"></div>
+              <span class="legend-text">体験・エンゲージメント</span>
+              <span class="legend-val">37%</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot" style="background: var(--purple);"></div>
+              <span class="legend-text">トレーサビリティ</span>
+              <span class="legend-val">22%</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot" style="background: rgba(255,255,255,0.15);"></div>
+              <span class="legend-text">その他</span>
+              <span class="legend-val">14%</span>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top: 16px; display: flex; align-items: center; gap: 12px;">
+          <div style="font-family: 'Inter'; font-size: 48px; font-weight: 900; color: var(--gold); text-shadow: 0 0 30px rgba(212,165,116,0.3);">$1.2B</div>
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <div style="font-family: 'Inter'; font-size: 48px; font-weight: 900; color: var(--teal); text-shadow: 0 0 30px rgba(42,157,143,0.3);">$4.5B</div>
+          <div style="margin-left: 16px;">
+            <div style="font-size: 14px; color: var(--text-muted);">CAGR</div>
+            <div style="font-family: 'Inter'; font-size: 28px; font-weight: 900; color: var(--coral);">16.5%</div>
+          </div>
+        </div>
+        <div style="margin-top: 24px; padding: 20px; border-radius: 12px; background: rgba(42,157,143,0.08); border: 1px solid rgba(42,157,143,0.2);">
+          <div style="font-size: 16px; font-weight: 700; color: var(--teal); margin-bottom: 8px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2" stroke-linecap="round" style="vertical-align: middle; margin-right: 6px;"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+            EU Digital Product Passport 2027〜
+          </div>
+          <div style="font-size: 14px; color: var(--text-body); line-height: 1.6;">
+            全繊維製品にデジタルIDが義務化。NFC/QR対応は規制対応にもなる追い風。
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-number">03 / 12</div>
+    <div class="brand-bar"></div>
+  </div>
+</body>
+</html>

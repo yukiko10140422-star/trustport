@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="/slides/html/common.css">
+<style>
+  .slide {
+    display: flex;
+    flex-direction: column;
+    padding: 80px 100px;
+    background: linear-gradient(135deg, var(--dark-bg) 0%, #16213e 100%);
+  }
+
+  .header {
+    margin-bottom: 60px;
+  }
+
+  .title {
+    font-family: 'Inter', sans-serif;
+    font-size: 64px;
+    font-weight: 900;
+    background: linear-gradient(135deg, #ffffff 0%, var(--ivory) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12px;
+  }
+
+  .subtitle {
+    font-size: 24px;
+    font-weight: 500;
+    color: var(--gold);
+    letter-spacing: 2px;
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+    flex: 1;
+  }
+
+  .card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 40px 32px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 4px;
+    border-radius: 16px 16px 0 0;
+  }
+
+  .card:nth-child(1)::before { background: var(--teal); }
+  .card:nth-child(2)::before { background: var(--terracotta); }
+  .card:nth-child(3)::before { background: var(--purple); }
+  .card:nth-child(4)::before { background: var(--gold); }
+
+  .card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin-bottom: 24px;
+  }
+
+  .card:nth-child(1) .card-icon { background: rgba(42,157,143,0.15); color: var(--teal); }
+  .card:nth-child(2) .card-icon { background: rgba(194,124,94,0.15); color: var(--terracotta); }
+  .card:nth-child(3) .card-icon { background: rgba(139,126,200,0.15); color: var(--purple); }
+  .card:nth-child(4) .card-icon { background: rgba(212,165,116,0.15); color: var(--gold); }
+
+  .card-title-jp {
+    font-size: 22px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 6px;
+  }
+
+  .card-title-en {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+  }
+
+  .card-desc {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text-muted);
+    flex: 1;
+  }
+
+  .card-age {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: rgba(255,255,255,0.35);
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+</style>
+</head>
+<body>
+  <div class="slide">
+    <div class="header">
+      <div class="section-label">Target Segments</div>
+      <div class="title">TARGET</div>
+      <div class="subtitle">4つのセグメントで届ける、記憶のファッション</div>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <div class="card-icon">01</div>
+        <div class="card-title-jp">記憶の継承者</div>
+        <div class="card-title-en">Memory Inheritors</div>
+        <div class="card-desc">被災地の記憶を身にまとい、次世代へ繋ぐ</div>
+        <div class="card-age">20-30代 / 被災地ゆかりの層</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">02</div>
+        <div class="card-title-jp">ストーリーウェアラー</div>
+        <div class="card-title-en">Story Wearers</div>
+        <div class="card-desc">社会貢献とファッションを両立する意識層</div>
+        <div class="card-age">25-40代 / エシカル志向</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">03</div>
+        <div class="card-title-jp">アーカイブ共感層</div>
+        <div class="card-title-en">Archive Enthusiasts</div>
+        <div class="card-desc">テクノロジーと文化保存に関心を持つ層</div>
+        <div class="card-age">20-35代 / テック+カルチャー</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">04</div>
+        <div class="card-title-jp">ローカルサポーター</div>
+        <div class="card-title-en">Local Supporters</div>
+        <div class="card-desc">地域経済の復興を支えたい消費者層</div>
+        <div class="card-age">30-50代 / 地方創生関心層</div>
+      </div>
+    </div>
+
+    <div class="brand-bar"></div>
+    <div class="slide-number">02 / 07</div>
+  </div>
+</body>
+</html>

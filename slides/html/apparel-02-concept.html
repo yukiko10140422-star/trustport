@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="/slides/html/common.css">
+<style>
+  .slide {
+    background-color: #070710;
+    background-image:
+      radial-gradient(ellipse 80% 60% at 15% 20%, rgba(30, 15, 60, 0.7) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 50% at 85% 75%, rgba(15, 25, 60, 0.5) 0%, transparent 65%),
+      radial-gradient(ellipse 40% 35% at 50% 50%, rgba(80, 50, 20, 0.12) 0%, transparent 60%);
+    padding: 80px 100px;
+  }
+  .slide::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-repeat: repeat; background-size: 256px 256px;
+    opacity: 0.03; mix-blend-mode: overlay; pointer-events: none; z-index: 5;
+  }
+
+  .deco-ring {
+    position: absolute;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.03);
+    bottom: -200px; right: -100px;
+  }
+
+  .content-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    height: 100%;
+    align-items: center;
+    position: relative;
+    z-index: 10;
+  }
+
+  .left-col {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .concept-main {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 42px;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.4;
+    letter-spacing: 2px;
+    text-shadow: 0 0 40px rgba(212,165,116,0.08);
+  }
+  .concept-main .accent {
+    color: var(--gold);
+    text-shadow: 0 0 10px rgba(212,165,116,0.3);
+  }
+
+  .concept-desc {
+    font-size: 22px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.9;
+    max-width: 600px;
+  }
+
+  .origin-card {
+    background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-top-color: rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2), 0 8px 24px rgba(0,0,0,0.15);
+  }
+  .origin-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 16px;
+  }
+  .origin-text {
+    font-size: 20px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.8;
+  }
+  .origin-text em {
+    color: var(--ivory);
+    font-style: normal;
+    font-weight: 500;
+  }
+
+  /* 右カラム: コンセプトベン図 */
+  .right-col {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .pillars {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
+  }
+
+  .pillar-card {
+    background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.015) 100%);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    padding: 28px 32px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    transition: all 0.3s;
+  }
+
+  .pillar-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .pillar-icon.teal { background: rgba(42,157,143,0.15); }
+  .pillar-icon.gold { background: rgba(212,165,116,0.15); }
+  .pillar-icon.purple { background: rgba(139,126,200,0.15); }
+
+  .pillar-icon svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .pillar-text h3 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 6px;
+  }
+  .pillar-text p {
+    font-size: 18px;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="deco-ring"></div>
+  <div class="slide-number">02 / 09</div>
+
+  <div class="content-grid">
+    <div class="left-col">
+      <div class="section-label">BRAND CONCEPT</div>
+      <div class="concept-main">
+        記憶の<span class="accent">揺らぎ</span>を、<br>力に変える。
+      </div>
+      <div class="divider" style="margin: 8px 0;"></div>
+      <div class="concept-desc">
+        被災地の風景と記憶をアートプリントに昇華し、<br>
+        「風化防止」を日常のファッションに落とし込む。<br>
+        着る人が記憶と向き合い、未来へ紡ぐブランド。
+      </div>
+      <div class="origin-card">
+        <div class="origin-title">Etymology</div>
+        <div class="origin-text">
+          <em>由良（ゆら）</em> — 古語で「揺らぎ」を意味する。<br>
+          記憶は揺らぐ。だからこそ、<br>
+          纏うことで留め、伝え、力に変える。
+        </div>
+      </div>
+    </div>
+
+    <div class="right-col">
+      <div class="pillars">
+        <div class="pillar-card">
+          <div class="pillar-icon teal">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#2a9d8f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>
+            </svg>
+          </div>
+          <div class="pillar-text">
+            <h3>被災地の記憶を纏う</h3>
+            <p>福島・東北の風景をアートプリントとして衣服に。<br>記憶の風化を防ぐ「着るアーカイブ」</p>
+          </div>
+        </div>
+        <div class="pillar-card">
+          <div class="pillar-icon gold">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#d4a574" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/><path d="m16 10-5.12 5.12-2.38-2.38"/>
+            </svg>
+          </div>
+          <div class="pillar-text">
+            <h3>社会貢献とデザインの両立</h3>
+            <p>チャリティーTの一過性を超え、<br>デザイン性と哲学的深みで継続的な支持を獲得</p>
+          </div>
+        </div>
+        <div class="pillar-card">
+          <div class="pillar-icon purple">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#8b7ec8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2v20M2 12h20"/>
+              <path d="M12 2a10 10 0 0 1 10 10"/>
+              <path d="M12 2a10 10 0 0 0-10 10"/>
+              <path d="M12 22a10 10 0 0 1-10-10"/>
+              <path d="M12 22a10 10 0 0 0 10-10"/>
+            </svg>
+          </div>
+          <div class="pillar-text">
+            <h3>デジタルアーカイブ連動</h3>
+            <p>QRコード/NFC → 衣服に紐づく写真・映像・<br>ストーリーへアクセス。物語を「着る」体験</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="brand-bar"></div>
+</div>
+</body>
+</html>

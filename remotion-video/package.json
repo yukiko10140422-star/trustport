@@ -1,0 +1,25 @@
+{
+  "name": "remotion-video",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "studio": "npx remotion studio src/index.ts",
+    "render": "npx remotion render src/index.ts YuraPromo ../outputs/videos/yura-promo.mp4",
+    "render-gif": "npx remotion render src/index.ts YuraPromo ../outputs/videos/yura-promo.gif --image-format png --every-nth-frame 2"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@remotion/cli": "^4.0.435",
+    "@remotion/renderer": "^4.0.435",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "remotion": "^4.0.435",
+    "typescript": "^5.9.3"
+  }
+}

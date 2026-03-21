@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="/slides/html/common.css">
+<style>
+  .slide {
+    padding: 80px;
+    display: flex;
+    flex-direction: column;
+  }
+  .header { z-index: 6; position: relative; margin-bottom: 36px; }
+  h2 { font-size: 40px; font-weight: 900; }
+  h2 span { color: var(--teal); }
+  .content { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 48px; flex: 1; z-index: 6; position: relative; }
+  /* Revenue flow */
+  .flow-diagram {
+    position: relative;
+    padding: 24px;
+    border-radius: 16px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .flow-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .flow-box {
+    padding: 18px 24px;
+    border-radius: 12px;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 700;
+    min-width: 160px;
+  }
+  .flow-box-main {
+    background: linear-gradient(135deg, rgba(42,157,143,0.2) 0%, rgba(42,157,143,0.08) 100%);
+    border: 1px solid rgba(42,157,143,0.3);
+    color: var(--teal);
+  }
+  .flow-box-sub {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    color: var(--text-secondary);
+  }
+  .flow-box-gold {
+    background: linear-gradient(135deg, rgba(212,165,116,0.2) 0%, rgba(212,165,116,0.08) 100%);
+    border: 1px solid rgba(212,165,116,0.3);
+    color: var(--gold);
+  }
+  .flow-box-coral {
+    background: linear-gradient(135deg, rgba(233,69,96,0.15) 0%, rgba(233,69,96,0.05) 100%);
+    border: 1px solid rgba(233,69,96,0.25);
+    color: var(--coral);
+  }
+  .flow-arrow {
+    font-size: 20px;
+    color: var(--text-muted);
+  }
+  .flow-arrow-down {
+    text-align: center;
+    font-size: 20px;
+    color: var(--text-muted);
+    margin: 4px 0;
+  }
+  /* Split row */
+  .split-row {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    margin-top: 4px;
+  }
+  .split-pct {
+    font-family: 'Inter';
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  /* Right side: donut + reference */
+  .right-content { display: flex; flex-direction: column; gap: 20px; }
+  /* Donut */
+  .donut-section {
+    padding: 24px;
+    border-radius: 16px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+  .donut-small {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .donut-small-center {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: var(--dark-bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .donut-small-val {
+    font-family: 'Inter';
+    font-size: 22px;
+    font-weight: 900;
+  }
+  .donut-small-label {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+  .legend-mini { display: flex; flex-direction: column; gap: 8px; }
+  .legend-mini-item { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--text-body); }
+  .legend-mini-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+  /* Reference brands */
+  .ref-card {
+    padding: 20px;
+    border-radius: 12px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+  }
+  .ref-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+  }
+  .ref-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 14px;
+  }
+  .ref-item:last-child { border-bottom: none; }
+  .ref-name { color: var(--text-secondary); font-weight: 600; }
+  .ref-model { color: var(--text-muted); }
+  .ref-result { color: var(--teal); font-weight: 700; font-size: 13px; }
+  /* Lesson */
+  .lesson-box {
+    padding: 16px 20px;
+    border-radius: 10px;
+    background: rgba(233,69,96,0.06);
+    border: 1px solid rgba(233,69,96,0.15);
+  }
+  .lesson-title { font-size: 14px; font-weight: 700; color: var(--coral); margin-bottom: 4px; }
+  .lesson-text { font-size: 13px; color: var(--text-body); line-height: 1.6; }
+</style>
+</head>
+<body>
+  <div class="slide">
+    <div class="header">
+      <div class="section-label">BUSINESS MODEL</div>
+      <h2><span>D2C + 社会貢献</span> — 持続可能な収益構造</h2>
+    </div>
+    <div class="content">
+      <!-- Left: Revenue flow diagram -->
+      <div class="flow-diagram">
+        <div class="flow-row">
+          <div class="flow-box flow-box-main" style="font-size: 20px; min-width: 280px;">
+            売上（D2C直販）<br>
+            <span style="font-size: 32px; font-weight: 900;">8,800 - 12,000円</span>
+          </div>
+        </div>
+        <div class="flow-arrow-down">▼</div>
+        <div class="flow-row">
+          <div>
+            <div class="split-pct" style="text-align: center;">原価 35-40%</div>
+            <div class="flow-box flow-box-sub">
+              製造原価<br>
+              <span style="font-size: 14px; color: var(--text-muted);">リバーシブル + QR/NFC</span><br>
+              <span style="font-size: 20px;">3,500 - 4,500円</span>
+            </div>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div>
+            <div class="split-pct" style="text-align: center;">粗利 60-65%</div>
+            <div class="flow-box flow-box-gold">
+              粗利益<br>
+              <span style="font-size: 20px;">5,300 - 7,500円</span>
+            </div>
+          </div>
+        </div>
+        <div class="flow-arrow-down">▼</div>
+        <div class="split-row">
+          <div>
+            <div class="split-pct" style="text-align: center;">マーケ + 運営 45-50%</div>
+            <div class="flow-box flow-box-sub" style="min-width: 140px;">
+              運営コスト<br>
+              <span style="font-size: 13px; color: var(--text-muted);">広告・物流・人件費</span>
+            </div>
+          </div>
+          <div>
+            <div class="split-pct" style="text-align: center; color: var(--coral);">寄付 10-15%</div>
+            <div class="flow-box flow-box-coral" style="min-width: 140px;">
+              復興支援寄付<br>
+              <span style="font-size: 13px;">880 - 1,800円/着</span>
+            </div>
+          </div>
+          <div>
+            <div class="split-pct" style="text-align: center; color: var(--teal);">純利益 10-15%</div>
+            <div class="flow-box flow-box-main" style="min-width: 140px;">
+              利益<br>
+              <span style="font-size: 13px;">880 - 1,800円/着</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Donut + references -->
+      <div class="right-content">
+        <div class="donut-section">
+          <div class="donut-small" style="background: conic-gradient(var(--terracotta) 0deg 130deg, rgba(255,255,255,0.06) 130deg 180deg, var(--teal) 180deg 234deg, var(--coral) 234deg 288deg, var(--gold) 288deg 360deg);">
+            <div class="donut-small-center">
+              <div class="donut-small-val" style="color: var(--text-primary);">100%</div>
+              <div class="donut-small-label">売上構成</div>
+            </div>
+          </div>
+          <div class="legend-mini">
+            <div class="legend-mini-item"><div class="legend-mini-dot" style="background: var(--terracotta);"></div>原価 36%</div>
+            <div class="legend-mini-item"><div class="legend-mini-dot" style="background: rgba(255,255,255,0.1);"></div>マーケ 14%</div>
+            <div class="legend-mini-item"><div class="legend-mini-dot" style="background: var(--teal);"></div>運営 15%</div>
+            <div class="legend-mini-item"><div class="legend-mini-dot" style="background: var(--coral);"></div>寄付 12%</div>
+            <div class="legend-mini-item"><div class="legend-mini-dot" style="background: var(--gold);"></div>利益 20%</div>
+          </div>
+        </div>
+        <div class="ref-card">
+          <div class="ref-title">参考: ソーシャルD2Cブランド</div>
+          <div class="ref-item">
+            <span class="ref-name">TOMS</span>
+            <span class="ref-model">利益1/3寄付</span>
+            <span class="ref-result">持続モデルへ転換</span>
+          </div>
+          <div class="ref-item">
+            <span class="ref-name">Bombas</span>
+            <span class="ref-model">1:1寄付</span>
+            <span class="ref-result">累計1億点+寄付</span>
+          </div>
+          <div class="ref-item">
+            <span class="ref-name">ALL YOURS</span>
+            <span class="ref-model">CF発D2C</span>
+            <span class="ref-result">CF国内No.1</span>
+          </div>
+        </div>
+        <div class="lesson-box">
+          <div class="lesson-title">TOMSの教訓</div>
+          <div class="lesson-text">1:1寄付モデルは急成長→経営難に。YURAは売上10-15%の持続可能な寄付比率を採用。</div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-number">08 / 12</div>
+    <div class="brand-bar"></div>
+  </div>
+</body>
+</html>

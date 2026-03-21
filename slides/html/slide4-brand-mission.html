@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="/slides/html/common.css">
+<style>
+  .slide {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .content-side {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 80px 80px 100px;
+    position: relative;
+    z-index: 2;
+    background: linear-gradient(135deg, var(--dark-bg) 0%, var(--dark-bg-95) 100%);
+  }
+
+  .title {
+    font-family: 'Inter', sans-serif;
+    font-size: 72px;
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, #ffffff 0%, var(--ivory) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .subtitle-jp {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 48px;
+    letter-spacing: 2px;
+  }
+
+  .description {
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.9;
+    color: var(--text-soft);
+    max-width: 680px;
+  }
+  .description strong {
+    color: var(--ivory);
+    font-weight: 700;
+  }
+</style>
+</head>
+<body>
+  <div class="slide">
+    <div class="content-side">
+      <div class="section-label">Brand Mission</div>
+      <h1 class="title">BRAND<br>MISSION</h1>
+      <p class="subtitle-jp">記憶の揺らぎを力に変える</p>
+      <div class="divider" style="margin-bottom: 40px;"></div>
+      <p class="description">
+        被災地に眠る<strong>風景の記憶</strong>をデジタルアーカイブし、<br>
+        ファッションという日常に溶け込む形で<strong>次世代へ継承</strong>する。<br><br>
+        着る人の物語と、土地の記憶が交差する場所。<br>
+        それが <strong>YURA</strong> のブランドミッションです。
+      </p>
+    </div>
+
+    <div class="image-side">
+      <img src="/outputs/images/brand-mission.png" alt="Brand Mission">
+    </div>
+
+    <div class="brand-bar"></div>
+    <div class="slide-number">04 / 07</div>
+  </div>
+</body>
+</html>

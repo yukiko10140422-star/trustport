@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="/slides/html/common.css">
+<style>
+  .slide {
+    padding: 80px;
+    display: flex;
+    flex-direction: column;
+    background-image:
+      radial-gradient(ellipse 80% 60% at 10% 20%, rgba(42,157,143,0.1) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 50% at 90% 85%, rgba(212,165,116,0.06) 0%, transparent 65%);
+  }
+  .header { z-index: 6; position: relative; margin-bottom: 40px; }
+  h2 { font-size: 40px; font-weight: 900; }
+  h2 span { color: var(--teal); }
+  .content { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; flex: 1; z-index: 6; position: relative; }
+  /* Positioning map */
+  .map-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    background: var(--card-bg);
+    overflow: hidden;
+  }
+  .axis-x, .axis-y {
+    position: absolute;
+    background: rgba(255,255,255,0.08);
+  }
+  .axis-x {
+    width: 100%;
+    height: 1px;
+    top: 50%;
+    left: 0;
+  }
+  .axis-y {
+    width: 1px;
+    height: 100%;
+    top: 0;
+    left: 50%;
+  }
+  .axis-label {
+    position: absolute;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+  }
+  .al-top { top: 12px; left: 50%; transform: translateX(-50%); }
+  .al-bottom { bottom: 12px; left: 50%; transform: translateX(-50%); }
+  .al-left { left: 12px; top: 50%; transform: translateY(-50%); }
+  .al-right { right: 12px; top: 50%; transform: translateY(-50%); }
+  .plot-dot {
+    position: absolute;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-primary);
+    transform: translate(-50%, -50%);
+  }
+  .yura-dot {
+    width: 80px;
+    height: 80px;
+    background: radial-gradient(circle, rgba(42,157,143,0.5) 0%, rgba(42,157,143,0.15) 60%, transparent 70%);
+    border: 2px solid var(--teal);
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--teal);
+    text-shadow: 0 0 20px rgba(42,157,143,0.6);
+    box-shadow: 0 0 30px rgba(42,157,143,0.3);
+    z-index: 2;
+  }
+  .competitor-dot {
+    width: 48px;
+    height: 48px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.15);
+    font-size: 10px;
+    text-align: center;
+    line-height: 1.2;
+    color: var(--text-muted);
+  }
+  /* Competitor list */
+  .comp-list { display: flex; flex-direction: column; gap: 16px; }
+  .comp-card {
+    padding: 20px 24px;
+    border-radius: 12px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .comp-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .comp-name {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 2px;
+  }
+  .comp-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+  .comp-diff {
+    margin-left: auto;
+    font-size: 12px;
+    color: var(--coral);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .yura-box {
+    margin-top: 16px;
+    padding: 24px;
+    border-radius: 12px;
+    background: rgba(42,157,143,0.08);
+    border: 1px solid rgba(42,157,143,0.25);
+  }
+  .yura-box-title {
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--teal);
+    margin-bottom: 8px;
+    text-shadow: 0 0 15px rgba(42,157,143,0.3);
+  }
+  .yura-box-desc {
+    font-size: 15px;
+    color: var(--text-body);
+    line-height: 1.7;
+  }
+</style>
+</head>
+<body>
+  <div class="slide">
+    <div class="header">
+      <div class="section-label">COMPETITIVE LANDSCAPE</div>
+      <h2><span>ブルーオーシャン</span> — 直接競合不在の新カテゴリ</h2>
+    </div>
+    <div class="content">
+      <!-- Left: Positioning map -->
+      <div class="map-container">
+        <div class="axis-x"></div>
+        <div class="axis-y"></div>
+        <div class="axis-label al-top">社会性 高</div>
+        <div class="axis-label al-bottom">社会性 低</div>
+        <div class="axis-label al-left">機能訴求</div>
+        <div class="axis-label al-right">情緒訴求</div>
+        <!-- Competitors -->
+        <div class="plot-dot competitor-dot" style="top: 30%; left: 25%;">Snow<br>Peak</div>
+        <div class="plot-dot competitor-dot" style="top: 20%; left: 40%;">EAST<br>LOOP</div>
+        <div class="plot-dot competitor-dot" style="top: 55%; left: 70%;">チャリティ<br>T</div>
+        <div class="plot-dot competitor-dot" style="top: 65%; left: 35%;">INTO<br>THE AM</div>
+        <div class="plot-dot competitor-dot" style="top: 40%; left: 60%;">Pangaia</div>
+        <div class="plot-dot competitor-dot" style="top: 75%; left: 75%;">Redbubble</div>
+        <!-- YURA -->
+        <div class="plot-dot yura-dot" style="top: 18%; left: 78%;">YURA</div>
+      </div>
+
+      <!-- Right: Competitor analysis -->
+      <div>
+        <div class="comp-list">
+          <div class="comp-card">
+            <div class="comp-icon" style="background: rgba(42,157,143,0.15); border: 1px solid rgba(42,157,143,0.3);">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5"><path d="M2 20h20M5 20V8l7-5 7 5v12"/></svg>
+            </div>
+            <div>
+              <div class="comp-name">Snow Peak LOCAL WEAR</div>
+              <div class="comp-desc">地域×アパレル成功モデル</div>
+            </div>
+            <div class="comp-diff">デジタル非連携</div>
+          </div>
+          <div class="comp-card">
+            <div class="comp-icon" style="background: rgba(212,165,116,0.15); border: 1px solid rgba(212,165,116,0.3);">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div>
+              <div class="comp-name">EAST LOOP</div>
+              <div class="comp-desc">被災地×ハンドメイド</div>
+            </div>
+            <div class="comp-diff">アーカイブ機能なし</div>
+          </div>
+          <div class="comp-card">
+            <div class="comp-icon" style="background: rgba(139,126,200,0.15); border: 1px solid rgba(139,126,200,0.3);">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            </div>
+            <div>
+              <div class="comp-name">一般チャリティーT</div>
+              <div class="comp-desc">寄付モデルのみ・単発</div>
+            </div>
+            <div class="comp-diff">継続的価値なし</div>
+          </div>
+        </div>
+        <div class="yura-box">
+          <div class="yura-box-title">YURAの独自ポジション</div>
+          <div class="yura-box-desc">
+            「風化防止ファッション」という<strong style="color: var(--teal);">世界初のカテゴリ</strong>。
+            デジタルアーカイブ×リバーシブル×NFC/QRの組み合わせは他に類を見ない。
+            被災地の記録を「着る」という日常行為に変換する唯一のブランド。
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-number">04 / 12</div>
+    <div class="brand-bar"></div>
+  </div>
+</body>
+</html>

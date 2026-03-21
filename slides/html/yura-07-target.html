@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="/slides/html/common.css">
+<style>
+  .slide {
+    padding: 80px;
+    display: flex;
+    flex-direction: column;
+  }
+  .header { z-index: 6; position: relative; margin-bottom: 36px; }
+  h2 { font-size: 40px; font-weight: 900; }
+  .content { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; flex: 1; z-index: 6; position: relative; }
+  /* Segment map */
+  .segment-map {
+    position: relative;
+    width: 100%;
+    height: 440px;
+    border-radius: 16px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    overflow: hidden;
+  }
+  .seg-axis-x, .seg-axis-y { position: absolute; background: rgba(255,255,255,0.06); }
+  .seg-axis-x { width: 100%; height: 1px; top: 50%; }
+  .seg-axis-y { height: 100%; width: 1px; left: 50%; }
+  .seg-label {
+    position: absolute;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+  }
+  .seg-bubble {
+    position: absolute;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    transform: translate(-50%, -50%);
+  }
+  .seg-bubble-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+  .seg-bubble-name {
+    font-size: 11px;
+    color: var(--text-body);
+    margin-top: 2px;
+  }
+  /* Persona cards */
+  .persona-list { display: flex; flex-direction: column; gap: 14px; }
+  .persona {
+    padding: 18px 20px;
+    border-radius: 12px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-left: 3px solid;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .persona-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 20px;
+  }
+  .persona-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+  .persona-demo {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+  .persona-desc {
+    font-size: 13px;
+    color: var(--text-body);
+    line-height: 1.5;
+    margin-top: 4px;
+  }
+  .persona-price {
+    margin-left: auto;
+    font-family: 'Inter';
+    font-size: 14px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .strategy-box {
+    margin-top: 12px;
+    padding: 16px 20px;
+    border-radius: 10px;
+    background: rgba(42,157,143,0.06);
+    border: 1px solid rgba(42,157,143,0.15);
+  }
+  .strategy-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--teal);
+    margin-bottom: 6px;
+  }
+  .strategy-steps {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--text-body);
+  }
+  .strategy-step {
+    padding: 6px 14px;
+    border-radius: 8px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+  .strategy-arrow {
+    color: var(--text-muted);
+  }
+</style>
+</head>
+<body>
+  <div class="slide">
+    <div class="header">
+      <div class="section-label">TARGET CUSTOMER</div>
+      <h2>4つのセグメントと段階的アプローチ</h2>
+    </div>
+    <div class="content">
+      <!-- Left: Segment map -->
+      <div>
+        <div class="segment-map">
+          <div class="seg-axis-x"></div>
+          <div class="seg-axis-y"></div>
+          <div class="seg-label" style="top: 8px; left: 50%; transform: translateX(-50%);">社会貢献意識 高</div>
+          <div class="seg-label" style="bottom: 8px; left: 50%; transform: translateX(-50%);">社会貢献意識 低</div>
+          <div class="seg-label" style="left: 8px; top: 50%; transform: translateY(-50%);">デザイン重視</div>
+          <div class="seg-label" style="right: 8px; top: 50%; transform: translateY(-50%);">ストーリー重視</div>
+
+          <!-- Bubble A: Urban Millennial -->
+          <div class="seg-bubble" style="top: 62%; left: 65%; width: 110px; height: 110px; background: rgba(42,157,143,0.12); border: 1px solid rgba(42,157,143,0.3);">
+            <div class="seg-bubble-label" style="color: var(--teal);">A</div>
+            <div class="seg-bubble-name">アーバン<br>ミレニアル</div>
+          </div>
+          <!-- Bubble B: Social Conscious -->
+          <div class="seg-bubble" style="top: 28%; left: 32%; width: 120px; height: 120px; background: rgba(212,165,116,0.12); border: 1px solid rgba(212,165,116,0.3);">
+            <div class="seg-bubble-label" style="color: var(--gold);">B</div>
+            <div class="seg-bubble-name">ソーシャル<br>コンシャス</div>
+          </div>
+          <!-- Bubble C: Art Culture -->
+          <div class="seg-bubble" style="top: 68%; left: 28%; width: 100px; height: 100px; background: rgba(139,126,200,0.12); border: 1px solid rgba(139,126,200,0.3);">
+            <div class="seg-bubble-label" style="color: var(--purple);">C</div>
+            <div class="seg-bubble-name">アート<br>カルチャー</div>
+          </div>
+          <!-- Bubble D: Disaster Support -->
+          <div class="seg-bubble" style="top: 25%; left: 72%; width: 130px; height: 130px; background: rgba(233,69,96,0.12); border: 1px solid rgba(233,69,96,0.3);">
+            <div class="seg-bubble-label" style="color: var(--coral);">D</div>
+            <div class="seg-bubble-name">被災地<br>応援層</div>
+          </div>
+        </div>
+        <div style="margin-top: 16px; display: flex; gap: 24px; justify-content: center;">
+          <div style="font-size: 13px; color: var(--text-muted);">
+            <span style="color: var(--coral); font-weight: 700;">D</span> = Makuake初期ターゲット（共感購入・支援動機）
+          </div>
+          <div style="font-size: 13px; color: var(--text-muted);">
+            <span style="color: var(--gold); font-weight: 700;">B</span> = D2C拡大期ターゲット
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Personas -->
+      <div>
+        <div class="persona-list">
+          <div class="persona" style="border-left-color: var(--coral);">
+            <div class="persona-avatar" style="background: rgba(233,69,96,0.15);">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--coral)" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+            <div>
+              <div class="persona-name">佐藤 美咲（32歳・会社員）</div>
+              <div class="persona-demo">東北出身・都内在住 / 年収450万</div>
+              <div class="persona-desc">地元の復興を気にかけているが、直接支援の機会が少ない。「着るだけで支援になる」に共感。</div>
+            </div>
+            <div class="persona-price" style="color: var(--coral);">~12,000円</div>
+          </div>
+          <div class="persona" style="border-left-color: var(--gold);">
+            <div class="persona-avatar" style="background: rgba(212,165,116,0.15);">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+            <div>
+              <div class="persona-name">田中 健太（28歳・デザイナー）</div>
+              <div class="persona-demo">渋谷区在住 / 年収550万</div>
+              <div class="persona-desc">エシカル消費に積極的。ファッションで社会的メッセージを発信したい。</div>
+            </div>
+            <div class="persona-price" style="color: var(--gold);">~10,000円</div>
+          </div>
+          <div class="persona" style="border-left-color: var(--purple);">
+            <div class="persona-avatar" style="background: rgba(139,126,200,0.15);">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+            <div>
+              <div class="persona-name">山本 蓮（25歳・学生）</div>
+              <div class="persona-demo">アート系大学院 / SNSフォロワー3K</div>
+              <div class="persona-desc">ユニークなアートTシャツを探している。NFC体験に興味。SNSで共有したい。</div>
+            </div>
+            <div class="persona-price" style="color: var(--purple);">~8,800円</div>
+          </div>
+        </div>
+        <div class="strategy-box">
+          <div class="strategy-title">段階的ローンチ戦略</div>
+          <div class="strategy-steps">
+            <div class="strategy-step">Makuake CF</div>
+            <div class="strategy-arrow">→</div>
+            <div class="strategy-step">Shopify D2C</div>
+            <div class="strategy-arrow">→</div>
+            <div class="strategy-step">セレクトショップ</div>
+            <div class="strategy-arrow">→</div>
+            <div class="strategy-step">ポップアップ</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-number">07 / 12</div>
+    <div class="brand-bar"></div>
+  </div>
+</body>
+</html>
