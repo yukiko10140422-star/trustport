@@ -1,9 +1,10 @@
 import { listEvents, createEvent } from './calendar-service';
 import { listTodos, createTodo, completeTodo } from './todo-service';
 import { searchDocuments, getDocumentDetail } from './company-docs-service';
+import { searchWeb } from './web-search-service';
 
 // Google OAuth不要のツール
-const NO_AUTH_TOOLS = new Set(['search_company_docs', 'get_company_doc_detail']);
+const NO_AUTH_TOOLS = new Set(['search_company_docs', 'get_company_doc_detail', 'web_search']);
 
 export async function executeTool(
   toolName: string,
@@ -75,6 +76,14 @@ export async function executeTool(
           return JSON.stringify({ error: '該当するドキュメントが見つかりませんでした' });
         }
         return JSON.stringify(doc);
+      }
+
+      case 'web_search': {
+        const results = await searchWeb(
+          toolInput.query as string,
+          toolInput.count as number | undefined,
+        );
+        return JSON.stringify(results);
       }
 
       default:

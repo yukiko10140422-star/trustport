@@ -102,4 +102,22 @@ export const TOOLS: Anthropic.Tool[] = [
       required: ['file_path'],
     },
   },
+  {
+    name: 'web_search',
+    description: 'インターネットで最新情報を検索します。ニュース、技術トレンド、市場動向、価格、人物情報など、外部の最新情報が必要なときに使います。検索結果のURLを引用元として必ず提示してください。',
+    input_schema: {
+      type: 'object' as const,
+      properties: {
+        query: {
+          type: 'string',
+          description: '検索クエリ。具体的なキーワードで検索してください。',
+        },
+        count: {
+          type: 'number',
+          description: '取得する検索結果の件数（デフォルト: 5、最大: 10）',
+        },
+      },
+      required: ['query'],
+    },
+  },
 ];
