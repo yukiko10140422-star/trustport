@@ -1,40 +1,44 @@
 /**
  * Detect if a user message requires Claude Code execution,
- * and classify into light (軽作業) vs heavy (重作業) tasks.
+ * and classify into chat / light / heavy tasks.
  *
- * Light tasks: handled by Claude API on Vercel (instant)
- * Heavy tasks: dispatched to local worker via Supabase queue (async)
+ * chat:  通常の会話・相談・質問 → Claude API（即時）
+ * light: データ参照が必要 → Claude API + tool_use（即時）
+ * heavy: ファイル作成・実行が必要 → ワーカー（非同期）
+ *
+ * 重要な判定基準:
+ * - 「〜したい」「〜どう思う？」「〜について」= 相談 → chat
+ * - 「〜して」「〜やって」「〜お願い」= 実行依頼 → heavy or light
  */
 
 import type { TaskType } from '@/types';
 
-// --- Heavy task keywords (require Claude Code CLI) ---
+// --- 相談・質問パターン（chatに分類、heavyにしない）---
+// 「〜したい」「〜考えてる」「〜どう思う」は相談であり実行依頼ではない
 
-const HEAVY_KEYWORDS: Record<TaskType, string[]> = {
-  research: [
-    '調べて', '調査', 'リサーチ', '競合分析', '市場調査',
-    'トレンド', '比較して', '検索して', '深掘り',
-  ],
-  slide: [
-    'スライド', 'プレゼン', '企画書', 'ピッチデッキ', 'PPTX',
-    'パワポ', '資料作成', 'デッキ',
-  ],
-  code: [
-    '実装して', '設計して', 'コードを', 'コミットして', 'pushして',
-    'デプロイして', 'ビルド', 'テスト書いて', 'リファクタ',
-  ],
-  report: [
-    'レポート', '報告書', 'まとめて', '分析して', '集計',
-  ],
-  'file-op': [
-    '作成して', '作って', '追加して', '更新して', '修正して',
-    '削除して', '保存して', '記録して', '書いて', 'メモして',
-    'ファイル', '変更して', '直して', '消して',
-  ],
-  heavy: [],
-};
+const CONSULTATION_PATTERNS = [
+  /したい[んの]?(?:だけど|けど|が|です)?$/,
+  /したいな[ぁー]?$/,
+  /どう(?:思う|思います|かな|でしょう)/,
+  /について(?:教えて|聞きたい)?$/,
+  /検討|考えて(?:る|いる|みて)/,
+  /(?:案|アイデア|意見).*(?:ある|ほしい|ください)/,
+  /どうすれば/,
+  /何が(?:いい|良い|必要)/,
+];
 
-// --- 事業・プロジェクト名のキーワード（これらが含まれる「進捗」質問は重作業） ---
+// --- 明示的な実行依頼（heavyに分類）---
+
+const HEAVY_EXECUTION_PATTERNS: { pattern: RegExp; taskType: TaskType }[] = [
+  // 「〜して」「〜やって」「〜お願い」= 実行依頼
+  { pattern: /(?:調べて|調査して|リサーチして)/, taskType: 'research' },
+  { pattern: /(?:スライド|プレゼン|企画書|PPTX|パワポ|資料).*(?:作って|作成|お願い)/, taskType: 'slide' },
+  { pattern: /(?:実装して|コード.*書いて|コミットして|pushして|デプロイして|ビルドして|テスト書いて)/, taskType: 'code' },
+  { pattern: /(?:レポート|報告書).*(?:作って|作成|書いて|お願い)/, taskType: 'report' },
+  { pattern: /(?:ファイル|ドキュメント).*(?:作成して|作って|更新して|修正して|削除して)/, taskType: 'file-op' },
+];
+
+// --- 事業データ参照（lightに分類、Supabase検索）---
 
 const BUSINESS_KEYWORDS = [
   'アパレル', 'YURA', 'ゆら', 'DX', 'eBay', 'イーベイ',
@@ -42,12 +46,10 @@ const BUSINESS_KEYWORDS = [
   'vkei', 'V系', 'EC', 'メモリアル', '仮想会社', 'company',
 ];
 
-// --- ファイルアクセスが必要な動詞（事業名と組み合わさると重作業） ---
-
 const DATA_QUERY_KEYWORDS = [
-  '進捗', '状況', 'ステータス', '確認して', '見せて',
+  '進捗', '状況', 'ステータス', '確認', '見せて',
   'プロジェクト', '計画', '決定事項', '振り返り',
-  'どうなってる', 'どこまで', '教えて',
+  'どうなってる', 'どこまで',
 ];
 
 const CHAT_ONLY_PATTERNS = [
@@ -58,6 +60,13 @@ const CHAT_ONLY_PATTERNS = [
   /^了解/,
   /^はい$/,
   /^うん$/,
+  /^おやすみ/,
+  /^よろしく/,
+];
+
+const TOOL_KEYWORDS = [
+  'TODO', '予定', 'カレンダー', 'スケジュール', 'タスク',
+  '決定事項', '社内資料',
 ];
 
 export type TaskClassification = {
@@ -71,38 +80,38 @@ export type TaskClassification = {
 export function classifyTask(message: string): TaskClassification {
   const trimmed = message.trim();
 
-  // Simple greetings → chat
+  // 1. Simple greetings → chat
   if (CHAT_ONLY_PATTERNS.some((p) => p.test(trimmed))) {
+    return { weight: 'chat', taskType: null };
+  }
+
+  // 2. 相談パターン → chat（「〜したい」「〜どう思う」は実行ではない）
+  if (CONSULTATION_PATTERNS.some((p) => p.test(trimmed))) {
     return { weight: 'chat', taskType: null };
   }
 
   const lower = message.toLowerCase();
 
-  // Check heavy keywords first (most specific)
-  for (const [type, keywords] of Object.entries(HEAVY_KEYWORDS) as [TaskType, string[]][]) {
-    if (keywords.some((kw) => lower.includes(kw.toLowerCase()))) {
-      return { weight: 'heavy', taskType: type };
+  // 3. 明示的な実行依頼 → heavy
+  for (const { pattern, taskType } of HEAVY_EXECUTION_PATTERNS) {
+    if (pattern.test(lower)) {
+      return { weight: 'heavy', taskType };
     }
   }
 
-  // 事業データが必要な質問 → 重作業
-  // （事業名 + データクエリ動詞の組み合わせ）
+  // 4. 事業データ参照 → light（Supabase検索で即時回答）
   const hasBusiness = BUSINESS_KEYWORDS.some((kw) => lower.includes(kw.toLowerCase()));
   const hasDataQuery = DATA_QUERY_KEYWORDS.some((kw) => lower.includes(kw.toLowerCase()));
   if (hasBusiness && hasDataQuery) {
-    return { weight: 'light', taskType: null }; // Supabase検索で即時回答
+    return { weight: 'light', taskType: null };
   }
 
-  // カレンダー・TODO関連 → 軽作業（tool_useで処理可能）
-  const TOOL_KEYWORDS = [
-    'TODO', '予定', 'カレンダー', 'スケジュール', 'タスク',
-    '決定事項', '社内資料',
-  ];
+  // 5. カレンダー・TODO関連 → light（tool_useで処理）
   if (TOOL_KEYWORDS.some((kw) => lower.includes(kw.toLowerCase()))) {
     return { weight: 'light', taskType: null };
   }
 
-  // その他の質問・雑談 → chat（軽作業）
+  // 6. それ以外 → chat
   return { weight: 'chat', taskType: null };
 }
 

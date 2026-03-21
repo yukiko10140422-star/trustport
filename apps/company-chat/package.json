@@ -6,7 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "generate": "node scripts/generate-departments.mjs"
+    "generate": "node scripts/generate-departments.mjs",
+    "test:e2e": "playwright test",
+    "test:e2e:mobile": "playwright test --project=chromium-mobile",
+    "test:e2e:desktop": "playwright test --project=chromium-desktop",
+    "test:e2e:report": "playwright show-report e2e-report"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",
@@ -17,6 +21,7 @@
     "react-dom": "^19.1.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.58.2",
     "@tailwindcss/postcss": "^4.1.7",
     "@types/node": "^22.15.21",
     "@types/react": "^19.1.4",

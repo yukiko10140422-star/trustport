@@ -72,7 +72,9 @@ ${dept.role}
 - 今日の日付: ${today}（${dayOfWeek}）`;
 }
 
-export function buildSecretaryRoutingMessage(dept: Department, userMessage: string): string {
+export function buildSecretaryRoutingMessage(dept: Department, _userMessage: string): string {
+  // 担当者名で直接指名された場合のみ転送メッセージを表示
+  // キーワード自動ルーティングは廃止したため、ほとんどのケースでは空文字を返す
   if (dept.id === 'secretary') return '';
-  return `${dept.name}の${dept.person}さんに確認しますね！`;
+  return `${dept.person}さんに聞いてみますね。`;
 }

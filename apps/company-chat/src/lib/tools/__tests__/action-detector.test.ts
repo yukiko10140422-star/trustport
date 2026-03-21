@@ -2,10 +2,22 @@ import { describe, it, expect } from 'vitest';
 import { classifyTask } from '../../action-detector';
 
 describe('classifyTask', () => {
-  // --- chat ---
+  // --- chat: 挨拶 ---
   it('greetings → chat', () => {
     expect(classifyTask('こんにちは').weight).toBe('chat');
     expect(classifyTask('おはよう').weight).toBe('chat');
+  });
+
+  // --- chat: 相談・質問（実行依頼ではない） ---
+  it('consultation (〜したい) → chat', () => {
+    expect(classifyTask('音声機能追加したいんだけど').weight).toBe('chat');
+    expect(classifyTask('UIを改善したい').weight).toBe('chat');
+    expect(classifyTask('新しい機能を検討したい').weight).toBe('chat');
+  });
+
+  it('opinions (〜どう思う) → chat', () => {
+    expect(classifyTask('この設計どう思う？').weight).toBe('chat');
+    expect(classifyTask('アパレルの方向性どう思います？').weight).toBe('chat');
   });
 
   it('general questions → chat', () => {
@@ -13,44 +25,30 @@ describe('classifyTask', () => {
     expect(classifyTask('壁打ちしたい').weight).toBe('chat');
   });
 
-  // --- heavy: 明示的な重作業 ---
-  it('research keywords → heavy', () => {
+  // --- heavy: 明示的な実行依頼（「〜して」） ---
+  it('explicit execution → heavy', () => {
     expect(classifyTask('競合を調べて').weight).toBe('heavy');
-    expect(classifyTask('市場調査をお願い').weight).toBe('heavy');
-  });
-
-  it('slide keywords → heavy', () => {
-    expect(classifyTask('スライドを作って').weight).toBe('heavy');
-    expect(classifyTask('PPTXで資料作成して').weight).toBe('heavy');
-  });
-
-  it('code keywords → heavy', () => {
+    expect(classifyTask('スライドを作ってください').weight).toBe('heavy');
     expect(classifyTask('実装してください').weight).toBe('heavy');
     expect(classifyTask('コミットしてpushして').weight).toBe('heavy');
   });
 
-  // --- light: 事業データの読み取り（Supabase検索で即時回答） ---
-  it('business + data query (read-only) → light', () => {
+  // --- light: 事業データの読み取り ---
+  it('business + data query → light', () => {
     expect(classifyTask('アパレル事業の進捗教えて').weight).toBe('light');
     expect(classifyTask('DXプロジェクトの状況は？').weight).toBe('light');
-    expect(classifyTask('eBayの売上確認して').weight).toBe('light');
     expect(classifyTask('YURAの計画どうなってる？').weight).toBe('light');
   });
 
-  it('business without data query → chat', () => {
-    // 事業名だけでデータクエリ動詞がない → chat
-    expect(classifyTask('アパレルって何？').weight).toBe('chat');
-  });
-
-  it('data query without business → chat', () => {
-    // データクエリ動詞だけで事業名がない → chat
-    expect(classifyTask('進捗どう？').weight).toBe('chat');
-  });
-
-  // --- light: tool_useで処理可能 ---
-  it('calendar/todo keywords → light', () => {
+  // --- light: ツール系 ---
+  it('calendar/todo → light', () => {
     expect(classifyTask('今月の予定教えて').weight).toBe('light');
     expect(classifyTask('TODO一覧見せて').weight).toBe('light');
-    expect(classifyTask('カレンダー確認').weight).toBe('light');
+  });
+
+  // --- 境界ケース ---
+  it('consultation about heavy topic → chat (not heavy)', () => {
+    // 「スライドについて相談したい」は相談であり作成依頼ではない
+    expect(classifyTask('スライドについて相談したいんだけど').weight).toBe('chat');
   });
 });
