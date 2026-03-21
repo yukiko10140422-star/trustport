@@ -52,9 +52,9 @@ owner: オーナー
 ## 関連ドキュメント
 - ビジネス要件定義書: `dx/products/dx-business-requirements.md`
 - CEO意思決定ログ: `ceo/decisions/2026-03-10-dx-business-requirements.md`
-- DX包括リサーチ: `research/topics/dx-comprehensive-research.md`
-- FDE型ビジネスモデル調査: `research/topics/fde-business-model-research.md`
-- DX総合リサーチ: `research/topics/dx-general-comprehensive-research.md`
+- FDE型ビジネスモデル調査: `research/topics/dx/fde-business-model-research.md`
+- DX総合リサーチ: `research/topics/dx/dx-general-comprehensive-research.md`
+- ターゲット選定リサーチ: `research/topics/dx/dx-target-selection-research.md`
 
 ## KPI
 | 指標 | Year 1目標 | Year 2目標 | Year 3目標 |

@@ -34,7 +34,7 @@ status: completed
 - 小売・建設に接点あり、SNS経由で他業種にもアプローチ可能
 
 ## 成果物
-- `research/topics/dx-target-selection-research.md` - 統合リサーチレポート
+- `research/topics/dx/dx-target-selection-research.md` - 統合リサーチレポート
 - `slides/dx-target-selection.md` - 比較検討スライド（PPTX/PDF）
 
 ## ネクストアクション

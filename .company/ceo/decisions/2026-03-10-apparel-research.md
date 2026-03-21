@@ -23,6 +23,6 @@ status: decided
 構想段階においてポジショニングを明確にするには、競合・先行事例の把握が不可欠。
 
 ## フォローアップ
-- [x] リサーチ実施・完了（research/topics/apparel-precedent-cases.md）
+- [x] リサーチ実施・完了（research/topics/apparel/apparel-precedent-cases.md）
 - [ ] 調査結果を基にブランドコンセプト素案を作成
 - [ ] スノーピーク LOCAL WEAR の詳細分析
