@@ -33,3 +33,7 @@ body {
 .safe-bottom {
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

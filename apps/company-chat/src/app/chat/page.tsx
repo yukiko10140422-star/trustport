@@ -7,8 +7,10 @@ import type { ChatMessage } from '@/types';
 import type { ModelKey } from '@/lib/constants';
 import { MODELS, DEPT_COLORS } from '@/lib/constants';
 import { getAllDepartments } from '@/lib/departments';
-import { needsExecution } from '@/lib/action-detector';
+import { classifyTask } from '@/lib/action-detector';
+import { useWorkerStatus } from '@/hooks/useTaskSubscription';
 import TabBar from '@/components/TabBar';
+import TaskStatus from '@/components/TaskStatus';
 
 const departments = getAllDepartments();
 
@@ -62,60 +64,49 @@ export default function ChatPage() {
       role: m.role, content: m.content,
     }));
 
-    const isAction = needsExecution(text);
-    const endpoint = isAction ? '/api/execute' : '/api/chat';
+    const classification = classifyTask(text);
 
     try {
-      if (isAction) {
-        // Claude Code execution (streaming SSE)
-        const res = await fetch(endpoint, {
+      if (classification.weight === 'heavy') {
+        // 重作業 → Supabaseタスクキューに登録
+        const res = await fetch('/api/tasks', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ message: text, departmentId: selectedDept || undefined }),
         });
 
-        if (!res.ok) throw new Error('API error');
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'API error');
 
-        const reader = res.body?.getReader();
-        if (!reader) throw new Error('No stream');
-
-        const decoder = new TextDecoder();
-        let buffer = '';
-
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          buffer += decoder.decode(value, { stream: true });
-          const lines = buffer.split('\n\n');
-          buffer = lines.pop() || '';
-
-          for (const line of lines) {
-            const dataLine = line.replace(/^data: /, '');
-            if (!dataLine) continue;
-            try {
-              const data = JSON.parse(dataLine);
-              if (data.type === 'meta' && data.routingMessage) {
-                setMessages(prev => [...prev, {
-                  id: genId(), role: 'assistant', content: data.routingMessage,
-                  departmentId: 'secretary', departmentName: '秘書室',
-                  person: '藤崎 ひなた', timestamp: Date.now(),
-                }]);
-              }
-              if (data.type === 'result') {
-                setMessages(prev => [...prev, {
-                  id: genId(), role: 'assistant', content: data.content,
-                  departmentId: data.departmentId || 'engineering',
-                  departmentName: data.departmentName || '開発',
-                  person: data.person || '鉄井 航',
-                  model: 'claude-code', timestamp: Date.now(),
-                }]);
-              }
-            } catch { /* skip */ }
-          }
+        if (data.offline) {
+          // ワーカーオフライン
+          setMessages(prev => [...prev, {
+            id: genId(), role: 'assistant', content: data.message,
+            departmentId: 'secretary', departmentName: '秘書室',
+            person: '藤崎 ひなた', timestamp: Date.now(),
+          }]);
+        } else {
+          // タスク登録成功
+          setMessages(prev => [...prev, {
+            id: genId(), role: 'assistant',
+            content: `${data.departmentName}の${data.person}さんに作業を依頼しました！`,
+            departmentId: 'secretary', departmentName: '秘書室',
+            person: '藤崎 ひなた', timestamp: Date.now(),
+          }]);
+          setMessages(prev => [...prev, {
+            id: genId(), role: 'assistant',
+            content: '',
+            departmentId: data.departmentId,
+            departmentName: data.departmentName,
+            person: data.person,
+            model: 'task-queue',
+            taskId: data.taskId,
+            timestamp: Date.now(),
+          }]);
         }
       } else {
-        // Normal Haiku chat (JSON response)
-        const res = await fetch(endpoint, {
+        // 軽作業・チャット → Claude API
+        const res = await fetch('/api/chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -357,15 +348,15 @@ function MessageBubble({ msg }: { msg: ChatMessage }) {
       )}
 
       <div style={{
-        maxWidth: '80%', padding: '10px 14px', borderRadius: 18,
-        background: isUser ? 'var(--user-bubble)' : 'var(--surface)',
+        maxWidth: '80%', padding: msg.taskId ? '4px' : '10px 14px', borderRadius: 18,
+        background: isUser ? 'var(--user-bubble)' : msg.taskId ? 'transparent' : 'var(--surface)',
         color: isUser ? '#fff' : 'var(--text)',
-        border: isUser ? 'none' : '1px solid var(--border)',
+        border: isUser ? 'none' : msg.taskId ? 'none' : '1px solid var(--border)',
         fontSize: 15, lineHeight: 1.5, whiteSpace: 'pre-wrap',
         borderBottomRightRadius: isUser ? 4 : 18,
         borderBottomLeftRadius: isUser ? 18 : 4,
       }}>
-        {msg.content}
+        {msg.taskId ? <TaskStatus taskId={msg.taskId} /> : msg.content}
       </div>
     </div>
   );
