@@ -12,6 +12,7 @@ import TabBar from '@/components/TabBar';
 import ConversationDrawer from '@/components/ConversationDrawer';
 import MessageBubble from '@/components/MessageBubble';
 import ImageUpload, { type UploadedImage } from '@/components/ImageUpload';
+import { useSpeechRecognition } from '@/hooks/useSpeechRecognition';
 
 const departments = getAllDepartments();
 
@@ -44,6 +45,7 @@ export default function ChatPage() {
   const [conversationId, setConversationId] = useState<string | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [images, setImages] = useState<UploadedImage[]>([]);
+  const speech = useSpeechRecognition();
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const abortRef = useRef<AbortController | null>(null);
@@ -51,6 +53,13 @@ export default function ChatPage() {
   useEffect(() => {
     if (status === 'unauthenticated') router.push('/login');
   }, [status, router]);
+
+  // 音声認識結果をinputに反映
+  useEffect(() => {
+    if (speech.transcript) {
+      setInput(speech.transcript);
+    }
+  }, [speech.transcript]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -457,6 +466,39 @@ export default function ChatPage() {
           onRemove={(i) => setImages(prev => prev.filter((_, idx) => idx !== i))}
           disabled={loading}
         />
+
+        {/* マイクボタン（音声入力） */}
+        {speech.supported && (
+          <button
+            onClick={() => {
+              if (speech.status === 'listening') {
+                speech.stop();
+              } else {
+                speech.reset();
+                speech.start();
+              }
+            }}
+            style={{
+              width: 38, height: 38, borderRadius: '50%',
+              border: speech.status === 'listening' ? '2px solid #ef4444' : '1px solid var(--border)',
+              background: speech.status === 'listening' ? 'rgba(239,68,68,0.1)' : 'var(--surface)',
+              color: speech.status === 'listening' ? '#ef4444' : 'var(--text-tertiary)',
+              cursor: 'pointer', flexShrink: 0,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              transition: 'all 0.2s',
+              animation: speech.status === 'listening' ? 'pulse 1.5s infinite' : 'none',
+              boxShadow: 'var(--shadow-sm)',
+            }}
+            title={speech.status === 'listening' ? '録音停止' : '音声入力'}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+              <line x1="12" y1="19" x2="12" y2="23" />
+              <line x1="8" y1="23" x2="16" y2="23" />
+            </svg>
+          </button>
+        )}
 
         <button
           onClick={() => setShowDeptPicker(!showDeptPicker)}
