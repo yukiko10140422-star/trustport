@@ -1,4 +1,4 @@
-import { listEvents, createEvent } from './calendar-service';
+import { listEvents, createEvent, deleteEvent } from './calendar-service';
 import { listTodos, createTodo, completeTodo } from './todo-service';
 import { searchDocuments, getDocumentDetail } from './company-docs-service';
 import { searchWeb } from './web-search-service';
@@ -35,6 +35,11 @@ export async function executeTool(
           allDay: toolInput.allDay as boolean | undefined,
         });
         return JSON.stringify(result);
+      }
+
+      case 'delete_calendar_event': {
+        await deleteEvent(accessToken, toolInput.eventId as string);
+        return JSON.stringify({ ok: true, message: '予定を削除しました' });
       }
 
       case 'get_todos': {

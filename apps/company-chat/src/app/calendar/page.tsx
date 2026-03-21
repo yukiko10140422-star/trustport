@@ -86,6 +86,14 @@ export default function CalendarPage() {
     if (status === 'authenticated') loadEvents();
   }, [status, loadEvents]);
 
+  const deleteEventById = useCallback(async (eventId: string) => {
+    if (!confirm('この予定を削除しますか？')) return;
+    try {
+      const res = await fetch(`/api/calendar?eventId=${encodeURIComponent(eventId)}`, { method: 'DELETE' });
+      if (res.ok) loadEvents();
+    } catch { /* ignore */ }
+  }, [loadEvents]);
+
   const addEvent = async () => {
     if (!newTitle || !newDate) return;
     const start = newTime ? `${newDate}T${newTime}:00+09:00` : newDate;
@@ -247,17 +255,33 @@ export default function CalendarPage() {
                       flex: 1, padding: '10px 14px', borderRadius: 'var(--radius-sm)',
                       background: 'var(--surface)', border: '1px solid var(--border-light)',
                       boxShadow: 'var(--shadow-sm)',
+                      display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                     }}>
-                      <div style={{ fontSize: 14, fontWeight: 600 }}>{event.title}</div>
-                      <div style={{ fontSize: 12, color: 'var(--text-secondary)', marginTop: 3, display: 'flex', alignItems: 'center', gap: 6 }}>
-                        <span>{formatTime(event.start, event.allDay)}</span>
-                        {event.location && (
-                          <>
-                            <span style={{ opacity: 0.4 }}>|</span>
-                            <span>{event.location}</span>
-                          </>
-                        )}
+                      <div>
+                        <div style={{ fontSize: 14, fontWeight: 600 }}>{event.title}</div>
+                        <div style={{ fontSize: 12, color: 'var(--text-secondary)', marginTop: 3, display: 'flex', alignItems: 'center', gap: 6 }}>
+                          <span>{formatTime(event.start, event.allDay)}</span>
+                          {event.location && (
+                            <>
+                              <span style={{ opacity: 0.4 }}>|</span>
+                              <span>{event.location}</span>
+                            </>
+                          )}
+                        </div>
                       </div>
+                      <button
+                        onClick={() => deleteEventById(event.id)}
+                        style={{
+                          border: 'none', background: 'none', cursor: 'pointer',
+                          color: 'var(--text-tertiary)', padding: 4, borderRadius: 6,
+                          flexShrink: 0,
+                        }}
+                        title="削除"
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <polyline points="3 6 5 6 21 6" /><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                        </svg>
+                      </button>
                     </div>
                   </div>
                 ))}

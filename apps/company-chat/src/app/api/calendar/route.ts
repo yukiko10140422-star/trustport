@@ -76,3 +76,29 @@ export async function POST(req: NextRequest) {
     start: created.start?.dateTime || created.start?.date,
   });
 }
+
+export async function DELETE(req: NextRequest) {
+  const auth = await getAuthSession();
+  if (!auth?.accessToken) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+  const { searchParams } = new URL(req.url);
+  const eventId = searchParams.get('eventId');
+  if (!eventId) {
+    return NextResponse.json({ error: 'eventId required' }, { status: 400 });
+  }
+
+  const res = await fetch(
+    `${CALENDAR_API}/calendars/primary/events/${encodeURIComponent(eventId)}`,
+    {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${auth.accessToken}` },
+    },
+  );
+
+  if (!res.ok) {
+    const err = await res.text();
+    return NextResponse.json({ error: 'Failed to delete', detail: err }, { status: res.status });
+  }
+
+  return NextResponse.json({ ok: true });
+}

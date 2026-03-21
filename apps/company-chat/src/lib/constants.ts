@@ -9,6 +9,7 @@ export type ModelKey = keyof typeof MODELS;
 export const TOOL_LABELS: Record<string, string> = {
   get_calendar_events: 'カレンダー確認中',
   create_calendar_event: '予定作成中',
+  delete_calendar_event: '予定削除中',
   get_todos: 'TODO確認中',
   create_todo: 'TODO作成中',
   complete_todo: 'TODO更新中',

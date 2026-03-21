@@ -1,11 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { listEvents, createEvent } from '../calendar-service';
+import { listEvents, createEvent, deleteEvent } from '../calendar-service';
 
 const mockFetch = vi.fn();
 global.fetch = mockFetch;
 
 beforeEach(() => {
-  vi.clearAllMocks();
+  mockFetch.mockReset();
 });
 
 describe('listEvents', () => {
@@ -110,5 +110,28 @@ describe('createEvent', () => {
     await expect(
       createEvent('fake-token', { title: 'test', start: 'invalid' }),
     ).rejects.toThrow();
+  });
+});
+
+describe('deleteEvent', () => {
+  it('should delete an event by id', async () => {
+    mockFetch.mockResolvedValueOnce({ ok: true });
+
+    await deleteEvent('fake-token', 'event-123');
+
+    expect(mockFetch).toHaveBeenCalledOnce();
+    const [url, opts] = mockFetch.mock.calls[0];
+    expect(url).toContain('event-123');
+    expect(opts.method).toBe('DELETE');
+  });
+
+  it('should throw on API error', async () => {
+    mockFetch.mockResolvedValueOnce({
+      ok: false,
+      status: 404,
+      text: async () => 'Not Found',
+    });
+
+    await expect(deleteEvent('fake-token', 'bad-id')).rejects.toThrow();
   });
 });

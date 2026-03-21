@@ -72,3 +72,21 @@ export async function createEvent(
     start: created.start?.dateTime || created.start?.date,
   };
 }
+
+export async function deleteEvent(
+  accessToken: string,
+  eventId: string,
+): Promise<void> {
+  const res = await fetch(
+    `${CALENDAR_API}/calendars/primary/events/${encodeURIComponent(eventId)}`,
+    {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${accessToken}` },
+    },
+  );
+
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`Failed to delete event (${res.status}): ${err}`);
+  }
+}

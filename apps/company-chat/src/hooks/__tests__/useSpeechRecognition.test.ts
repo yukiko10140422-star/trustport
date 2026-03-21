@@ -49,6 +49,8 @@ describe('useSpeechRecognition', () => {
   it('ブラウザ対応時は supported: true を返す', async () => {
     const { useSpeechRecognition } = await import('../useSpeechRecognition');
     const { result } = renderHook(() => useSpeechRecognition());
+    // useEffect後にsupportedが更新される
+    await act(async () => {});
     expect(result.current.supported).toBe(true);
   });
 
@@ -57,12 +59,14 @@ describe('useSpeechRecognition', () => {
     delete (globalThis as Record<string, unknown>).SpeechRecognition;
     const { useSpeechRecognition } = await import('../useSpeechRecognition');
     const { result } = renderHook(() => useSpeechRecognition());
+    await act(async () => {});
     expect(result.current.supported).toBe(false);
   });
 
   it('初期状態は idle', async () => {
     const { useSpeechRecognition } = await import('../useSpeechRecognition');
     const { result } = renderHook(() => useSpeechRecognition());
+    await act(async () => {});
     expect(result.current.status).toBe('idle');
     expect(result.current.transcript).toBe('');
   });
@@ -70,6 +74,7 @@ describe('useSpeechRecognition', () => {
   it('start() で listening に遷移する', async () => {
     const { useSpeechRecognition } = await import('../useSpeechRecognition');
     const { result } = renderHook(() => useSpeechRecognition());
+    await act(async () => {}); // useEffect完了待ち
 
     act(() => {
       result.current.start();
@@ -82,6 +87,7 @@ describe('useSpeechRecognition', () => {
   it('stop() で idle に戻る', async () => {
     const { useSpeechRecognition } = await import('../useSpeechRecognition');
     const { result } = renderHook(() => useSpeechRecognition());
+    await act(async () => {});
 
     act(() => {
       result.current.start();
@@ -100,6 +106,7 @@ describe('useSpeechRecognition', () => {
   it('音声結果が transcript に反映される', async () => {
     const { useSpeechRecognition } = await import('../useSpeechRecognition');
     const { result } = renderHook(() => useSpeechRecognition());
+    await act(async () => {});
 
     act(() => {
       result.current.start();
@@ -123,6 +130,7 @@ describe('useSpeechRecognition', () => {
     delete (globalThis as Record<string, unknown>).SpeechRecognition;
     const { useSpeechRecognition } = await import('../useSpeechRecognition');
     const { result } = renderHook(() => useSpeechRecognition());
+    await act(async () => {});
 
     act(() => {
       result.current.start();

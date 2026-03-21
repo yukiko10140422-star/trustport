@@ -34,6 +34,17 @@ export const TOOLS: Anthropic.Tool[] = [
     },
   },
   {
+    name: 'delete_calendar_event',
+    description: 'Googleカレンダーの予定を削除します。「予定を消して」「キャンセルして」などのときに使います。まずget_calendar_eventsで対象のイベントIDを確認してから削除してください。',
+    input_schema: {
+      type: 'object' as const,
+      properties: {
+        eventId: { type: 'string', description: '削除するイベントのID（get_calendar_eventsの結果から取得）' },
+      },
+      required: ['eventId'],
+    },
+  },
+  {
     name: 'get_todos',
     description: 'Google TasksからTODOリストを取得します。「TODO一覧」「やることリスト」などを聞かれたときに使います。',
     input_schema: {

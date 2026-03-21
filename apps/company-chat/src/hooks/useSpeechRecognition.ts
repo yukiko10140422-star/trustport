@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 
 export type SpeechStatus = 'idle' | 'listening' | 'error';
 
@@ -14,7 +14,6 @@ interface SpeechResult {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type SpeechRecognitionInstance = any;
 
-// ブラウザ互換性
 function getSpeechRecognitionClass(): (new () => SpeechRecognitionInstance) | null {
   if (typeof window === 'undefined') return null;
   const w = window as unknown as Record<string, unknown>;
@@ -23,14 +22,22 @@ function getSpeechRecognitionClass(): (new () => SpeechRecognitionInstance) | nu
 }
 
 export function useSpeechRecognition(): SpeechResult {
-  const SRClass = getSpeechRecognitionClass();
-  const supported = SRClass !== null;
-
+  // SSR時はfalse、クライアント側でuseEffectで再判定
+  const [supported, setSupported] = useState(false);
   const [status, setStatus] = useState<SpeechStatus>('idle');
   const [transcript, setTranscript] = useState('');
   const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
+  const srClassRef = useRef<(new () => SpeechRecognitionInstance) | null>(null);
+
+  // クライアント側でのみSpeechRecognition対応を判定
+  useEffect(() => {
+    const SRClass = getSpeechRecognitionClass();
+    srClassRef.current = SRClass;
+    setSupported(SRClass !== null);
+  }, []);
 
   const start = useCallback(() => {
+    const SRClass = srClassRef.current;
     if (!SRClass) return;
     if (recognitionRef.current) {
       recognitionRef.current.abort();
@@ -62,7 +69,7 @@ export function useSpeechRecognition(): SpeechResult {
     recognitionRef.current = recognition;
     setStatus('listening');
     recognition.start();
-  }, [SRClass]);
+  }, []);
 
   const stop = useCallback(() => {
     recognitionRef.current?.stop();
