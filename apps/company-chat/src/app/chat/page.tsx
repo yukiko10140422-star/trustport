@@ -8,7 +8,6 @@ import type { ModelKey } from '@/lib/constants';
 import { MODELS, DEPT_COLORS } from '@/lib/constants';
 import { getAllDepartments } from '@/lib/departments';
 import { classifyTask } from '@/lib/action-detector';
-import { useWorkerStatus } from '@/hooks/useTaskSubscription';
 import TabBar from '@/components/TabBar';
 import TaskStatus from '@/components/TaskStatus';
 
@@ -25,7 +24,7 @@ export default function ChatPage() {
     {
       id: 'welcome',
       role: 'assistant',
-      content: 'こんにちは！秘書のひなたです。\n何でも聞いてくださいね！',
+      content: 'おはようございます！秘書のひなたです。\n何でも聞いてくださいね。',
       departmentId: 'secretary',
       departmentName: '秘書室',
       person: '藤崎 ひなた',
@@ -68,7 +67,6 @@ export default function ChatPage() {
 
     try {
       if (classification.weight === 'heavy') {
-        // 重作業 → Supabaseタスクキューに登録
         const res = await fetch('/api/tasks', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -79,14 +77,12 @@ export default function ChatPage() {
         if (!res.ok) throw new Error(data.error || 'API error');
 
         if (data.offline) {
-          // ワーカーオフライン
           setMessages(prev => [...prev, {
             id: genId(), role: 'assistant', content: data.message,
             departmentId: 'secretary', departmentName: '秘書室',
             person: '藤崎 ひなた', timestamp: Date.now(),
           }]);
         } else {
-          // タスク登録成功
           setMessages(prev => [...prev, {
             id: genId(), role: 'assistant',
             content: `${data.departmentName}の${data.person}さんに作業を依頼しました！`,
@@ -94,25 +90,18 @@ export default function ChatPage() {
             person: '藤崎 ひなた', timestamp: Date.now(),
           }]);
           setMessages(prev => [...prev, {
-            id: genId(), role: 'assistant',
-            content: '',
-            departmentId: data.departmentId,
-            departmentName: data.departmentName,
-            person: data.person,
-            model: 'task-queue',
-            taskId: data.taskId,
+            id: genId(), role: 'assistant', content: '',
+            departmentId: data.departmentId, departmentName: data.departmentName,
+            person: data.person, model: 'task-queue', taskId: data.taskId,
             timestamp: Date.now(),
           }]);
         }
       } else {
-        // 軽作業・チャット → Claude API
         const res = await fetch('/api/chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            message: text,
-            model,
-            history,
+            message: text, model, history,
             departmentId: selectedDept || undefined,
           }),
         });
@@ -150,68 +139,83 @@ export default function ChatPage() {
   if (status !== 'authenticated') return null;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100dvh', maxWidth: 640, margin: '0 auto' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100dvh', maxWidth: 640, margin: '0 auto', background: 'var(--bg)' }}>
       {/* Header */}
       <header style={{
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '12px 16px', borderBottom: '1px solid var(--border)',
-        background: 'var(--surface)', position: 'sticky', top: 0, zIndex: 10,
+        padding: '14px 20px',
+        background: 'linear-gradient(135deg, var(--gradient-start), var(--gradient-end))',
+        color: '#fff',
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <div style={{
-            width: 32, height: 32, borderRadius: '50%', background: 'var(--primary)',
+            width: 36, height: 36, borderRadius: '50%',
+            background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(8px)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            color: '#fff', fontSize: 14, fontWeight: 700,
+            fontSize: 15, fontWeight: 700,
           }}>秘</div>
-          <span style={{ fontWeight: 700, fontSize: 16 }}>Company 秘書室</span>
+          <div>
+            <div style={{ fontWeight: 700, fontSize: 15, letterSpacing: '0.02em' }}>Company 秘書室</div>
+            <div style={{ fontSize: 11, opacity: 0.8 }}>藤崎 ひなた</div>
+          </div>
         </div>
-        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-          <button
-            onClick={() => setShowModelPicker(!showModelPicker)}
-            style={{
-              padding: '4px 10px', borderRadius: 16, fontSize: 12, fontWeight: 600,
-              border: '1px solid var(--border)', background: 'var(--surface)',
-              color: 'var(--text)', cursor: 'pointer',
-            }}
-          >
-            {MODELS[model].label}
-          </button>
-        </div>
+        <button
+          onClick={() => setShowModelPicker(!showModelPicker)}
+          style={{
+            padding: '5px 12px', borderRadius: 20, fontSize: 11, fontWeight: 600,
+            border: '1px solid rgba(255,255,255,0.3)', background: 'rgba(255,255,255,0.15)',
+            color: '#fff', cursor: 'pointer', backdropFilter: 'blur(8px)',
+          }}
+        >
+          {MODELS[model].label}
+        </button>
       </header>
 
       {/* Model Picker */}
       {showModelPicker && (
         <div style={{
-          display: 'flex', gap: 6, padding: '8px 16px',
+          display: 'flex', gap: 6, padding: '10px 20px',
           background: 'var(--surface)', borderBottom: '1px solid var(--border)',
+          animation: 'fadeIn 0.2s ease',
         }}>
           {(Object.entries(MODELS) as [ModelKey, typeof MODELS[ModelKey]][]).map(([key, m]) => (
             <button
               key={key}
               onClick={() => { setModel(key); setShowModelPicker(false); }}
               style={{
-                flex: 1, padding: '8px 4px', borderRadius: 8, fontSize: 12,
+                flex: 1, padding: '10px 4px', borderRadius: 'var(--radius-sm)', fontSize: 12,
                 border: key === model ? '2px solid var(--primary)' : '1px solid var(--border)',
-                background: key === model ? 'var(--primary)' : 'var(--surface)',
-                color: key === model ? '#fff' : 'var(--text)', cursor: 'pointer',
-                fontWeight: key === model ? 700 : 400,
+                background: key === model ? 'var(--primary-bg)' : 'var(--surface)',
+                color: key === model ? 'var(--primary)' : 'var(--text)', cursor: 'pointer',
+                fontWeight: key === model ? 700 : 400, transition: 'all 0.2s',
               }}
             >
               <div>{m.label}</div>
-              <div style={{ fontSize: 10, opacity: 0.7 }}>{m.desc}</div>
+              <div style={{ fontSize: 10, color: 'var(--text-secondary)', marginTop: 2 }}>{m.desc}</div>
             </button>
           ))}
         </div>
       )}
 
       {/* Messages */}
-      <main style={{ flex: 1, overflowY: 'auto', padding: '16px' }}>
-        {messages.map(msg => (
-          <MessageBubble key={msg.id} msg={msg} />
+      <main style={{ flex: 1, overflowY: 'auto', padding: '16px 20px' }}>
+        {messages.map((msg, i) => (
+          <div key={msg.id} style={{ animation: `fadeIn 0.3s ease ${Math.min(i * 0.05, 0.3)}s both` }}>
+            <MessageBubble msg={msg} />
+          </div>
         ))}
         {loading && (
-          <div style={{ display: 'flex', gap: 4, padding: '8px 0' }}>
-            <span style={{ animation: 'pulse 1s infinite', color: 'var(--text-secondary)' }}>...</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '12px 0' }}>
+            <div style={{ display: 'flex', gap: 4 }}>
+              {[0, 1, 2].map(i => (
+                <span key={i} style={{
+                  width: 7, height: 7, borderRadius: '50%',
+                  background: 'var(--primary)', opacity: 0.4,
+                  animation: `pulse 1.4s ${i * 0.2}s infinite ease-in-out`,
+                }} />
+              ))}
+            </div>
+            <span style={{ fontSize: 12, color: 'var(--text-tertiary)' }}>考え中...</span>
           </div>
         )}
         <div ref={bottomRef} />
@@ -220,16 +224,18 @@ export default function ChatPage() {
       {/* Department Picker */}
       {showDeptPicker && (
         <div style={{
-          display: 'flex', flexWrap: 'wrap', gap: 6, padding: '8px 16px',
+          display: 'flex', flexWrap: 'wrap', gap: 6, padding: '10px 20px',
           background: 'var(--surface)', borderTop: '1px solid var(--border)',
-          maxHeight: 120, overflowY: 'auto',
+          maxHeight: 140, overflowY: 'auto', animation: 'slideUp 0.2s ease',
         }}>
           <button
             onClick={() => { setSelectedDept(''); setShowDeptPicker(false); }}
             style={{
-              padding: '4px 10px', borderRadius: 12, fontSize: 11,
+              padding: '6px 12px', borderRadius: 20, fontSize: 12,
               border: !selectedDept ? '2px solid var(--primary)' : '1px solid var(--border)',
-              background: 'var(--surface)', color: 'var(--text)', cursor: 'pointer',
+              background: !selectedDept ? 'var(--primary-bg)' : 'var(--surface)',
+              color: !selectedDept ? 'var(--primary)' : 'var(--text)', cursor: 'pointer',
+              fontWeight: !selectedDept ? 600 : 400,
             }}
           >
             自動
@@ -239,10 +245,11 @@ export default function ChatPage() {
               key={d.id}
               onClick={() => { setSelectedDept(d.id); setShowDeptPicker(false); }}
               style={{
-                padding: '4px 10px', borderRadius: 12, fontSize: 11,
+                padding: '6px 12px', borderRadius: 20, fontSize: 12,
                 border: selectedDept === d.id ? `2px solid ${DEPT_COLORS[d.id]}` : '1px solid var(--border)',
                 background: selectedDept === d.id ? DEPT_COLORS[d.id] : 'var(--surface)',
                 color: selectedDept === d.id ? '#fff' : 'var(--text)', cursor: 'pointer',
+                fontWeight: selectedDept === d.id ? 600 : 400, transition: 'all 0.2s',
               }}
             >
               {d.name}
@@ -254,7 +261,7 @@ export default function ChatPage() {
       {/* Input */}
       <footer style={{
         display: 'flex', alignItems: 'flex-end', gap: 8,
-        padding: '8px 16px', borderTop: '1px solid var(--border)',
+        padding: '10px 16px', borderTop: '1px solid var(--border)',
         background: 'var(--surface)',
       }}
       className="safe-bottom"
@@ -262,10 +269,11 @@ export default function ChatPage() {
         <button
           onClick={() => setShowDeptPicker(!showDeptPicker)}
           style={{
-            width: 36, height: 36, borderRadius: '50%', border: '1px solid var(--border)',
+            width: 38, height: 38, borderRadius: '50%', border: '1px solid var(--border)',
             background: selectedDept ? DEPT_COLORS[selectedDept] : 'var(--surface)',
-            color: selectedDept ? '#fff' : 'var(--text-secondary)',
-            cursor: 'pointer', fontSize: 14, flexShrink: 0,
+            color: selectedDept ? '#fff' : 'var(--text-tertiary)',
+            cursor: 'pointer', fontSize: 13, flexShrink: 0, transition: 'all 0.2s',
+            boxShadow: 'var(--shadow-sm)',
           }}
           title="部署を選択"
         >
@@ -285,11 +293,19 @@ export default function ChatPage() {
           placeholder="ひなたに聞いてみよう..."
           rows={1}
           style={{
-            flex: 1, padding: '8px 12px', borderRadius: 20,
+            flex: 1, padding: '10px 16px', borderRadius: 22,
             border: '1px solid var(--border)', background: 'var(--bg)',
             color: 'var(--text)', fontSize: 15, resize: 'none',
-            maxHeight: 120, lineHeight: 1.4,
-            outline: 'none',
+            maxHeight: 120, lineHeight: 1.4, outline: 'none',
+            transition: 'border-color 0.2s, box-shadow 0.2s',
+          }}
+          onFocus={e => {
+            e.target.style.borderColor = 'var(--primary)';
+            e.target.style.boxShadow = '0 0 0 3px var(--primary-bg)';
+          }}
+          onBlur={e => {
+            e.target.style.borderColor = 'var(--border)';
+            e.target.style.boxShadow = 'none';
           }}
         />
 
@@ -297,14 +313,19 @@ export default function ChatPage() {
           onClick={sendMessage}
           disabled={!input.trim() || loading}
           style={{
-            width: 36, height: 36, borderRadius: '50%',
-            background: input.trim() && !loading ? 'var(--primary)' : 'var(--border)',
+            width: 38, height: 38, borderRadius: '50%',
+            background: input.trim() && !loading
+              ? 'linear-gradient(135deg, var(--gradient-start), var(--gradient-end))'
+              : 'var(--border)',
             border: 'none', color: '#fff', cursor: input.trim() ? 'pointer' : 'default',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            flexShrink: 0, fontSize: 18,
+            flexShrink: 0, transition: 'all 0.2s',
+            boxShadow: input.trim() && !loading ? 'var(--shadow-md)' : 'none',
           }}
         >
-          ↑
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13" /><polygon points="22 2 15 22 11 13 2 9 22 2" />
+          </svg>
         </button>
       </footer>
 
@@ -315,31 +336,34 @@ export default function ChatPage() {
 
 function MessageBubble({ msg }: { msg: ChatMessage }) {
   const isUser = msg.role === 'user';
-  const color = msg.departmentId ? DEPT_COLORS[msg.departmentId] || '#666' : '#666';
+  const color = msg.departmentId ? DEPT_COLORS[msg.departmentId] || 'var(--text-secondary)' : 'var(--text-secondary)';
 
   return (
     <div style={{
       display: 'flex', flexDirection: 'column',
       alignItems: isUser ? 'flex-end' : 'flex-start',
-      marginBottom: 12,
+      marginBottom: 14,
     }}>
       {!isUser && msg.person && (
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
           <div style={{
-            width: 24, height: 24, borderRadius: '50%', background: color,
+            width: 28, height: 28, borderRadius: '50%',
+            background: `linear-gradient(135deg, ${color}, ${color}dd)`,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            color: '#fff', fontSize: 10, fontWeight: 700,
+            color: '#fff', fontSize: 11, fontWeight: 700,
+            boxShadow: 'var(--shadow-sm)',
           }}>
             {msg.person.charAt(msg.person.indexOf(' ') + 1) || msg.person.charAt(0)}
           </div>
-          <span style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
+          <span style={{ fontSize: 12, color: 'var(--text-secondary)', fontWeight: 500 }}>
             {msg.person}
-            {msg.departmentName && ` (${msg.departmentName})`}
+            {msg.departmentName && <span style={{ opacity: 0.7 }}> / {msg.departmentName}</span>}
           </span>
           {msg.model && (
             <span style={{
-              fontSize: 10, padding: '1px 6px', borderRadius: 8,
-              background: 'var(--border)', color: 'var(--text-secondary)',
+              fontSize: 9, padding: '2px 7px', borderRadius: 10,
+              background: 'var(--primary-bg)', color: 'var(--primary)',
+              fontWeight: 600, letterSpacing: '0.02em',
             }}>
               {msg.model}
             </span>
@@ -348,13 +372,15 @@ function MessageBubble({ msg }: { msg: ChatMessage }) {
       )}
 
       <div style={{
-        maxWidth: '80%', padding: msg.taskId ? '4px' : '10px 14px', borderRadius: 18,
-        background: isUser ? 'var(--user-bubble)' : msg.taskId ? 'transparent' : 'var(--surface)',
+        maxWidth: '85%', padding: msg.taskId ? '4px' : '12px 16px',
+        borderRadius: isUser ? '20px 20px 4px 20px' : '20px 20px 20px 4px',
+        background: isUser
+          ? 'linear-gradient(135deg, var(--gradient-start), var(--gradient-end))'
+          : msg.taskId ? 'transparent' : 'var(--surface)',
         color: isUser ? '#fff' : 'var(--text)',
-        border: isUser ? 'none' : msg.taskId ? 'none' : '1px solid var(--border)',
-        fontSize: 15, lineHeight: 1.5, whiteSpace: 'pre-wrap',
-        borderBottomRightRadius: isUser ? 4 : 18,
-        borderBottomLeftRadius: isUser ? 18 : 4,
+        border: isUser ? 'none' : msg.taskId ? 'none' : '1px solid var(--border-light)',
+        fontSize: 15, lineHeight: 1.6, whiteSpace: 'pre-wrap',
+        boxShadow: isUser ? 'var(--shadow-md)' : msg.taskId ? 'none' : 'var(--shadow-sm)',
       }}>
         {msg.taskId ? <TaskStatus taskId={msg.taskId} /> : msg.content}
       </div>

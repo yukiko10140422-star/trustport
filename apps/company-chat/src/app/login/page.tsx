@@ -15,18 +15,29 @@ export default function LoginPage() {
   return (
     <div style={{
       display: 'flex', flexDirection: 'column', alignItems: 'center',
-      justifyContent: 'center', height: '100dvh', padding: '1.5rem', gap: '2rem',
+      justifyContent: 'center', height: '100dvh', padding: '2rem',
+      background: 'linear-gradient(160deg, #0c0c1d 0%, #1a1a3e 50%, #2d1b4e 100%)',
     }}>
-      <div style={{ textAlign: 'center' }}>
+      <div style={{
+        textAlign: 'center',
+        animation: 'fadeIn 0.6s ease',
+      }}>
         <div style={{
-          width: 80, height: 80, borderRadius: '50%', background: 'var(--primary)',
+          width: 88, height: 88, borderRadius: '50%',
+          background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          margin: '0 auto 1rem', fontSize: 36, color: '#fff',
+          margin: '0 auto 1.5rem', fontSize: 38, color: '#fff', fontWeight: 700,
+          boxShadow: '0 8px 32px rgba(99,102,241,0.4)',
         }}>
           秘
         </div>
-        <h1 style={{ fontSize: 24, fontWeight: 700, margin: '0 0 0.5rem' }}>Company 秘書室</h1>
-        <p style={{ color: 'var(--text-secondary)', fontSize: 14 }}>
+        <h1 style={{
+          fontSize: 26, fontWeight: 800, margin: '0 0 0.5rem', color: '#fff',
+          letterSpacing: '0.04em',
+        }}>
+          Company 秘書室
+        </h1>
+        <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 14, lineHeight: 1.6 }}>
           秘書のひなたが何でもお手伝いします
         </p>
       </div>
@@ -34,11 +45,21 @@ export default function LoginPage() {
       <button
         onClick={() => signIn('google', { callbackUrl: '/chat' })}
         style={{
-          display: 'flex', alignItems: 'center', gap: 12,
-          padding: '12px 24px', borderRadius: 12, border: '1px solid var(--border)',
-          background: 'var(--surface)', color: 'var(--text)',
-          fontSize: 16, fontWeight: 500, cursor: 'pointer',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+          display: 'flex', alignItems: 'center', gap: 12, marginTop: 40,
+          padding: '14px 28px', borderRadius: 14, border: 'none',
+          background: '#fff', color: '#1a1a2e',
+          fontSize: 15, fontWeight: 600, cursor: 'pointer',
+          boxShadow: '0 4px 14px rgba(0,0,0,0.15)',
+          transition: 'transform 0.2s, box-shadow 0.2s',
+          animation: 'slideUp 0.6s ease 0.2s both',
+        }}
+        onMouseEnter={e => {
+          (e.target as HTMLElement).style.transform = 'translateY(-2px)';
+          (e.target as HTMLElement).style.boxShadow = '0 6px 20px rgba(0,0,0,0.2)';
+        }}
+        onMouseLeave={e => {
+          (e.target as HTMLElement).style.transform = 'translateY(0)';
+          (e.target as HTMLElement).style.boxShadow = '0 4px 14px rgba(0,0,0,0.15)';
         }}
       >
         <svg width="20" height="20" viewBox="0 0 24 24">
