@@ -90,7 +90,7 @@ export default function ImageUpload({ images, onAdd, onRemove, disabled }: Props
         onDrop={handleDrop}
         onDragOver={(e) => e.preventDefault()}
         style={{
-          width: 38, height: 38, borderRadius: '50%',
+          width: 34, height: 34, borderRadius: '50%',
           border: '1px solid var(--border)',
           background: uploading ? 'var(--primary-bg)' : 'var(--surface)',
           color: 'var(--text-tertiary)',

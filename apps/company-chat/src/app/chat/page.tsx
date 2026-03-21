@@ -453,12 +453,11 @@ export default function ChatPage() {
 
       {/* Input */}
       <footer style={{
-        display: 'flex', alignItems: 'flex-end', gap: 8,
-        padding: '10px 16px', borderTop: '1px solid var(--border)',
+        display: 'flex', alignItems: 'flex-end', gap: 6,
+        padding: '8px 12px', borderTop: '1px solid var(--border)',
         background: 'var(--surface)',
         position: 'relative',
       }}
-      className="safe-bottom"
       >
         <ImageUpload
           images={images}
@@ -479,7 +478,7 @@ export default function ChatPage() {
               }
             }}
             style={{
-              width: 38, height: 38, borderRadius: '50%',
+              width: 34, height: 34, borderRadius: '50%',
               border: speech.status === 'listening' ? '2px solid #ef4444' : '1px solid var(--border)',
               background: speech.status === 'listening' ? 'rgba(239,68,68,0.1)' : 'var(--surface)',
               color: speech.status === 'listening' ? '#ef4444' : 'var(--text-tertiary)',
@@ -503,10 +502,10 @@ export default function ChatPage() {
         <button
           onClick={() => setShowDeptPicker(!showDeptPicker)}
           style={{
-            width: 38, height: 38, borderRadius: '50%', border: '1px solid var(--border)',
+            width: 34, height: 34, borderRadius: '50%', border: '1px solid var(--border)',
             background: selectedDept ? DEPT_COLORS[selectedDept] : 'var(--surface)',
             color: selectedDept ? '#fff' : 'var(--text-tertiary)',
-            cursor: 'pointer', fontSize: 13, flexShrink: 0, transition: 'all 0.2s',
+            cursor: 'pointer', fontSize: 12, flexShrink: 0, transition: 'all 0.2s',
             boxShadow: 'var(--shadow-sm)',
           }}
           title="部署を選択"
@@ -547,7 +546,7 @@ export default function ChatPage() {
           <button
             onClick={handleStop}
             style={{
-              width: 38, height: 38, borderRadius: '50%',
+              width: 34, height: 34, borderRadius: '50%',
               background: '#ef4444', border: 'none', color: '#fff',
               cursor: 'pointer', display: 'flex', alignItems: 'center',
               justifyContent: 'center', flexShrink: 0, transition: 'all 0.2s',
@@ -563,7 +562,7 @@ export default function ChatPage() {
             onClick={sendMessage}
             disabled={!input.trim()}
             style={{
-              width: 38, height: 38, borderRadius: '50%',
+              width: 34, height: 34, borderRadius: '50%',
               background: input.trim()
                 ? 'linear-gradient(135deg, var(--gradient-start), var(--gradient-end))'
                 : 'var(--border)',
